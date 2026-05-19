@@ -1,0 +1,22 @@
+/*
+:root {
+  --primary-color: #1ECB15;
+  --primary-color-rgb: 120, 202, 92;
+
+  --secondary-color: #179510;
+  --secondary-color-rgb: 23, 149, 16;
+}*/
+/* ==================================================
+   GLOBAL COLOR VARIABLES (Classic – NOT BLACK)
+   ================================================== */
+:root {
+  --primary-color: #1F3A5F;   /* Steel Blue *//*#0D1B2A; navy blue*/
+  --primary-color-rgb: 13,27,42;
+
+  --secondary-color: #5DA9E9;
+  --secondary-color-rgb: 93,169,233;
+
+  --bg-light: #F4F9FF;
+  --text-dark: #1F2933;
+  --border-color: #D6E4F0;
+}

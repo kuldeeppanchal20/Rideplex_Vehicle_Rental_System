@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+
+    {% include 'links.html' %}
+
+</head>
+
+<body>
+
+
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+  <div id="flash-wrap">
+    {% for message in messages %}
+      <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div id="wrapper">
+
+    <!-- page preloader begin -->
+    <div id="de-preloader"></div>
+    <!-- page preloader close -->
+
+    <!--navbar start -->
+
+    {% include 'navbar.html' %}
+    <!--navbar end-->
+
+    <!-- content begin -->
+    <div class="no-bottom no-top" id="content">
+        <div id="top"></div>
+       <section class="kr-hero-wrap" id="section-hero">
+
+    <div class="kr-container">
+        <div class="kr-row">
+
+            <!-- LEFT CONTENT -->
+            <div class="kr-col-left">
+                <h4 class="kr-tagline">Plan your trip now</h4>
+
+                <h1 class="kr-main-title">
+                    Start Your Journey with
+                    <span class="kr-highlight">Confidence</span>
+                </h1>
+
+                <p class="kr-subtext">
+                    Comfortable cars, transparent pricing, and dependable service —
+                    wherever the road takes you.
+                </p>
+                 <form name="contactForm" id="contact_form" action="/vehicle" method="post">
+    {% csrf_token %}
+
+                      <input type="submit"  class="kr-btn" value="Book Your Ride">
+                 </form>
+            </div>
+
+            <!-- RIGHT IMAGE -->
+            <div class="kr-col-right">
+                <img src="static/images/misc/bmwm3.png" alt="car">
+            </div>
+
+        </div>
+    </div>
+
+</section>
+        <section class="no-top" id="section-cars">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6 offset-lg-3 fleet-header">
+    <h2 class="fleet-title">Pick Your Ride, Start Your Journey</h2>
+    <p class="fleet-subtext">
+        Choose from a wide range of vehicles designed for comfort, convenience, and every kind of trip.
+    </p>
+</div>
+
+            <div class="clearfix"></div>
+
+            <!-- CAROUSEL -->
+            <div class="owl-carousel" id="items-carousel">
+
+                {% for v in vehicles %}
+                <div class="item">
+                    <div class="vp-card">
+
+                       <div class="vp-image">
+    <img src="{{ v.vehicle_img.url }}" alt="">
+    <span class="vp-overlay"></span>
+
+    {% if v.available_status == '1' %}
+        <span class="vp-status available">
+            <i class="fa fa-check-circle"></i> Available
+        </span>
+    {% elif v.available_status == '2' %}
+        <span class="vp-status not-available">
+            <i class="fa fa-times-circle"></i> Not Available
+        </span>
+    {% elif v.available_status == '3' %}
+        <span class="vp-status on-ride">
+            <i class="fa fa-car"></i> On Ride
+        </span>
+    {% endif %}
+</div>
+
+                        <div class="vp-card-body">
+                            <h4 class="vp-name">{{ v.brand }} {{ v.model }}</h4>
+
+                            <div class="vp-specs">
+                                        <span class="vp-spec"><img src="/static/images/icons/seat.png"> {{ v.seats }}</span>
+                                        <span class="vp-spec"><img src="/static/images/icons/fuel.png"> {{ v.fuel_type }}</span>
+<!--                                        <span class="vp-spec"><img src="/static/images/icons/3.png">{{ v.vcategory }}</span>-->
+                                        <span class="vp-spec"><img src="/static/images/icons/car.png">{{ v.vsubcategory }}</span>
+                                    </div>
+
+                                  <div class="vp-footer">
+    <div>
+        <small>Daily Rate</small>
+        <strong>₹{{ v.fare }}</strong>
+    </div>
+
+    {% if v.available_status == '1' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">Rent Now</button>
+        </form>
+                                      {% elif v.available_status == '2' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details </button>
+        </form>
+
+    {% elif v.available_status == '3' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details</button>
+        </form>
+
+    {% endif %}
+</div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="feature-section">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <!-- LEFT CONTENT -->
+            <div class="col-lg-3 feature-box">
+                <h2 class="feature-title">Mobility Made Simple</h2>
+                <p class="feature-subtext">
+                    Experience seamless vehicle rentals with flexible options built around your lifestyle.
+                </p>
+            </div>
+
+            <!-- FEATURE LIST -->
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <i class="fa fa-inr"></i>
+                    <div>
+                        <h4>Cost-Effective Mobility</h4>
+                        <p>Enjoy affordable transportation without ownership costs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <i class="fa fa-car"></i>
+                    <div>
+                        <h4>Diverse Vehicle Options</h4>
+                        <p>Choose from bikes to premium cars for every journey.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <i class="fa fa-calendar-check-o"></i>
+                    <div>
+                        <h4>Seamless Booking</h4>
+                        <p>Book quickly with our simple and user-friendly platform.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="process-section">
+    <div class="container">
+
+        <div class="col-lg-6 offset-lg-3 fleet-header">
+            <h2 class="fleet-title">Effortless Booking Process</h2>
+            <p class="fleet-subtext">
+                Reserve your vehicle in minutes with a simple flow
+            </p>
+        </div>
+
+        <div class="process-line">
+
+            <div class="process-step">
+                <span class="step-number">01</span>
+                <i class="fa fa-list"></i>
+                <h4>Explore Vehicles</h4>
+                <p>Browse available cars and bikes.<br>Choose what suits your travel needs.</p>
+            </div>
+
+            <div class="process-step">
+                <span class="step-number">02</span>
+                <i class="fa fa-filter"></i>
+                <h4>Refine Search</h4>
+                <p>Apply filters by category and type.<br>Quickly find your ideal vehicle.</p>
+            </div>
+
+            <div class="process-step">
+                <span class="step-number">03</span>
+                <i class="fa fa-info-circle"></i>
+                <h4>View Details</h4>
+                <p>Check price, specs, and availability.<br>Make sure it fits your needs.</p>
+            </div>
+
+            <div class="process-step">
+                <span class="step-number">04</span>
+                <i class="fa fa-calendar-check-o"></i>
+                <h4>Confirm Booking</h4>
+                <p>Select date and time easily.<br>Secure your vehicle instantly.</p>
+            </div>
+
+            <div class="process-step">
+                <span class="step-number">05</span>
+                <i class="fa fa-credit-card"></i>
+                <h4>Make Payment</h4>
+                <p>Pay securely using online methods.<br>Fast and reliable checkout.</p>
+            </div>
+
+            <div class="process-step">
+                <span class="step-number">06</span>
+                <i class="fa fa-check-circle"></i>
+                <h4>Start Ride</h4>
+                <p>Pick up your vehicle on time.<br>Enjoy a smooth journey.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+        <section class="kr-cta-wrap">
+
+    <div class="kr-container kr-cta-content">
+        <h2 class="kr-cta-title">Ready to Hit the Road?</h2>
+
+        <p class="kr-cta-subtitle">
+            Discover the perfect vehicle for your journey — comfort, style, and reliability in one place.
+        </p>
+
+        <a href="/vehicle" class="kr-cta-btn">Explore Vehicles</a>
+    </div>
+
+</section>
+
+
+
+       <!-- <section id="section-fun-facts">
+
+            <div class="container">
+                <div class="row g-custom-x force-text-center">
+                    <div class="col-md-3 col-sm-6 mb-sm-30">
+                        <div class="de_count wow fadeInUp">
+                            <h3 class="timer" data-speed="3000" data-to="0">0</h3>
+                            Trips Powered
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-sm-30">
+                        <div class="de_count wow fadeInUp">
+                            <h3 class="timer" data-speed="3000" data-to="0">0</h3>
+                            Happy Customers
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-sm-30">
+                        <div class="de_count wow fadeInUp">
+                            <h3 class="timer" data-speed="3000" data-to="0">0</h3>
+                            Fleets Vehicle
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-sm-30">
+                        <div class="de_count wow fadeInUp">
+                            <h3 class="timer" data-speed="3000" data-to="15">0</h3>
+                            Years Experience
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+
+        <section aria-label="section" class="pt40 pb40 text-light" data-bgcolor="#181818">
+            <div class="wow fadeInRight d-flex">
+                <div class="de-marquee-list">
+                    <div class="d-item">
+                        <span class="d-item-txt">SUV</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Bikes</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Luxury Cars</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Minivans</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Compact Cars</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                    </div>
+                </div>
+
+                <div class="de-marquee-list">
+                    <div class="d-item">
+                        <span class="d-item-txt">SUV</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Bikes</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Luxury Cars</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Minivans</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                        <span class="d-item-txt">Compact Cars</span>
+                        <span class="d-item-display">
+                        <i class="d-item-dot"></i>
+                      </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer close -->
+
+<!-- Javascript Files
+================================================== -->
+<script src="static/js/plugins.js"></script>
+<script src="static/js/designesia.js"></script>
+
+</body>
+</html>

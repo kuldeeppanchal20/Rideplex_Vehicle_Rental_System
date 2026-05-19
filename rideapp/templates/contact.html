@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+
+{% include 'links.html' %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Poppins',sans-serif;
+background:#fafafa;
+}
+
+/* Intro */
+
+.support-intro{
+text-align:center;
+margin-bottom:50px;
+}
+
+.support-intro h2{
+
+font-size:34px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.support-intro p{
+color:#6b7280;
+max-width:700px;
+margin:auto;
+}
+
+/* Card */
+
+.support-box{
+background:#fff;
+padding:40px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.06);
+margin-bottom:35px;
+transition:.3s;
+}
+
+.support-box:hover{
+transform:translateY(-5px);
+box-shadow:0 25px 60px rgba(0,0,0,0.1);
+}
+
+.support-title{
+font-size:24px;
+font-weight:600;
+margin-bottom:8px;
+}
+
+.support-desc{
+font-size:14px;
+color:#6b7280;
+margin-bottom:20px;
+}
+
+/* Inputs */
+
+.form-control{
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:10px;
+height:52px;
+padding:12px 16px;
+font-size:14px;
+}
+
+textarea.form-control{
+height:140px;
+resize:none;
+}
+
+/* Button (MATCH HEADER COLOR) */
+
+.btn-main{
+background:#0f172a;
+border:none;
+padding:13px 35px;
+border-radius:8px;
+color:white;
+font-weight: 700;
+letter-spacing:.5px;
+transition:.3s;
+}
+
+.btn-main:hover{
+background:#1e293b;
+transform:translateY(-2px);
+}
+
+/* Star Rating */
+
+.star-rating{
+display:flex;
+flex-direction:row-reverse;
+justify-content:flex-end;
+font-size:30px;
+margin-bottom:20px;
+}
+
+.star-rating input{
+display:none;
+}
+
+.star-rating label{
+color:#ddd;
+cursor:pointer;
+transition:0.3s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label{
+color:#fbbf24;
+}
+
+/* Sidebar cards */
+
+.info-card{
+background:#fff;
+padding:25px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
+margin-bottom:25px;
+display:flex;
+gap:15px;
+align-items:center;
+}
+
+.info-icon{
+width:45px;
+height:45px;
+background:#0f172a;   /* SAME AS HEADER */
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:10px;
+font-size:18px;
+}
+
+.info-text h5{
+margin:0;
+font-size:16px;
+font-weight:600;
+}
+
+.info-text p{
+margin:0;
+font-size:13px;
+color:#6b7280;
+}
+
+/* Tips */
+
+.tips-box{
+background:#f3f4f6;
+padding:25px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.tips-box ul{
+margin:0;
+padding-left:18px;
+color:#555;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<script>
+setTimeout(() => {
+const flashWrap = document.getElementById("flash-wrap");
+if (flashWrap) {
+flashWrap.style.opacity = "0";
+setTimeout(() => flashWrap.remove(), 300);
+}
+}, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+{% for message in messages %}
+<div class="flash-msg flash-{{ message.tags }}">
+{{ message }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+
+<div id="wrapper">
+
+<div id="de-preloader"></div>
+
+{% include 'navbar.html' %}
+
+<div class="no-bottom no-top" id="content">
+
+<div id="top"></div>
+
+
+<section id="subheader" class="jarallax text-light">
+
+<img src="static/images/background/contactbg.png" class="jarallax-img">
+
+<div class="center-y relative text-center">
+<div class="container">
+<div class="row">
+
+ <div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title">Support & Feedback</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+</div>
+</div>
+</div>
+
+</section>
+
+
+<section>
+
+<div class="container">
+
+<div class="support-intro">
+
+<h2>We're Here To Help</h2>
+
+<p>
+Share your experience with our vehicle rental service or report any issue you faced.
+Your feedback helps us improve and deliver better rides.
+</p>
+
+</div>
+
+
+<div class="row">
+
+
+<div class="col-lg-8">
+
+
+<div class="support-box">
+
+<div class="support-title">⭐ Rate Your Experience</div>
+
+<div class="support-desc">
+Let us know how satisfied you are with our platform.
+</div>
+
+<form method="POST" action="/feedback" data-parsley-validate>
+
+{% csrf_token %}
+
+<div class="star-rating">
+
+<input type="radio" name="rating" value="5" id="5" required data-parsley-required-message="Please select rating">
+<label for="5">★</label>
+
+<input type="radio" name="rating" value="4" id="4">
+<label for="4">★</label>
+
+<input type="radio" name="rating" value="3" id="3">
+<label for="3">★</label>
+
+<input type="radio" name="rating" value="2" id="2">
+<label for="2">★</label>
+
+<input type="radio" name="rating" value="1" id="1">
+<label for="1">★</label>
+
+</div>
+
+<textarea name="comment"
+class="form-control"
+placeholder="Tell us about your experience..."
+required
+data-parsley-minlength="10"
+data-parsley-minlength-message="Please write at least 10 characters"></textarea>
+
+<br>
+
+<button type="submit" class="btn-main">Submit Feedback</button>
+
+</form>
+
+</div>
+
+
+
+<div class="support-box">
+
+<div class="support-title">📩 Report an Issue</div>
+
+<div class="support-desc">
+We value your experience. Please describe any issue or concern you encountered while using the platform.
+</div>
+
+<form method="POST" action="/complaint" data-parsley-validate>
+
+{% csrf_token %}
+
+<input type="text"
+name="title"
+class="form-control"
+placeholder="Complaint Title"
+required
+data-parsley-minlength="5"
+data-parsley-minlength-message="Title must be at least 5 characters">
+
+<br>
+
+<textarea name="description"
+class="form-control"
+placeholder="Explain your issue in detail..."
+required
+data-parsley-minlength="15"
+data-parsley-minlength-message="Description must be at least 15 characters"></textarea>
+
+<br>
+
+<button type="submit" class="btn-main">Submit Complaint</button>
+
+</form>
+
+</div>
+
+
+<div class="tips-box">
+
+<strong>Tips when submitting feedback :</strong>
+
+<ul>
+<li>Provide accurate booking or vehicle details.</li>
+<li>Explain the issue clearly.</li>
+<li>Your feedback helps improve our service.</li>
+</ul>
+
+</div>
+
+</div>
+
+
+
+<div class="col-lg-4">
+
+<div class="info-card">
+<div class="info-icon"><i class="fa fa-headphones"></i></div>
+<div class="info-text">
+<h5>24/7 Support</h5>
+<p>Our support team is always available.</p>
+</div>
+</div>
+
+<div class="info-card">
+<div class="info-icon"><i class="fa fa-envelope"></i></div>
+<div class="info-text">
+<h5>Email Support</h5>
+<p>rideplex.support@gmail.com</p>
+</div>
+</div>
+
+<div class="info-card">
+<div class="info-icon"><i class="fa fa-phone"></i></div>
+<div class="info-text">
+<h5>Call Us</h5>
+<p>+91 9876543210</p>
+</div>
+</div>
+
+<div class="info-card">
+<div class="info-icon"><i class="fa fa-clock-o"></i></div>
+<div class="info-text">
+<h5>Response Time</h5>
+<p>Usually within 24 hours.</p>
+</div>
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+
+{% include 'footer.html' %}
+
+</div>
+
+<!-- Parsley Validation -->
+<script src="https://cdn.jsdelivr.net/npm/parsleyjs"></script>
+
+<script src="static/js/plugins.js"></script>
+<script src="static/js/designesia.js"></script>
+
+</body>
+</html>

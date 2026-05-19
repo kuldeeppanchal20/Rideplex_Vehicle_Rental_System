@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+{% include 'links.html' %}
+
+<style>
+
+/* ===== HEADER ===== */
+#subheader h1{
+font-size:60px !important;
+font-weight:800 !important;
+letter-spacing:1px;
+}
+#subheader p{
+font-size:18px !important;
+opacity:.9;
+}
+.subheader-line{
+width:70px;
+height:3px;
+background:#fff;
+margin:0 auto 15px auto;
+border-radius:2px;
+}
+
+/* ===== MAIN PANEL ===== */
+.col-lg-9.col-md-8{
+background:#ffffff;
+border-radius:12px;
+padding:25px;
+box-shadow:0 6px 25px rgba(0,0,0,0.08);
+}
+
+/* ===== CARD ===== */
+.premium-ride-card{
+    background:#ffffff;
+    border-radius:14px;
+    padding:20px;
+    margin-top:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border-top:4px solid #2563eb;
+    transition:0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.premium-ride-card:hover{
+    transform:translateY(-3px);
+}
+
+/* HEADER */
+.ride-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+.ride-title{
+    font-size:18px;
+    font-weight:700;
+    color:#111827;
+}
+
+/* STATUS BADGE */
+.status-badge{
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+.status-badge.not_started{
+    background:#fef3c7;
+    color:#92400e;
+}
+.status-badge.on_ride{
+    background:#dbeafe;
+    color:#1e40af;
+}
+.status-badge.completed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+/* GRID */
+.ride-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+.ride-item{
+    display:flex;
+    gap:10px;
+    background:#f9fafb;
+    padding:10px;
+    border-radius:8px;
+}
+.ride-item i{ color:#2563eb; }
+.ride-item span{
+    font-size:11px;
+    color:#6b7280;
+}
+.ride-item p{
+    margin:0;
+    font-weight:600;
+    font-size:13px;
+}
+
+/* HIGHLIGHT AMOUNT */
+.highlight{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+}
+.highlight p{
+    color:#2563eb;
+    font-size:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+  <div id="de-preloader"></div>
+
+<div id="wrapper" class="profile-section">
+{% include 'navbar.html' %}
+
+<div class="no-bottom no-top zebra" id="content">
+
+<!-- HEADER -->
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img">
+
+
+<div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title"> Booking Overview</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+</section>
+
+
+
+<div class="container mt-4 mb-5">
+<div class="row g-4">
+
+<!-- SIDEBAR -->
+<div class="col-lg-3 col-md-4">
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+<div class="rp-user-name">
+Welcome, {{ leaser.lname }}
+</div>
+<div class="rp-user-sub">
+See all bookings associated with your vehicles.
+</div>
+</div>
+
+<ul class="rp-menu">
+<li><a href="/leaser_cars"><i class="fa fa-car"></i> My Vehicles</a></li>
+<li><a href="/leaser_add_car"><i class="fa fa-plus"></i> Add Vehicle</a></li>
+<li class="active"><a href="/leaser_bookings"><i class="fa fa-calendar-check-o"></i> Booking Overview</a></li>
+<li><a href="/leaserprofile"><i class="fa fa-user"></i> Profile</a></li>
+<li><a href="/document"><i class="fa fa-file-pdf-o"></i> Documents</a></li>
+<li><a href="/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+</ul>
+
+</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="col-lg-9 col-md-8">
+
+
+
+{% if bookings %}
+
+{% for book in bookings %}
+
+<div class="premium-ride-card
+{% if book.ride_status == 'cancelled' or not book.booking_status %}cancelled-card{% endif %}">
+ <!-- 🔥 Ribbon -->
+    {% if book.ride_status == 'completed' %}
+        <div class="ribbon completed">Completed</div>
+    {% endif %}
+<div class="ride-head">
+<div class="ride-title">
+<i class="fa fa-car"></i>
+{{ book.vehicle_id.brand }} - {{ book.vehicle_id.model }}
+</div>
+
+<div class="status-badge {{ book.ride_status }}">
+{{ book.ride_status|title }}
+</div>
+</div>
+
+<div class="ride-grid">
+
+<div class="ride-item">
+<i class="fa fa-user"></i>
+<div>
+<span>Customer</span>
+<p>{{ book.user_id.uname }}</p>
+</div>
+</div>
+
+<div class="ride-item">
+<i class="fa fa-id-badge"></i>
+<div>
+<span>Driver</span>
+<p>
+{% if book.driver_id %}
+{{ book.driver_id.dname }}
+{% else %}
+Not Assigned
+{% endif %}
+</p>
+</div>
+</div>
+
+<div class="ride-item">
+<i class="fa fa-calendar"></i>
+<div>
+<span>Duration</span>
+<p>{{ book.start_date }} → {{ book.end_date }}</p>
+</div>
+</div>
+
+<div class="ride-item highlight">
+<i class="fa fa-money"></i>
+<div>
+<span>Total Amount</span>
+<p>₹ {{ book.total_amount }}</p>
+</div>
+</div>
+
+</div>
+
+<!-- PROGRESS -->
+<div class="ride-progress" data-status="{{ book.ride_status }}">
+
+<div class="step {% if book.ride_status == 'not_started' %}active{% endif %}">
+<div class="circle"></div>
+<span>Not Started</span>
+</div>
+
+<div class="step {% if book.ride_status == 'on_ride' %}active{% endif %}">
+<div class="circle"></div>
+<span>On Ride</span>
+</div>
+
+<div class="step {% if book.ride_status == 'completed' %}active{% endif %}">
+<div class="circle"></div>
+<span>Completed</span>
+</div>
+
+</div>
+{% if book.ride_status == 'cancelled' or not book.booking_status %}
+    <div class="cancel-stripe">CANCELLED</div>
+    <div class="cancel-overlay">Booking Cancelled</div>
+{% endif %}
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty-box">
+
+<img src="{% static 'images/icons/zeroride.png' %}" width="130" style="opacity:0.6">
+
+<h4 style="margin-top:20px;color:#94a3b8;">
+No booking found
+</h4>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+</div>
+
+{% include 'footer.html' %}
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+</body>
+</html>

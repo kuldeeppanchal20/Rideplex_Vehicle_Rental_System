@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+
+{% load static %}
+{% include 'links.html' %}
+
+<!-- Parsley Validation -->
+<script src="https://cdn.jsdelivr.net/npm/parsleyjs"></script>
+
+</head>
+
+<body>
+
+<script>
+setTimeout(() => {
+const flashWrap = document.getElementById("flash-wrap");
+if (flashWrap) {
+flashWrap.style.opacity = "0";
+setTimeout(() => flashWrap.remove(), 300);
+}
+}, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+{% for message in messages %}
+<div class="flash-msg flash-{{ message.tags }}">
+{{ message }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+<div id="wrapper" class="profile-section">
+
+{% include 'navbar.html' %}
+
+<div id="de-preloader"></div>
+
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img">
+<div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                   <h1 class="hero-title"> Leaser Profile</h1>
+
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+</section>
+
+<div class="container mt-4 mb-5">
+<div class="row g-4">
+
+<!-- Sidebar -->
+<div class="col-lg-3 col-md-4">
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+<div class="rp-user-name">
+Welcome, {{ leaser.lname }}
+</div>
+
+<div class="rp-user-sub">
+Manage your personal information and keep your profile updated.
+</div>
+</div>
+
+<ul class="rp-menu">
+    <li class="{% if request.path == '/leaser_cars' %}active{% endif %}">
+<a href="/leaser_cars">
+<i class="fa fa-car"></i> My Vehicles
+</a>
+</li>
+<li class="{% if request.path == '/leaser_add_car' %}active{% endif %}">
+<a href="/leaser_add_car">
+<i class="fa fa-plus"></i> Add New Vehicle
+</a>
+</li>
+    <li class="{% if request.path == '/leaser_bookings' %}active{% endif %}">
+<a href="/leaser_bookings">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking Overview</span>
+</a>
+</li>
+<li class="{% if request.path == '/leaserprofile' %}active{% endif %}">
+<a href="/leaserprofile">
+<i class="fa fa-user"></i> Profile
+</a>
+</li>
+
+    <li class="{% if request.path == '/document' %}active{% endif %}">
+<a href="/document">
+<i class="fa fa-file-pdf-o"></i> Documents
+</a>
+</li>
+
+<li>
+<a href="/logout">
+<i class="fa fa-sign-out"></i> Sign Out
+</a>
+</li>
+
+</ul>
+
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="col-lg-9">
+
+<!-- PROFILE CARD -->
+<div class="kp-pro-card">
+
+<div class="kp-pro-top">
+
+<div class="kp-pro-avatar">
+<img id="profilePreview" src="/media/{{ leaser.profile_pic }}" class="kp-pro-img">
+</div>
+
+<div class="kp-pro-meta">
+
+<h2 class="kp-pro-name">{{ leaser.lname }}</h2>
+
+<form id="photoForm" method="POST" action="/changeleaserprofile" enctype="multipart/form-data">
+{% csrf_token %}
+
+<input
+type="file"
+id="profileUpload"
+name="pfp"
+accept="image/*"
+style="display:none">
+
+<div class="kp-pro-divider"></div>
+
+<button
+type="button"
+class="kp-pro-btn"
+onclick="openFileSelector()">
+Change Photo
+</button>
+
+</form>
+
+</div>
+</div>
+
+<div class="kp-pro-divider"></div>
+
+</div>
+
+<!-- PROFILE UPDATE FORM -->
+<form method="POST" class="kp-form-wrap" data-parsley-validate>
+
+{% csrf_token %}
+
+<div class="kp-card">
+
+<div class="kp-card-head">
+<h3 class="kp-title">Leaser Information</h3>
+<p class="kp-sub">Update your profile details</p>
+</div>
+
+<div class="kp-grid">
+
+<!-- Name -->
+<div class="kp-field">
+<label class="kp-label">Full Name</label>
+<input
+type="text"
+name="lname"
+value="{{ leaser.lname }}"
+class="kp-input"
+required
+pattern="[A-Za-z ]{3,50}"
+data-parsley-pattern-message="Only letters allowed"
+data-parsley-minlength="3"
+data-parsley-minlength-message="Name must be at least 3 characters">
+</div>
+
+<!-- Age -->
+<div class="kp-field">
+<label class="kp-label">Age</label>
+<input
+type="number"
+name="age"
+value="{{ leaser.age }}"
+class="kp-input"
+required
+min="18"
+max="100"
+data-parsley-min="18"
+data-parsley-max="100"
+data-parsley-min-message="Minimum age is 18"
+data-parsley-max-message="Maximum age is 100">
+</div>
+
+<!-- Password Section -->
+<div class="kp-field">
+<label class="kp-label">New Password</label>
+<input
+type="password"
+name="new_password"
+class="kp-input"
+placeholder="Enter new password"
+minlength="6"
+data-parsley-minlength="6"
+data-parsley-minlength-message="Password must be at least 6 characters">
+</div>
+
+<div class="kp-field">
+<label class="kp-label">Confirm Password</label>
+<input
+type="password"
+name="confirm_password"
+class="kp-input"
+placeholder="Confirm new password"
+data-parsley-equalto="[name=new_password]"
+data-parsley-equalto-message="Passwords must match">
+</div>
+
+<!-- Contact -->
+<div class="kp-field">
+<label class="kp-label">Phone Number</label>
+<input
+type="number"
+name="contact"
+value="{{ leaser.contact }}"
+class="kp-input"
+required
+pattern="[0-9]{10}"
+data-parsley-pattern-message="Enter valid 10 digit phone number">
+</div>
+
+</div>
+
+<div class="kp-pro-divider"></div>
+
+<button type="submit" name="update_profile" class="kp-btn-save">
+Update Profile
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+
+<footer>
+{% include 'footer.html' %}
+</footer>
+
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<script>
+
+function openFileSelector(){
+document.getElementById("profileUpload").click();
+}
+
+document.getElementById("profileUpload").addEventListener("change", function(event){
+
+const file = event.target.files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+document.getElementById("profilePreview").src = e.target.result;
+};
+
+reader.readAsDataURL(file);
+
+document.getElementById("photoForm").submit();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>Rideplex | Premium Vehicle Management</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="/static/images/ridelogo.png">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet" type="text/css" id="mdb">
+    <link href="{% static 'css/plugins.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
+    <link id="colors" href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+    <style>
+
+        .rp-card {
+            background: #ffffff;
+            border: none;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .rp-card-header {
+            background: white;
+            padding: 1.75rem 2rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .rp-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(145deg, #1e2a3e, #0f1a2c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.01em;
+        }
+
+        .rp-subtitle {
+            color: #5b6e8c;
+            margin-top: 0.35rem;
+            font-size: 0.9rem;
+        }
+
+        .rp-label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #3a5670;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .rp-input, .rp-file, select.form-control {
+            background-color: #fefefe;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 0.9rem;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            box-shadow: none;
+        }
+
+        .rp-input:focus, select.form-control:focus {
+            border-color: #2a5298;
+            box-shadow: var(--input-focus);
+            outline: none;
+        }
+
+        .rp-btn-primary {
+            background: linear-gradient(95deg, #1e3c72, #2a5298);
+            border: none;
+            padding: 0.9rem 1.8rem;
+            font-weight: 600;
+            border-radius: 2rem;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px -8px rgba(30,60,114,0.4);
+            letter-spacing: 0.3px;
+        }
+
+        .rp-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -12px #1e3c72;
+            background: linear-gradient(95deg, #2a5298, #1e3c72);
+        }
+
+        /* ----- UPGRADED IMAGE THUMBNAILS ----- */
+        .image-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem; /* Increased gap */
+            margin-bottom: 1.5rem;
+        }
+
+        .img-thumb-card {
+            background: #f9fafb;
+            border-radius: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #eef2ff;
+            transition: all 0.3s ease;
+            width: 160px; /* Increased size */
+            text-align: center;
+            text-decoration: none !important;
+            display: block;
+            cursor: pointer;
+        }
+
+        .img-thumb-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(42, 82, 152, 0.15);
+            border-color: #2a5298;
+        }
+
+        .img-thumb-card img {
+            width: 100%;
+            height: 110px; /* Increased size */
+            object-fit: cover;
+            border-radius: 0.6rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .img-label-sm {
+            font-size: 0.8rem; /* Slightly larger text */
+            font-weight: 600;
+            margin-top: 0.5rem;
+            color: #4a627a;
+            transition: color 0.3s ease;
+        }
+
+        .img-thumb-card:hover .img-label-sm {
+            color: #1e3c72;
+        }
+
+        /* Document table premium */
+        .premium-doc-table {
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .premium-doc-table thead th {
+            background: #f8fafd;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2edf2;
+            padding: 1rem 0.75rem;
+        }
+        .premium-doc-table tbody td {
+            vertical-align: middle;
+            padding: 0.9rem 0.75rem;
+            border-bottom: 1px solid #f0f3f8;
+        }
+        .badge-premium-verified {
+            background: #10b98120;
+            color: #0a724a;
+            border-radius: 40px;
+            padding: 0.35rem 0.9rem;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+        .badge-premium-pending {
+            background: #f59e0b20;
+            color: #b45309;
+            border-radius: 40px;
+            padding: 0.35rem 0.9rem;
+            font-weight: 600;
+        }
+
+        /* ----- VISIBLE VIEW BUTTON (NO HOVER) ----- */
+        .rp-view-btn {
+            background-color: #e0e7ff;
+            color: #1e3c72 !important;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-decoration: none !important;
+            display: inline-block;
+            border: 1px solid #c7d2fe;
+            transition: none !important; /* Removes default transitions */
+        }
+        .rp-view-btn:hover, .rp-view-btn:focus, .rp-view-btn:active {
+            background-color: #e0e7ff !important; /* Forces background to stay the same */
+            color: #1e3c72 !important; /* Forces text color to stay the same */
+            transform: none !important; /* Prevents any shifting */
+            box-shadow: none !important;
+            cursor: pointer;
+        }
+
+        .doc-form-section {
+            transition: all 0.25s ease;
+            margin-top: 1rem;
+            border-radius: 1rem;
+            background: #ffffff;
+            border: 1px solid #e9edf2 !important;
+        }
+
+        .rp-file {
+            padding: 0.5rem;
+            background: #fdfdfd;
+        }
+
+        select#docTypeSelect {
+            border-radius: 2rem;
+            padding: 0.7rem 1.2rem;
+            font-weight: 500;
+            background: #ffffff;
+            border: 1.5px solid #e0e7ff;
+        }
+
+        footer {
+            margin-top: 4rem;
+        }
+        @media (max-width: 768px) {
+            .rp-card-header {
+                padding: 1.2rem;
+            }
+            .rp-title {
+                font-size: 1.4rem;
+            }
+            .img-thumb-card {
+                width: 100%; /* Make them stack better on small screens */
+                max-width: 200px;
+            }
+            .image-preview-grid {
+                justify-content: center;
+            }
+        }
+        .warning-card {
+            display: flex;
+            gap: 12px;
+            background: #fff;
+            border: 1px solid #fde68a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .warning-icon {
+            font-size: 24px;
+            color: #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <div id="de-preloader"></div>
+         <header class="transparent header-light scroll-light has-topbar">
+
+    <div class="container">
+        <div class="de-flex align-items-center justify-content-between">
+
+            <div id="logo">
+                <a href="/">
+                    <img src="{% static 'images/v.png' %}" height="70"  width="200" />
+                </a>
+            </div>
+
+            <ul id="mainmenu">
+    {% if request.session.userlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-car"></i> Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/bookinghistory' %}active{% endif %}" href="/bookinghistory">
+            <i class="fa fa-calendar-check-o"></i> Booking History
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/userprofile' %}active{% endif %}" href="/userprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.leaserlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/leaser' in request.path %}active{% endif %}" href="/">
+            <i class="fa fa-car"></i> Vehicles Listing
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_add_car' %}active{% endif %}" href="/leaser_add_car">
+                    <i class="fa fa-plus"></i> Add Vehicles
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_cars' %}active{% endif %}" href="/leaser_cars">
+                    <i class="fa fa-cogs"></i> Manage Vehicles
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/leaserprofile' %}active{% endif %}" href="/leaserprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.driverlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/assign_ride' %}active{% endif %}" href="/assign_ride">
+            <i class="fa fa-map"></i> Assigned Rides
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/driverprofile' %}active{% endif %}" href="/driverprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% else %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+<i class="fa fa-comments-o"></i>
+
+  About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-tachometer"></i>
+
+            Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    {% endif %}
+</ul>
+
+            <div class="menu_side_area">
+
+                {% if request.session.userlogid %}
+                    <b class="me-2">{{request.session.userlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.leaserlogid %}
+                    <b class="me-2">{{request.session.leaserlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.driverlogid %}
+
+                    <b class="me-2">{{request.session.driverlogname}}</b>
+                        <a href="/logout" class="btn-main">Logout</a>
+
+                {% else %}
+
+                  {% if request.path != "/login" %}
+                <a href="/login" class="btn-main">Login</a>
+                {% endif %}
+
+    {% if request.path == "/userregister" %}
+                <a href="/leaserregister" class="btn-main">Leaser Registration</a>
+
+                {% elif request.path == "/leaserregister" %}
+                <a href="/userregister" class="btn-main">User Registration</a>
+
+    {% elif request.path != "/registration" %}
+                <a href="/registration" class="btn-main">Register</a>
+                {% endif %}
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+</header>
+        <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
+
+            <section id="subheader" class="jarallax text-light">
+                <img src="{% static 'images/background/nb.jpeg' %}" class="jarallax-img" alt="">
+                <div class="center-y relative text-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <h1>Edit Vehicle</h1>
+                                <p>Refine your listing, manage documents, elevate your fleet</p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="container mt-4 mb-5">
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-4">
+            <div class="rp-sidebar">
+                        <div class="rp-sidebar-title">ACCOUNT</div>
+
+                        <div class="rp-userbox">
+                            <div class="rp-user-name">Welcome, {{ request.session.leaserlogname }}</div>
+                            <div class="rp-user-sub">Premium Dashboard • Manage your listings</div>
+                        </div>
+                        <ul class="rp-menu">
+                            <li class="{% if '/leaser_cars' in request.path or '/editvehicle' in request.path %}active{% endif %}">
+                                <a href="/leaser_cars"><i class="fa fa-car"></i><span>My Vehicles</span></a>
+                            </li>
+                            <li class="{% if request.path == '/leaser_add_car' %}active{% endif %}">
+                                <a href="/leaser_add_car"><i class="fa fa-plus"></i><span>Add New Vehicle</span></a>
+                            </li>
+                            <li class="{% if request.path == '/leaser_bookings' %}active{% endif %}">
+<a href="/leaser_bookings">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking Overview</span>
+</a>
+</li>
+                            <li class="{% if request.path == '/leaserprofile' %}active{% endif %}">
+                                <a href="/leaserprofile"><i class="fa fa-user"></i><span>Profile</span></a>
+                            </li>
+                            <li class="{% if request.path == '/document' %}active{% endif %}">
+                                <a href="/document"><i class="fa fa-file-pdf-o"></i> Documents</a>
+                            </li>
+                            <li><a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-8">
+                  {% if vehicle.available_status == "3" %}
+    <div class="warning-card danger">
+        <div class="warning-icon">🚫</div>
+        <div>
+            <h6>Vehicle On Ride</h6>
+            <p>
+                Your vehicle is currently on a ride (booked by a user). You’ll be able to edit the details once the ride is completed.
+            </p>
+        </div>
+    </div>
+                    {% elif vehicle.available_status == "2" %}
+
+    <div class="warning-card review">
+        <div class="warning-icon">🕒</div>
+        <div>
+            <h6>Under Review</h6>
+            <p>
+                We’re reviewing your vehicle documents. Until then, your vehicle won’t be available for bookings.
+            </p>
+        </div>
+    </div>
+{% else %}
+    <div class="warning-card">
+        <div class="warning-icon">⚠</div>
+        <div>
+            <h6>Before You Edit</h6>
+            <p>
+                Any changes will temporarily make this vehicle unavailable.
+                It will be reactivated after admin approval.
+            </p>
+        </div>
+    </div>
+{% endif %}
+                    <div class="rp-card">
+                        <div class="bd-left-head">
+<a href="/leaser_cars" class="bd-back-btn">
+<i class="fa fa-arrow-left"></i> Back
+</a>
+
+<div class="bd-title">
+  <h2 class="rp-title">Edit: {{ vehicle.brand }} {{ vehicle.model }}</h2>
+                            <p class="rp-subtitle">Update vehicle specifications, premium pricing, and gallery images.</p>
+</div>
+</div>
+
+
+                            <form id="addCarForm" action="/updatevehicle"
+      method="POST"
+      enctype="multipart/form-data"
+      data-parsley-validate
+                                   {% if vehicle.available_status == "3" %}
+          style="pointer-events: none; opacity: 0.6;"
+      {% endif %}
+      novalidate>
+
+{% csrf_token %}
+  <input type="hidden" name="vehicleid" value="{{ vehicle.id }}">
+
+<div class="row g-4 p-4 pt-0">
+
+<div class="col-md-6">
+<label class="rp-label">Vehicle Category</label>
+<select name="vcategory"
+        id="category"
+        class="form-control rp-input"
+        required
+        data-parsley-required-message="Please select vehicle category"
+        data-parsley-trigger="change">
+<option value="">Select Category</option>
+{% for c in categories %}
+<option value="{{c.id}}" {% if vehicle.vcategory.id == c.id %}selected{% endif %}>{{c.catname}}</option>
+{% endfor %}
+</select>
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Vehicle Subcategory</label>
+<select name="vsubcategory"
+        id="subcategory"
+        class="form-control rp-input"
+        required
+        data-parsley-required-message="Please select vehicle subcategory"
+        data-parsley-trigger="change">
+<option value="">Select Subcategory</option>
+{% for sub in subcategories %}
+<option value="{{ sub.id }}" data-category="{{ sub.vcategory.id }}" {% if vehicle.vsubcategory.id == sub.id %}selected{% endif %}>{{ sub.subcatname }}</option>
+{% endfor %}
+</select>
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Brand</label>
+<input type="text"
+       name="brand"
+       class="form-control rp-input"
+       placeholder="e.g., Maruti Suzuki , Royal enfield "
+       value="{{ vehicle.brand }}"
+       required
+       data-parsley-pattern="^[A-Za-z ]+$"
+       data-parsley-pattern-message="Only letters allowed"
+data-parsley-required-message="Enter Vehicle brand ">
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Model</label>
+<input type="text"
+       name="model"
+       class="form-control rp-input"
+       placeholder="e.g., Baleno 2022 , Classic 350 "
+       value="{{ vehicle.model }}"
+       required
+data-parsley-required-message="Enter Model Name and Year">
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Fuel Type</label>
+<select name="fueltype"
+        id="fueltype"
+        class="form-control rp-input"
+        required
+        data-parsley-required-message="Select fuel type">
+<option value="">Select Fuel Type</option>
+<option value="Petrol" {% if vehicle.fuel_type == 'Petrol' %}selected{% endif %}>Petrol</option>
+<option value="Diesel" {% if vehicle.fuel_type == 'Diesel' %}selected{% endif %}>Diesel</option>
+<option value="CNG" {% if vehicle.fuel_type == 'CNG' %}selected{% endif %}>CNG</option>
+<option value="Electric" {% if vehicle.fuel_type == 'Electric' %}selected{% endif %}>Electric</option>
+</select>
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Seats</label>
+<select name="seats"
+        id="seats"
+        class="form-control rp-input"
+        required
+        data-parsley-required-message="Select number of seats">
+<option value="">Select Seats</option>
+<option value="2" {% if vehicle.seats == '2' %}selected{% endif %}>2 Seats</option>
+<option value="4" {% if vehicle.seats == '4' %}selected{% endif %}>4 Seats</option>
+<option value="5" {% if vehicle.seats == '5' %}selected{% endif %}>5 Seats</option>
+<option value="7" {% if vehicle.seats == '7' %}selected{% endif %}>7 Seats</option>
+<option value="10+" {% if vehicle.seats == '10+' %}selected{% endif %}>10+ Seats</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="rp-label">Registration Number</label>
+<input type="text"
+       name="registration_number"
+       class="form-control rp-input text-uppercase"
+       placeholder="e.g., GJ01AB1234"
+       value="{{ vehicle.registration_number }}"
+       required
+       data-parsley-pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$"
+       data-parsley-pattern-message="Enter valid registration number"
+       data-parsley-required-message="Enter registration number"
+       data-parsley-uniquereg="true"
+       data-parsley-trigger="keyup focusout">
+</div>
+
+
+<div class="col-md-6">
+<label class="rp-label">Daily Fare (₹)</label>
+<input type="number"
+       name="fare"
+       class="form-control rp-input"
+       placeholder="e.g., 1500"
+       value="{{ vehicle.fare }}"
+       required
+       min="401"
+       data-parsley-type="number"
+       data-parsley-min="401"
+       data-parsley-required-message="Please enter fare"
+       data-parsley-min-message="Fare must be greater than 400">
+</div>
+
+<div class="col-md-12 mt-2">
+    <label class="rp-label">Vehicle Gallery (premium images)</label>
+
+    <div class="image-preview-grid">
+        {% if vehicle.vehicle_img %}
+        <a href="{{ vehicle.vehicle_img.url }}" target="_blank" class="img-thumb-card" title="Click to view full image">
+            <img src="{{ vehicle.vehicle_img.url }}" alt="Main">
+            <div class="img-label-sm">Main <i class="fa fa-external-link ms-1"></i></div>
+        </a>
+        {% endif %}
+
+        {% if vehicle.front_angle %}
+        <a href="{{ vehicle.front_angle.url }}" target="_blank" class="img-thumb-card" title="Click to view full image">
+            <img src="{{ vehicle.front_angle.url }}" alt="Back">
+            <div class="img-label-sm">Back <i class="fa fa-external-link ms-1"></i></div>
+        </a>
+        {% endif %}
+
+        {% if vehicle.leftside_angle %}
+        <a href="{{ vehicle.leftside_angle.url }}" target="_blank" class="img-thumb-card" title="Click to view full image">
+            <img src="{{ vehicle.leftside_angle.url }}" alt="Left">
+            <div class="img-label-sm">Left <i class="fa fa-external-link ms-1"></i></div>
+        </a>
+        {% endif %}
+
+        {% if vehicle.rightside_angle %}
+        <a href="{{ vehicle.rightside_angle.url }}" target="_blank" class="img-thumb-card" title="Click to view full image">
+            <img src="{{ vehicle.rightside_angle.url }}" alt="Right">
+            <div class="img-label-sm">Right <i class="fa fa-external-link ms-1"></i></div>
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-3"><label class="small fw-semibold">Main Image</label><input type="file" name="vehicle_img" class="form-control rp-file" accept="image/*"></div>
+        <div class="col-md-3"><label class="small fw-semibold">Back View</label><input type="file" name="front_angle" class="form-control rp-file" accept="image/*"></div>
+        <div class="col-md-3"><label class="small fw-semibold">Left Side</label><input type="file" name="leftside_angle" class="form-control rp-file" accept="image/*"></div>
+        <div class="col-md-3"><label class="small fw-semibold">Right Side</label><input type="file" name="rightside_angle" class="form-control rp-file" accept="image/*"></div>
+    </div>
+    <small class="text-muted"><i class="fa fa-info-circle"></i> Leave blank to keep existing images. Upload new to replace.</small>
+</div>
+
+<div class="col-md-12 mt-4">
+    <div class="card p-4 rounded-4" style="border: 1px solid #eef2ff; background: #ffffff;">
+        <h5 class="fw-bold mb-3"><i class="fa fa-file-text text-primary me-2"></i> Vehicle Documents</h5>
+        <p class="small text-secondary mb-3">Manage RC, Insurance, PUC – updating any document will reset admin verification status.</p>
+
+        <div class="table-responsive mb-4">
+            <table class="table premium-doc-table">
+                <thead>
+                    <tr><th>Document</th><th>Number</th><th>Expiry</th><th>Preview</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">📄 RC Book</td>
+                        <td id="rc-table-number">{{ vehicle.rc_number|default:"—" }}</td>
+                        <td id="rc-table-expiry">{{ vehicle.rc_expiry_date|default:"—" }}</td>
+                        <td id="rc-table-preview">{% if vehicle.rc_book %}<a href="{{ vehicle.rc_book.url }}" target="_blank" class="rp-view-btn"><i class="fa fa-eye"></i> View</a>{% else %}—{% endif %}</td>
+                        <td id="rc-table-status">{% if vehicle.rc_verified %}<span class="badge-premium-verified"><i class="fa fa-check-circle"></i> Verified</span>{% else %}<span class="badge-premium-pending"><i class="fa fa-clock-o"></i> Pending</span>{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">🛡️ Insurance</td>
+                        <td id="ins-table-number">{{ vehicle.insurance_number|default:"—" }}</td>
+                        <td id="ins-table-expiry">{{ vehicle.insurance_expiry_date|default:"—" }}</td>
+                        <td id="ins-table-preview">{% if vehicle.insurance %}<a href="{{ vehicle.insurance.url }}" target="_blank" class="rp-view-btn"><i class="fa fa-eye"></i> View</a>{% else %}—{% endif %}</td>
+                        <td id="ins-table-status">{% if vehicle.insurance_verified %}<span class="badge-premium-verified"><i class="fa fa-check-circle"></i> Verified</span>{% else %}<span class="badge-premium-pending"><i class="fa fa-clock-o"></i> Pending</span>{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">🌿 PUC</td>
+                        <td id="puc-table-number">{{ vehicle.puc_number|default:"—" }}</td>
+                        <td id="puc-table-expiry">{{ vehicle.puc_expiry_date|default:"—" }}</td>
+                        <td id="puc-table-preview">{% if vehicle.puc %}<a href="{{ vehicle.puc.url }}" target="_blank" class="rp-view-btn"><i class="fa fa-eye"></i> View</a>{% else %}—{% endif %}</td>
+                        <td id="puc-table-status">{% if vehicle.puc_verified %}<span class="badge-premium-verified"><i class="fa fa-check-circle"></i> Verified</span>{% else %}<span class="badge-premium-pending"><i class="fa fa-clock-o"></i> Pending</span>{% endif %}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <label class="fw-semibold text-primary"><i class="fa fa-refresh"></i> Update document</label>
+                <select id="docTypeSelect" class="form-select mt-1">
+                    <option value="">-- Choose document to update --</option>
+                    <option value="rc">RC Book (Registration)</option>
+                    <option value="ins">Insurance Policy</option>
+                    <option value="puc">PUC Certificate</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="rc-form" class="doc-form-section p-3" style="display:none;">
+            <h6 class="fw-bold mb-2"><i class="fa fa-id-card-o"></i> Update RC Details</h6>
+            <div class="row g-3">
+                <div class="col-md-3"><label>RC Number</label><input type="text" name="rc_number" class="form-control" placeholder="GJ01AB1234" value="{{ vehicle.rc_number|default:'' }}"></div>
+                <div class="col-md-3"><label>Issue Date</label><input type="date" name="rc_issue_date" class="form-control" value="{{ vehicle.rc_issue_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>Expiry Date</label><input type="date" name="rc_expiry_date" class="form-control" value="{{ vehicle.rc_expiry_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>RC File (PDF/Image)</label><input type="file" name="rc_book" class="form-control" accept=".pdf, image/*"></div>
+            </div>
+        </div>
+        <div id="ins-form" class="doc-form-section p-3" style="display:none;">
+            <h6 class="fw-bold mb-2"><i class="fa fa-shield"></i> Update Insurance</h6>
+            <div class="row g-3">
+                <div class="col-md-3"><label>Policy Number</label><input type="text" name="insurance_number" class="form-control" value="{{ vehicle.insurance_number|default:'' }}"></div>
+                <div class="col-md-3"><label>Issue Date</label><input type="date" name="insurance_issue_date" class="form-control" value="{{ vehicle.insurance_issue_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>Expiry Date</label><input type="date" name="insurance_expiry_date" class="form-control" value="{{ vehicle.insurance_expiry_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>Insurance File</label><input type="file" name="insurance" class="form-control" accept=".pdf, image/*"></div>
+            </div>
+        </div>
+        <div id="puc-form" class="doc-form-section p-3" style="display:none;">
+            <h6 class="fw-bold mb-2"><i class="fa fa-leaf"></i> Update PUC</h6>
+            <div class="row g-3">
+                <div class="col-md-3"><label>PUC Number</label><input type="text" name="puc_number" class="form-control" value="{{ vehicle.puc_number|default:'' }}"></div>
+                <div class="col-md-3"><label>Issue Date</label><input type="date" name="puc_issue_date" class="form-control" value="{{ vehicle.puc_issue_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>Expiry Date</label><input type="date" name="puc_expiry_date" class="form-control" value="{{ vehicle.puc_expiry_date|date:'Y-m-d' }}"></div>
+                <div class="col-md-3"><label>PUC File</label><input type="file" name="puc" class="form-control" accept=".pdf, image/*"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-12 mt-4">
+<button type="submit" id="submitVehicleBtn" class="rp-btn rp-btn-primary w-100"><i class="fa fa-save me-2"></i> Save Changes & Publish</button>
+</div>
+</div>
+</form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <footer class="text-light">
+            {% include 'footer.html'%}
+        </footer>
+        </div>
+
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/designesia.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // --- NEW: PARSLEY UNIQUE REGISTRATION VALIDATOR ---
+            const existingRegs = {{ existing_regs_json|safe|default:"[]" }};
+
+            if (window.Parsley) {
+                window.Parsley.addValidator('uniquereg', {
+                    validateString: function(value) {
+                        return !existingRegs.includes(value.toUpperCase());
+                    },
+                    messages: {
+                        en: 'This registration number is already registered to another vehicle.'
+                    }
+                });
+            }
+
+            const docSelect = document.getElementById('docTypeSelect');
+            const sections = document.querySelectorAll('.doc-form-section');
+            docSelect.addEventListener('change', function() {
+                sections.forEach(sec => sec.style.display = 'none');
+                if(this.value) document.getElementById(this.value + '-form').style.display = 'block';
+            });
+
+            // Category logic
+            const categorySelect = document.getElementById("category");
+            const subcategorySelect = document.getElementById("subcategory");
+            const allSubcategories = Array.from(subcategorySelect.querySelectorAll('option[data-category]'));
+            function updateSubcategories() {
+                const selectedCategoryId = categorySelect.value;
+                const currentSubcatValue = subcategorySelect.value;
+                subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+                allSubcategories.forEach(opt => {
+                    if (opt.getAttribute("data-category") === selectedCategoryId) {
+                        const newOpt = opt.cloneNode(true);
+                        subcategorySelect.appendChild(newOpt);
+                        if (newOpt.value === currentSubcatValue) newOpt.selected = true;
+                    }
+                });
+            }
+            categorySelect.addEventListener("change", updateSubcategories);
+            updateSubcategories();
+            const initialSubcatId = "{{ vehicle.vsubcategory.id }}";
+            if (initialSubcatId && Array.from(subcategorySelect.options).some(opt => opt.value === initialSubcatId)) subcategorySelect.value = initialSubcatId;
+
+      // --- DATE VALIDATION LOGIC ---
+
+            // 1. Get today's local date in YYYY-MM-DD format
+            const todayObj = new Date();
+            const todayStr = todayObj.getFullYear() + '-' + String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
+
+            // 2. Get tomorrow's local date for the baseline expiry minimum
+            const tomorrowObj = new Date();
+            tomorrowObj.setDate(tomorrowObj.getDate() + 1);
+            const tomorrowStr = tomorrowObj.getFullYear() + '-' + String(tomorrowObj.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrowObj.getDate()).padStart(2, '0');
+
+            // 3. Set max attribute for all issue dates so they cannot be in the future
+            const issueDateInputs = ['rc_issue_date', 'insurance_issue_date', 'puc_issue_date'];
+            issueDateInputs.forEach(inputName => {
+                const elem = document.querySelector(`input[name="${inputName}"]`);
+                if (elem) {
+                    elem.setAttribute('max', todayStr);
+                }
+            });
+
+            // 4. Set baseline min attribute for all expiry dates so they cannot be today or in the past
+            const expiryDateInputs = ['rc_expiry_date', 'insurance_expiry_date', 'puc_expiry_date'];
+            expiryDateInputs.forEach(inputName => {
+                const elem = document.querySelector(`input[name="${inputName}"]`);
+                if (elem) {
+                    elem.setAttribute('min', tomorrowStr);
+                }
+            });
+
+            // 5. Robust function using inline visual validation instead of alerts
+            function restrictDates(issueId, expiryId) {
+                const issueElem = document.querySelector(`input[name="${issueId}"]`);
+                const expiryElem = document.querySelector(`input[name="${expiryId}"]`);
+
+                if (issueElem && expiryElem) {
+
+                    // Create an inline error message element directly below the expiry input
+                    const errorSpan = document.createElement('div');
+                    errorSpan.className = 'text-danger small mt-1 fw-semibold d-none';
+                    errorSpan.innerHTML = '<i class="fa fa-exclamation-circle"></i> Expiry must be after Issue Date and cannot be past/today.';
+
+                    // Insert the error span right after the expiry input
+                    if(expiryElem.parentNode) {
+                        expiryElem.parentNode.appendChild(errorSpan);
+                    }
+
+                    const validateExpiry = () => {
+                        let requiredMinExpiry = tomorrowStr; // Baseline minimum is tomorrow
+
+                        if (issueElem.value) {
+                            let issueDate = new Date(issueElem.value);
+                            issueDate.setDate(issueDate.getDate() + 1); // Expiry must be AT LEAST 1 day after issue
+
+                            const issueBasedMin = issueDate.getFullYear() + '-' +
+                                              String(issueDate.getMonth() + 1).padStart(2, '0') + '-' +
+                                              String(issueDate.getDate()).padStart(2, '0');
+
+                            if (issueBasedMin > requiredMinExpiry) {
+                                requiredMinExpiry = issueBasedMin;
+                            }
+                        }
+
+                        // Apply the dynamic minimum for browser HTML5 validation
+                        expiryElem.setAttribute('min', requiredMinExpiry);
+
+                        // Check if the currently selected expiry is invalid
+                        if (expiryElem.value && expiryElem.value < requiredMinExpiry) {
+                            // Show inline error, apply red border, and block form submission
+                            errorSpan.classList.remove('d-none');
+                            expiryElem.style.borderColor = '#dc3545';
+                            expiryElem.setCustomValidity("Invalid expiry date.");
+                        } else {
+                            // Hide error, reset border, and clear form block
+                            errorSpan.classList.add('d-none');
+                            expiryElem.style.borderColor = '';
+                            expiryElem.setCustomValidity("");
+                        }
+                    };
+
+                    // Run on load to check pre-filled data
+                    validateExpiry();
+
+                    // Listeners to trigger validation in real-time
+                    issueElem.addEventListener('change', validateExpiry);
+                    expiryElem.addEventListener('input', validateExpiry);
+                    expiryElem.addEventListener('change', validateExpiry);
+                }
+            }
+
+            // Initialize strict date validation
+            restrictDates('rc_issue_date', 'rc_expiry_date');
+            restrictDates('insurance_issue_date', 'insurance_expiry_date');
+            restrictDates('puc_issue_date', 'puc_expiry_date');
+
+            // --- END DATE VALIDATION LOGIC ---
+
+            // --- LIVE DOCUMENT PREVIEW LOGIC ---
+
+            // Function to handle text and date inputs
+            function setupTextInputSync(inputName, targetId, prefix) {
+                const input = document.querySelector(`input[name="${inputName}"]`);
+                const target = document.getElementById(targetId);
+                if (input && target) {
+                    input.addEventListener('input', function() {
+                        target.innerHTML = `<span class="text-primary fw-bold">${this.value || '—'}</span>`;
+                        updateStatusToUnsaved(prefix);
+                    });
+                }
+            }
+
+            // Function to handle live file preview generation
+            function setupFileInputSync(inputName, targetId, prefix) {
+                const input = document.querySelector(`input[name="${inputName}"]`);
+                const target = document.getElementById(targetId);
+                if (input && target) {
+                    input.addEventListener('change', function() {
+                        if (this.files && this.files[0]) {
+                            const file = this.files[0];
+                            const fileURL = URL.createObjectURL(file); // Creates a temporary browser URL
+
+                            // Replace the preview cell with a "View New" button highlighting the change
+                            target.innerHTML = `<a href="${fileURL}" target="_blank" class="rp-view-btn" style="background-color: #dcfce7; color: #166534 !important; border-color: #86efac;"><i class="fa fa-eye"></i> View New</a>`;
+                            updateStatusToUnsaved(prefix);
+                        }
+                    });
+                }
+            }
+
+            // Function to flag the status column as containing unsaved changes
+            function updateStatusToUnsaved(prefix) {
+                const statusCell = document.getElementById(`${prefix}-table-status`);
+                if (statusCell) {
+                    statusCell.innerHTML = `<span class="badge-premium-pending" style="background: #e0e7ff; color: #3730a3;"><i class="fa fa-info-circle"></i> Unsaved Changes</span>`;
+                }
+            }
+
+            // Initialize RC fields
+            setupTextInputSync('rc_number', 'rc-table-number', 'rc');
+            setupTextInputSync('rc_expiry_date', 'rc-table-expiry', 'rc');
+            setupFileInputSync('rc_book', 'rc-table-preview', 'rc');
+
+            // Initialize Insurance fields
+            setupTextInputSync('insurance_number', 'ins-table-number', 'ins');
+            setupTextInputSync('insurance_expiry_date', 'ins-table-expiry', 'ins');
+            setupFileInputSync('insurance', 'ins-table-preview', 'ins');
+
+            // Initialize PUC fields
+            setupTextInputSync('puc_number', 'puc-table-number', 'puc');
+            setupTextInputSync('puc_expiry_date', 'puc-table-expiry', 'puc');
+            setupFileInputSync('puc', 'puc-table-preview', 'puc');
+        });
+    </script>
+
+</body>
+</html>

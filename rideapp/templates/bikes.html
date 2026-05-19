@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    {% include 'links.html' %}
+</head>
+
+<body>
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+  <div id="flash-wrap">
+    {% for message in messages %}
+      <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div id="wrapper">
+
+    <div id="de-preloader"></div>
+    {% include 'navbar.html' %}
+
+    <div class="no-bottom no-top zebra" id="content">
+
+        <section class="vp-header">
+            <div class="container">
+                <div class="vp-header-box">
+                    <div>
+                        <h2 class="vp-title">Bikes</h2>
+                        <p class="vp-subtitle">Browse our collection of premium two-wheelers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="vp-main">
+            <div class="container">
+                <div class="row g-4">
+
+                    <div class="col-lg-3">
+                        <form method="GET" action="/bikes" class="vp-filter-panel" id="filter-form">
+
+                            <div class="vp-filter-head">
+                                <h4 class="vp-filter-title">Filter</h4>
+                                <a href="/bikes" class="vp-clear-btn" style="text-decoration: none;">Clear</a>
+                            </div>
+
+                            <div class="vp-filter-group" id="subcat-group">
+                                <h5 class="vp-filter-label">Body Type</h5>
+                                <div class="vp-pill-wrap">
+                                    <label class="vp-pill">
+                                        <input type="radio" name="subcategory" value="Sports" {% if selected_subcategory == 'Sports' %}checked{% endif %}>
+                                        <span>Sports</span>
+                                    </label>
+                                    <label class="vp-pill">
+                                        <input type="radio" name="subcategory" value="Cruiser" {% if selected_subcategory == 'Cruiser' %}checked{% endif %}>
+                                        <span>Cruiser</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="vp-filter-group" id="fuel-group" style="display: none;">
+                                <h5 class="vp-filter-label">Fuel Type</h5>
+                                <div class="vp-pill-wrap">
+                                    <label class="vp-pill">
+                                        <input type="radio" name="fueltype" value="Petrol" {% if selected_fuel == 'Petrol' %}checked{% endif %}>
+                                        <span>Petrol</span>
+                                    </label>
+                                    <label class="vp-pill">
+                                        <input type="radio" name="fueltype" value="Electric" {% if selected_fuel == 'Electric' %}checked{% endif %}>
+                                        <span>Electric</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+                            <div class="vp-filter-group" >
+                                <button type="submit" class="vp-btn" style="width: 100%;  ">Apply Filters</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="vp-grid">
+
+                            {% for v in vehicles %}
+                            <div class="vp-card">
+
+                               <div class="vp-image">
+    <img src="{{ v.vehicle_img.url }}" alt="">
+    <span class="vp-overlay"></span>
+
+    {% if v.available_status == '1' %}
+        <span class="vp-status available">
+            <i class="fa fa-check-circle"></i> Available
+        </span>
+    {% elif v.available_status == '2' %}
+        <span class="vp-status not-available">
+            <i class="fa fa-times-circle"></i> Not Available
+        </span>
+    {% elif v.available_status == '3' %}
+        <span class="vp-status on-ride">
+            <i class="fa fa-car"></i> On Ride
+        </span>
+    {% endif %}
+</div>
+
+                                <div class="vp-card-body">
+                                    <h4 class="vp-name">{{ v.brand }} {{ v.model }}</h4>
+
+                                    <div class="vp-specs">
+                                        <span class="vp-spec"><img src="/static/images/icons/seat.png"> {{ v.seats }}</span>
+                                        <span class="vp-spec"><img src="/static/images/icons/fuel.png"> {{ v.fuel_type }}</span>
+                                        <span class="vp-spec"><img src="/static/images/icons/bike.png"> {{ v.vsubcategory }}</span>
+                                    </div>
+
+                                                   <div class="vp-footer">
+    <div>
+        <small>Daily Rate</small>
+        <strong>₹{{ v.fare }}</strong>
+    </div>
+
+    {% if v.available_status == '1' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">Rent Now</button>
+        </form>
+                                      {% elif v.available_status == '2' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details </button>
+        </form>
+
+    {% elif v.available_status == '3' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details</button>
+        </form>
+
+    {% endif %}
+</div>
+                                </div>
+
+                            </div>
+                            {% empty %}
+                            <div class="no-results-message" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border: 2px dashed #e0e0e0; border-radius: 12px; background-color: #fafafa;">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <h3 style="color: #333; margin-bottom: 12px; font-weight: 600;">No Bikes Found</h3>
+                                <p style="color: #666; margin-bottom: 25px; max-width: 400px; margin-left: auto; margin-right: auto;">We couldn't find any bikes matching your current filters. Try adjusting your preferences to see more options.</p>
+                                <a href="/bikes" class="vp-btn" style="text-decoration: none; display: inline-block; padding: 10px 24px;">Clear All Filters</a>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% include 'footer.html' %}
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/designesia.js"></script>
+
+<script>
+    const fuelGroup = document.getElementById('fuel-group');
+
+    // Function to toggle visibility of Fuel Type filter
+    function toggleFuelFilter() {
+        const isSubcatChecked = document.querySelector('input[name="subcategory"]:checked');
+        if (isSubcatChecked) {
+            fuelGroup.style.display = 'block';
+        } else {
+            fuelGroup.style.display = 'none';
+            // Optional: Uncheck the fuel types if body type is deselected
+            document.querySelectorAll('input[name="fueltype"]').forEach(r => {
+                r.checked = false;
+                r.dataset.wasChecked = "false";
+            });
+        }
+    }
+
+    // Allow radio buttons to be deselected when clicked again
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.type === 'radio') {
+            if (e.target.dataset.wasChecked === "true") {
+                // If it was already checked, uncheck it
+                e.target.checked = false;
+                e.target.dataset.wasChecked = "false";
+
+                // If they unchecked the subcategory, hide fuel filter
+                if (e.target.name === 'subcategory') toggleFuelFilter();
+            } else {
+                // Uncheck all other radios in the same group
+                const groupRadios = document.getElementsByName(e.target.name);
+                groupRadios.forEach(r => r.dataset.wasChecked = "false");
+
+                // Mark the clicked one as checked
+                e.target.dataset.wasChecked = "true";
+
+                // If they checked a subcategory, show fuel filter
+                if (e.target.name === 'subcategory') toggleFuelFilter();
+            }
+        }
+    });
+
+    // Handle page loads (if a filter was previously applied and page reloads)
+    document.addEventListener("DOMContentLoaded", function() {
+        // Mark initially checked radios so they can be properly toggled off
+        document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+            radio.dataset.wasChecked = "true";
+        });
+
+        // Toggle fuel filter visibility based on whether a subcategory is pre-selected
+        toggleFuelFilter();
+    });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="zxx">-->
+<!--<head>-->
+<!--    {% include 'links.html' %}-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<script>-->
+<!--  setTimeout(() => {-->
+<!--    const flashWrap = document.getElementById("flash-wrap");-->
+<!--    if (flashWrap) {-->
+<!--      flashWrap.style.opacity = "0";-->
+<!--      setTimeout(() => flashWrap.remove(), 300);-->
+<!--    }-->
+<!--  }, 2500);-->
+<!--</script>-->
+
+<!--{% if messages %}-->
+<!--  <div id="flash-wrap">-->
+<!--    {% for message in messages %}-->
+<!--      <div class="flash-msg flash-{{ message.tags }}">-->
+<!--        {{ message }}-->
+<!--      </div>-->
+<!--    {% endfor %}-->
+<!--  </div>-->
+<!--{% endif %}-->
+
+<!--<div id="wrapper">-->
+
+<!--    <div id="de-preloader"></div>-->
+<!--    {% include 'navbar.html' %}-->
+
+<!--    <div class="no-bottom no-top zebra" id="content">-->
+
+<!--        <section class="vp-header">-->
+<!--            <div class="container">-->
+<!--                <div class="vp-header-box">-->
+<!--                    <div>-->
+<!--                        <h2 class="vp-title">Bikes</h2>-->
+<!--                        <p class="vp-subtitle">Browse our collection of premium two-wheelers</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
+
+<!--        <section class="vp-main">-->
+<!--            <div class="container">-->
+<!--                <div class="row g-4">-->
+
+<!--                    <div class="col-lg-3">-->
+<!--                        <form method="GET" action="/bikes" class="vp-filter-panel" id="filter-form">-->
+
+<!--                            <div class="vp-filter-head">-->
+<!--                                <h4 class="vp-filter-title">Filter</h4>-->
+<!--                                <a href="/bikes" class="vp-clear-btn" style="text-decoration: none;">Clear</a>-->
+<!--                            </div>-->
+
+<!--                            <div class="vp-filter-group" id="category-group">-->
+<!--                                <h5 class="vp-filter-label">Vehicle Type</h5>-->
+<!--                                <div class="vp-pill-wrap">-->
+<!--                                    <label class="vp-pill">-->
+<!--                                        <input type="radio" name="category" value="Bike" id="cat-bike">-->
+<!--                                        <span>Bike</span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <div class="vp-filter-group" id="subcat-group" style="display: none;">-->
+<!--                                <h5 class="vp-filter-label">Body Type</h5>-->
+<!--                                <div class="vp-pill-wrap">-->
+<!--                                    <label class="vp-pill">-->
+<!--                                        <input type="radio" name="subcategory" value="Sports" {% if selected_subcategory == 'Sports' %}checked{% endif %}>-->
+<!--                                        <span>Sports</span>-->
+<!--                                    </label>-->
+<!--                                    <label class="vp-pill">-->
+<!--                                        <input type="radio" name="subcategory" value="Cruiser" {% if selected_subcategory == 'Cruiser' %}checked{% endif %}>-->
+<!--                                        <span>Cruiser</span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <div class="vp-filter-group" id="fuel-group" style="display: none;">-->
+<!--                                <h5 class="vp-filter-label">Fuel Type</h5>-->
+<!--                                <div class="vp-pill-wrap">-->
+<!--                                    <label class="vp-pill">-->
+<!--                                        <input type="radio" name="fueltype" value="Petrol" {% if selected_fuel == 'Petrol' %}checked{% endif %}>-->
+<!--                                        <span>Petrol</span>-->
+<!--                                    </label>-->
+<!--                                    <label class="vp-pill">-->
+<!--                                        <input type="radio" name="fueltype" value="Electric" {% if selected_fuel == 'Electric' %}checked{% endif %}>-->
+<!--                                        <span>Electric</span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <button type="submit" class="vp-btn" style="width: 100%; margin-top: 15px; padding: 12px 0; border: none; cursor: pointer;">Apply Filters</button>-->
+
+<!--                            <div class="vp-filter-note mt-4">-->
+<!--                                <span class="vp-dot"></span>-->
+<!--                                <p>Premium bike rentals with a secure booking experience.</p>-->
+<!--                            </div>-->
+
+<!--                        </form>-->
+<!--                    </div>-->
+
+<!--                    <div class="col-lg-9">-->
+<!--                        <div class="vp-grid">-->
+
+<!--                            {% for v in vehicles %}-->
+<!--                            <div class="vp-card">-->
+
+<!--                                <div class="vp-image">-->
+<!--                                    <img src="{{ v.vehicle_img.url }}" alt="">-->
+<!--                                    <span class="vp-overlay"></span>-->
+<!--                                    <span class="vp-price">₹{{ v.fare }}/day</span>-->
+<!--                                </div>-->
+
+<!--                                <div class="vp-card-body">-->
+<!--                                    <h4 class="vp-name">{{ v.brand }} {{ v.model }}</h4>-->
+
+<!--                                    <div class="vp-specs">-->
+<!--                                        <span class="vp-spec"><img src="/static/images/icons/seat.png"> {{ v.seats }}</span>-->
+<!--                                        <span class="vp-spec"><img src="/static/images/icons/fuel.png"> {{ v.fuel_type }}</span>-->
+<!--                                        <span class="vp-spec"><img src="/static/images/icons/bike.png"> {{ v.vsubcategory }}</span>-->
+<!--                                    </div>-->
+
+<!--                                    <div class="vp-footer">-->
+<!--                                        <div>-->
+<!--                                            <small>Daily Rate</small>-->
+<!--                                            <strong>₹{{ v.fare }}</strong>-->
+<!--                                        </div>-->
+
+<!--                                        <form action="/singlecar/{{v.id}}" method="post">-->
+<!--                                            {% csrf_token %}-->
+<!--                                            <input type="hidden" name="vid" value="{{ v.id }}">-->
+<!--                                            <button class="vp-btn">Rent Now</button>-->
+<!--                                        </form>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+<!--                            {% empty %}-->
+<!--                            <div class="no-results-message" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border: 2px dashed #e0e0e0; border-radius: 12px; background-color: #fafafa;">-->
+<!--                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">-->
+<!--                                    <circle cx="11" cy="11" r="8"></circle>-->
+<!--                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>-->
+<!--                                </svg>-->
+<!--                                <h3 style="color: #333; margin-bottom: 12px; font-weight: 600;">No Bikes Found</h3>-->
+<!--                                <p style="color: #666; margin-bottom: 25px; max-width: 400px; margin-left: auto; margin-right: auto;">We couldn't find any bikes matching your current filters. Try adjusting your preferences to see more options.</p>-->
+<!--                                <a href="/bikes" class="vp-btn" style="text-decoration: none; display: inline-block; padding: 10px 24px;">Clear All Filters</a>-->
+<!--                            </div>-->
+<!--                            {% endfor %}-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+<!--{% include 'footer.html' %}-->
+<!--<script src="/static/js/plugins.js"></script>-->
+<!--<script src="/static/js/designesia.js"></script>-->
+
+<!--<script>-->
+<!--    const catBike = document.getElementById('cat-bike');-->
+<!--    const subcatGroup = document.getElementById('subcat-group');-->
+<!--    const fuelGroup = document.getElementById('fuel-group');-->
+
+<!--    // Function to toggle visibility of sub-filters-->
+<!--    function toggleSubFilters() {-->
+<!--        if (catBike && catBike.checked) {-->
+<!--            subcatGroup.style.display = 'block';-->
+<!--            fuelGroup.style.display = 'block';-->
+<!--        } else {-->
+<!--            subcatGroup.style.display = 'none';-->
+<!--            fuelGroup.style.display = 'none';-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Allow radio buttons to be deselected when clicked again-->
+<!--    document.addEventListener('click', function(e) {-->
+<!--        if (e.target && e.target.type === 'radio') {-->
+<!--            if (e.target.dataset.wasChecked === "true") {-->
+<!--                // If it was already checked, uncheck it-->
+<!--                e.target.checked = false;-->
+<!--                e.target.dataset.wasChecked = "false";-->
+
+<!--                // If they unchecked the category, hide sub-filters-->
+<!--                if (e.target.name === 'category') toggleSubFilters();-->
+<!--            } else {-->
+<!--                // Uncheck all other radios in the same group-->
+<!--                const groupRadios = document.getElementsByName(e.target.name);-->
+<!--                groupRadios.forEach(r => r.dataset.wasChecked = "false");-->
+
+<!--                // Mark the clicked one as checked-->
+<!--                e.target.dataset.wasChecked = "true";-->
+
+<!--                // If they checked the category, show sub-filters-->
+<!--                if (e.target.name === 'category') toggleSubFilters();-->
+<!--            }-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Handle page loads (if a filter was previously applied)-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--        // Mark initially checked radios so they can be properly toggled off-->
+<!--        document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {-->
+<!--            radio.dataset.wasChecked = "true";-->
+<!--        });-->
+
+<!--        // Check if there are active subcategory or fuel filters from the URL-->
+<!--        const hasSubFilters = document.querySelector('input[name="subcategory"]:checked') ||-->
+<!--                              document.querySelector('input[name="fueltype"]:checked');-->
+
+<!--        // If there are sub-filters applied, auto-check the Bike category and display the blocks-->
+<!--        if (hasSubFilters && catBike) {-->
+<!--            catBike.checked = true;-->
+<!--            catBike.dataset.wasChecked = "true";-->
+<!--        }-->
+
+<!--        toggleSubFilters();-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->

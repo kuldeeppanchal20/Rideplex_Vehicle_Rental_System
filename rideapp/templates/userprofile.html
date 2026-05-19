@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+{% load static %}
+{% include 'links.html' %}
+
+<style>
+    .subheader-title{
+font-size:60px;
+font-weight:800;
+color:#fff;
+letter-spacing:1px;
+margin-bottom:10px;
+}
+
+.subheader-line{
+width:70px;
+height:3px;
+background:#fff;
+margin:0 auto 15px auto;
+border-radius:2px;
+}
+
+.subheader-subtitle{
+font-size:18px;
+color:#e5e5e5;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+setTimeout(() => {
+const flashWrap = document.getElementById("flash-wrap");
+if (flashWrap) {
+flashWrap.style.opacity = "0";
+setTimeout(() => flashWrap.remove(), 300);
+}
+}, 2500);
+</script>
+
+
+{% if messages %}
+<div id="flash-wrap">
+  {% for message in messages %}
+  <div class="flash-msg flash-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div id="wrapper" class="profile-section">
+
+{% include 'navbar.html' %}
+
+<div id="de-preloader"></div>
+
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img" alt="">
+
+<div class="center-y relative text-center">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+
+<h1 class="subheader-title">User Profile</h1>
+
+<div class="subheader-line"></div>
+
+<p class="subheader-subtitle">
+Manage your account information
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+</section>
+
+<div class="container mt-4 mb-5">
+<div class="row g-4">
+
+<!-- Sidebar -->
+<div class="col-lg-3 col-md-4">
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+<div class="rp-user-name">
+Welcome, {{ user.uname }}
+</div>
+
+<div class="rp-user-sub">
+Manage Your Personal Information and Keep updated your Profile.
+</div>
+</div>
+
+<ul class="rp-menu">
+
+   <li class="{% if request.path == '/bookinghistory' %}active{% endif %}">
+<a href="/bookinghistory">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking History</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/userprofile' %}active{% endif %}">
+<a href="/userprofile">
+<i class="fa fa-user"></i>
+<span>Profile</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/document' %}active{% endif %}">
+<a href="/document">
+<i class="fa fa-file-pdf-o"></i>
+<span>My Documents</span>
+</a>
+</li>
+
+<li>
+<a href="/logout">
+<i class="fa fa-sign-out"></i> Sign Out
+</a>
+</li>
+
+</ul>
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="col-lg-9">
+
+<!-- PROFILE CARD -->
+<div class="kp-pro-card">
+
+<div class="kp-pro-top">
+
+<div class="kp-pro-avatar">
+<img id="profilePreview" src="/media/{{ user.profile_pic }}" alt="Profile" class="kp-pro-img">
+</div>
+
+<div class="kp-pro-meta">
+
+<h2 class="kp-pro-name">{{ user.uname }}</h2>
+
+<form id="photoForm" method="POST" action="/changeuserprofile" enctype="multipart/form-data">
+{% csrf_token %}
+
+<input
+type="file"
+id="profileUpload"
+name="pfp"
+accept="image/*"
+style="display:none"
+required
+data-parsley-required-message="Profile picture required">
+
+<div class="kp-pro-divider"></div>
+
+<button
+type="button"
+class="kp-pro-btn"
+onclick="openFileSelector()">
+Change Photo
+</button>
+
+</form>
+
+</div>
+</div>
+
+<div class="kp-pro-divider"></div>
+
+</div>
+
+<!-- USER PROFILE UPDATE FORM -->
+<form method="POST" id="userprofileupdate" class="kp-form-wrap" data-parsley-validate>
+{% csrf_token %}
+
+<input type="hidden" name="userid" value="{{ user.id }}">
+
+<div class="kp-card">
+
+<div class="kp-card-head">
+<h3 class="kp-title">User Information</h3>
+<p class="kp-sub">Update your profile details</p>
+</div>
+
+<div class="kp-grid">
+
+<!-- Name -->
+<div class="kp-field">
+<label class="kp-label">Full Name</label>
+<input
+type="text"
+name="name"
+value="{{ user.uname }}"
+class="kp-input"
+required
+pattern="[A-Za-z ]{3,50}"
+data-parsley-pattern-message="Only letters allowed">
+</div>
+
+<!-- Contact -->
+<div class="kp-field">
+<label class="kp-label">Phone Number</label>
+<input
+type="number"
+name="contact"
+value="{{ user.contact }}"
+class="kp-input"
+required
+pattern="[0-9]{10}"
+data-parsley-pattern-message="Enter valid 10 digit number">
+</div>
+
+<!-- Password Section -->
+<div class="kp-field">
+<label class="kp-label">New Password</label>
+<input
+type="password"
+name="new_password"
+class="kp-input"
+placeholder="Enter new password"
+minlength="6"
+data-parsley-minlength="6"
+data-parsley-minlength-message="Password must be at least 6 characters">
+</div>
+
+<div class="kp-field">
+<label class="kp-label">Confirm Password</label>
+<input
+type="password"
+name="confirm_password"
+class="kp-input"
+placeholder="Confirm new password"
+data-parsley-equalto="[name=new_password]"
+data-parsley-equalto-message="Passwords must match">
+</div>
+
+<!-- Age -->
+<div class="kp-field">
+<label class="kp-label">Age</label>
+<input
+type="number"
+name="age"
+value="{{ user.age }}"
+class="kp-input"
+min="18"
+max="100"
+required>
+</div>
+
+<!-- Address -->
+<div class="kp-field kp-full">
+<label class="kp-label">Address</label>
+<textarea
+class="form-control"
+name="address"
+rows="4"
+required
+data-parsley-minlength="10"
+data-parsley-minlength-message="Address must be at least 10 characters"
+placeholder="Enter your full address">{{user.address}}</textarea>
+</div>
+
+</div>
+
+<div class="kp-pro-divider"></div>
+
+<button type="submit" name="update_profile" class="kp-btn-save">
+Update Profile
+</button>
+
+</div>
+</form>
+
+</div>
+</div>
+</div>
+
+<footer>
+{% include 'footer.html' %}
+</footer>
+
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<script>
+
+function openFileSelector() {
+document.getElementById("profileUpload").click();
+}
+
+document.getElementById("profileUpload").addEventListener("change", function(event) {
+
+const file = event.target.files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+document.getElementById("profilePreview").src = e.target.result;
+};
+
+reader.readAsDataURL(file);
+
+document.getElementById("photoForm").submit();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

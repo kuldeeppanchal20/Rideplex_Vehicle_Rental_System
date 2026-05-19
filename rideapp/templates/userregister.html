@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+{% include 'links.html' %}
+
+<style>
+
+/* password wrapper */
+.pass-wrap{
+position:relative;
+}
+
+.pass-wrap input{
+padding-right:45px;
+}
+
+/* eye icon */
+.eye-icon{
+position:absolute;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#6b7280;
+font-size:16px;
+z-index:5;
+}
+
+.eye-icon:hover{
+color:#2563eb;
+}
+
+/* parsley error */
+.parsley-errors-list{
+margin-top:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="de-preloader"></div>
+
+{% include 'navbar.html' %}
+
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+
+<section aria-label="section" class="jarallax" id="section-hero">
+
+<img alt="" class="jarallax-img" src="static/images/background/userbg.png">
+
+<div class="v-center">
+
+<div class="container">
+
+<div class="jarallax text-light">
+
+<div class="row">
+<div class="col-md-12 text-center">
+
+<div class="hero-title-wrap">
+<h1 class="hero-title">User Registration</h1>
+<p class="hero-subtitle">Create your account to continue</p>
+<div class="hero-line"></div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+
+
+<div class="row align-items-center">
+
+<div class="premium-form-card">
+
+<h4>Create Account</h4>
+
+
+{% if messages %}
+<div class="form-msg form-msg-danger">
+{% for i in messages %}
+<div>{{ i }}</div>
+{% endfor %}
+</div>
+{% endif %}
+
+
+
+<form action="userregisterdata"
+class="form-border js-validate"
+id="userRegisterForm"
+method="post"
+data-parsley-validate="true"
+novalidate
+enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div class="row">
+
+
+<!-- NAME -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Name</label>
+
+<input class="form-control"
+id="name"
+name="name"
+type="text"
+placeholder="Enter full name"
+required
+data-parsley-pattern="^[A-Za-z\s]+$"
+data-parsley-required-message="Name is required"
+data-parsley-pattern-message="Only alphabets allowed">
+
+</div>
+</div>
+
+
+
+<!-- EMAIL -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Email Address</label>
+
+<input class="form-control"
+id="email"
+name="email"
+type="email"
+placeholder="Enter email address"
+required
+data-parsley-type="email"
+data-parsley-required-message="Email is required"
+data-parsley-type-message="Enter valid email like abc@gmail.com">
+
+</div>
+</div>
+
+
+
+<!-- PASSWORD -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Password</label>
+
+<div class="pass-wrap">
+
+<input class="form-control"
+id="password"
+name="password"
+type="password"
+placeholder="Enter password"
+required
+data-parsley-minlength="6"
+data-parsley-required-message="Password is required"
+data-parsley-minlength-message="Password must be at least 6 characters"
+data-parsley-errors-container="#password-error">
+
+<i class="fa fa-eye eye-icon"
+onclick="togglePassword('password', this)"></i>
+
+</div>
+
+<div id="password-error"></div>
+
+</div>
+</div>
+
+
+
+<!-- CONFIRM PASSWORD -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Re-enter Password</label>
+
+<div class="pass-wrap">
+
+<input class="form-control"
+id="repassword"
+name="re-password"
+type="password"
+placeholder="Confirm password"
+required
+data-parsley-equalto="#password"
+data-parsley-required-message="Confirm password is required"
+data-parsley-equalto-message="Passwords do not match"
+data-parsley-errors-container="#repassword-error">
+
+<i class="fa fa-eye eye-icon"
+onclick="togglePassword('repassword', this)"></i>
+
+</div>
+
+<div id="repassword-error"></div>
+
+</div>
+</div>
+
+
+
+<!-- CONTACT -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Contact</label>
+
+<input class="form-control"
+id="contact"
+name="contact"
+type="number"
+placeholder="Enter mobile number"
+required
+data-parsley-pattern="^[6-9]\d{9}$"
+data-parsley-required-message="Contact number is required"
+data-parsley-pattern-message="Enter valid 10 digit mobile number">
+
+</div>
+</div>
+
+
+
+<!-- AGE -->
+
+<div class="col-md-6">
+<div class="field-set">
+
+<label>Age</label>
+
+<input class="form-control"
+id="age"
+name="age"
+type="text"
+placeholder="Enter age"
+required
+data-parsley-type="digits"
+data-parsley-range="[18, 80]"
+data-parsley-required-message="Age is required"
+data-parsley-type-message="Age must be a number"
+data-parsley-range-message="Age must be between 18 to 80">
+
+</div>
+</div>
+
+
+
+<!-- PROFILE PICTURE -->
+
+<div class="col-md-12">
+<div class="field-set">
+
+<label>Profile Picture</label>
+
+<input type="file"
+class="form-control"
+id="pfp"
+name="pfp"
+accept="image/*"
+required
+data-parsley-required-message="Profile Picture is required">
+
+</div>
+</div>
+
+
+
+<!-- ADDRESS -->
+
+<div class="col-md-12">
+<div class="field-set">
+
+<label>Address</label>
+
+<textarea class="form-control"
+id="address"
+name="address"
+rows="4"
+placeholder="Enter your full address"
+required
+data-parsley-minlength="20"
+data-parsley-required-message="Address is required"
+data-parsley-minlength-message="Enter proper address"></textarea>
+
+</div>
+</div>
+
+
+
+<!-- SUBMIT -->
+
+<div class="col-md-12">
+<div id="submit">
+
+<button class="btn-main btn-fullwidth" type="submit">
+Register Now
+</button>
+
+</div>
+</div>
+
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+{% include 'footer.html' %}
+
+</div>
+
+
+
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/designesia.js"></script>
+
+<script>
+
+function togglePassword(inputId, icon){
+
+var input = document.getElementById(inputId);
+
+if(input.type === "password"){
+input.type="text";
+icon.classList.remove("fa-eye");
+icon.classList.add("fa-eye-slash");
+}
+else{
+input.type="password";
+icon.classList.remove("fa-eye-slash");
+icon.classList.add("fa-eye");
+}
+
+}
+
+</script>
+
+</body>
+</html>

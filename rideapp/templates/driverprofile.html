@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zxx">
+{% load static %}
+<head>
+   {% include 'links.html' %}
+
+   <style>
+/* Force header font like User Profile */
+#subheader h1{
+    font-size:64px !important;
+    font-weight:800 !important;
+    letter-spacing:1px;
+    text-transform:capitalize;
+}
+
+/* Subtitle style */
+#subheader p{
+    font-size:18px !important;
+    font-weight:400;
+    margin-top:5px;
+}
+
+.subheader-line{
+width:70px;
+height:3px;
+background:#fff;
+margin:0 auto 15px auto;
+border-radius:2px;
+}
+
+<div class="kp-field">
+<label class="kp-label">Gender</label>
+
+<select class="kp-input" name="gender" required>
+<option value="">Select Gender</option>
+<option value="Male" {% if driver.gender == "Male" %}selected{% endif %}>Male</option>
+<option value="Female" {% if driver.gender == "Female" %}selected{% endif %}>Female</option>
+</select>
+
+</div>
+
+</style>
+
+</head>
+
+<body>
+
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+  {% for message in messages %}
+  <div class="flash-msg flash-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div id="wrapper" class="profile-section">
+
+{% include 'navbar.html' %}
+
+<!-- page preloader -->
+<div id="de-preloader"></div>
+
+<!-- content -->
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+<!-- SUBHEADER -->
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img" alt="">
+
+<div class="center-y relative text-center">
+<div class="container">
+<div class="row">
+
+
+     <div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title"> Driver Profile</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+<div class="clearfix"></div>
+
+</div>
+</div>
+</div>
+
+</section>
+
+<div class="container mt-4 mb-5">
+<div class="row g-4">
+
+<!-- Sidebar -->
+<div class="col-lg-3 col-md-4">
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+<div class="rp-user-name">
+Welcome, {{ driver.dname }}
+</div>
+
+<div class="rp-user-sub">
+Manage your personal information and keep your profile updated.
+</div>
+</div>
+
+<ul class="rp-menu">
+
+<li class="{% if request.path == '/assign_ride' %}active{% endif %}">
+<a href="/assign_ride">
+<i class="fa fa-car"></i> Assigned Rides
+</a>
+</li>
+
+<li class="{% if request.path == '/driverprofile' %}active{% endif %}">
+<a href="/driverprofile">
+<i class="fa fa-user"></i> Profile
+</a>
+</li>
+
+<li class="{% if request.path == '/document' %}active{% endif %}">
+<a href="/document">
+<i class="fa fa-file-pdf-o"></i> Documents
+</a>
+</li>
+
+<li>
+<a href="/logout">
+<i class="fa fa-sign-out"></i> Sign Out
+</a>
+</li>
+
+</ul>
+
+</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="col-lg-9">
+
+<!-- PROFILE CARD -->
+<div class="kp-pro-card">
+
+<div class="kp-pro-top">
+
+<div class="kp-pro-avatar">
+<img id="profilePreview" src="/media/{{ driver.profile_pic }}" class="kp-pro-img">
+</div>
+
+<div class="kp-pro-meta">
+
+<h2 class="kp-pro-name">{{ driver.dname }}</h2>
+<p class="kp-pro-subtitle">Driver Account</p>
+
+<form id="photoForm" method="POST" action="/changedriverprofile" enctype="multipart/form-data">
+{% csrf_token %}
+
+<input
+type="file"
+id="profileUpload"
+name="pfp"
+accept="image/*"
+style="display:none">
+
+<div class="kp-pro-divider"></div>
+
+<button
+type="button"
+class="kp-pro-btn"
+onclick="openFileSelector()">
+Change Photo
+</button>
+
+</form>
+
+</div>
+</div>
+
+<div class="kp-pro-divider"></div>
+
+</div>
+
+<!-- PROFILE UPDATE -->
+<form method="POST" class="kp-form-wrap" data-parsley-validate>
+
+{% csrf_token %}
+
+<input type="hidden" name="driverid" value="{{ driver.id }}">
+
+<div class="kp-card">
+
+<div class="kp-card-head">
+<h3 class="kp-title">Driver Information</h3>
+<p class="kp-sub">Update your profile details</p>
+</div>
+
+<div class="kp-grid">
+
+<!-- NAME -->
+<div class="kp-field">
+<label class="kp-label">Full Name</label>
+<input
+type="text"
+name="name"
+value="{{ driver.dname }}"
+class="kp-input"
+required
+pattern="[A-Za-z ]{3,50}"
+data-parsley-pattern-message="Only letters allowed"
+data-parsley-minlength="3"
+data-parsley-minlength-message="Name must be at least 3 characters">
+</div>
+
+<!-- CONTACT -->
+<div class="kp-field">
+<label class="kp-label">Phone Number</label>
+<input
+type="number"
+name="contact"
+value="{{ driver.contact }}"
+class="kp-input"
+required
+pattern="[0-9]{10}"
+data-parsley-pattern-message="Enter valid 10 digit phone number">
+</div>
+
+<!-- GENDER -->
+<div class="kp-field">
+<label class="kp-label">Gender</label>
+
+<select class="kp-input" name="gender" required>
+<option value="">Select Gender</option>
+<option value="Male" {% if driver.gender == "Male" %}selected{% endif %}>Male</option>
+<option value="Female" {% if driver.gender == "Female" %}selected{% endif %}>Female</option>
+</select>
+
+</div>
+
+<!-- NEW PASSWORD -->
+<div class="kp-field">
+<label class="kp-label">New Password</label>
+<input
+type="password"
+name="new_password"
+id="new_password"
+class="kp-input"
+placeholder="Enter new password"
+data-parsley-minlength="6"
+data-parsley-minlength-message="Password must be at least 6 characters">
+</div>
+
+<!-- CONFIRM PASSWORD -->
+<div class="kp-field">
+<label class="kp-label">Confirm Password</label>
+<input
+type="password"
+name="confirm_password"
+class="kp-input"
+placeholder="Confirm password"
+data-parsley-equalto="#new_password"
+data-parsley-equalto-message="Passwords must match">
+</div>
+
+</div>
+
+<!-- AVAILABLE CHECKBOX -->
+<div class="rp-check-wrap mt-3">
+<label class="rp-check-custom">
+
+<input
+type="checkbox"
+name="available_status"
+{% if driver.is_available %}checked{% endif %}>
+
+<span class="rp-check-box"></span>
+
+<span class="rp-check-text">
+Available for Ride
+</span>
+
+</label>
+</div>
+
+<div class="kp-pro-divider"></div>
+
+<button type="submit" name="update_profile" class="kp-btn-save">
+Update Profile
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+
+<footer>
+{% include 'footer.html' %}
+</footer>
+
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<script>
+
+function openFileSelector(){
+document.getElementById("profileUpload").click();
+}
+
+document.getElementById("profileUpload").addEventListener("change", function(event){
+
+const file = event.target.files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+document.getElementById("profilePreview").src = e.target.result;
+};
+
+reader.readAsDataURL(file);
+
+document.getElementById("photoForm").submit();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

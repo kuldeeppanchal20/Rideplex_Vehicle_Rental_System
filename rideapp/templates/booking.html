@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+{%load static%}
+
+<head>
+  <title>Rideplex:Rent,Ride and Explore with Rideplex</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="/static/images/ridelogo.png">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Rideplex :Rent ,Ride and Explore with Rideplex" name="description">
+    <meta content="" name="keywords">
+    <meta content="" name="author">
+    <!-- CSS Files
+    ================================================== -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet" type="text/css" id="mdb">
+    <link href="{% static 'css/plugins.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- color scheme -->
+    <link id="colors" href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+  <div id="flash-wrap">
+    {% for message in messages %}
+      <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+    <div id="wrapper">
+
+        <!-- page preloader begin -->
+        <div id="de-preloader"></div>
+        <!-- page preloader close -->
+
+        <!-- header begin -->
+      <header class="transparent header-light scroll-light has-topbar">
+
+    <!-- ===== MAIN NAVBAR ===== -->
+    <div class="container">
+        <div class="de-flex align-items-center justify-content-between">
+
+            <!-- LOGO -->
+            <div id="logo">
+                <a href="/">
+                    <img src="{% static 'images/v.png' %}" height="70"  width="200" />
+                </a>
+            </div>
+
+
+
+            <!-- MENU -->
+          <ul id="mainmenu">
+    {% if request.session.userlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-car"></i> Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/bookinghistory' %}active{% endif %}" href="/bookinghistory">
+            <i class="fa fa-calendar-check-o"></i> Booking History
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/userprofile' %}active{% endif %}" href="/userprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.leaserlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/leaser' in request.path %}active{% endif %}" href="/">
+            <i class="fa fa-car"></i> Vehicles Listing
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_add_car' %}active{% endif %}" href="/leaser_add_car">
+                    <i class="fa fa-plus"></i> Add Vehicles
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_cars' %}active{% endif %}" href="/leaser_cars">
+                    <i class="fa fa-cogs"></i> Manage Vehicles
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/leaserprofile' %}active{% endif %}" href="/leaserprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.driverlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/assign_ride' %}active{% endif %}" href="/assign_ride">
+            <i class="fa fa-map"></i> Assigned Rides
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/driverprofile' %}active{% endif %}" href="/driverprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% else %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+<i class="fa fa-comments-o"></i>
+
+  About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-tachometer"></i>
+
+
+            Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    {% endif %}
+</ul>
+
+            <!-- RIGHT SIDE -->
+            <div class="menu_side_area">
+
+                {% if request.session.userlogid %}
+                    <b class="me-2">{{request.session.userlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.leaserlogid %}
+                    <b class="me-2">{{request.session.leaserlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.driverlogid %}
+
+                    <b class="me-2">{{request.session.driverlogname}}</b>
+                        <a href="/logout" class="btn-main">Logout</a>
+
+                {% else %}
+
+                  <!-- LOGIN -->
+                {% if request.path != "/login" %}
+                <a href="/login" class="btn-main">Login</a>
+                {% endif %}
+
+    <!-- USER ↔ LEASER SWITCH -->
+                {% if request.path == "/userregister" %}
+                <a href="/leaserregister" class="btn-main">Leaser Registration</a>
+
+                {% elif request.path == "/leaserregister" %}
+                <a href="/userregister" class="btn-main">User Registration</a>
+
+    <!-- NORMAL REGISTER (only when not on any registration page) -->
+                {% elif request.path != "/registration" %}
+                <a href="/registration" class="btn-main">Register</a>
+                {% endif %}
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<section>
+<div class="container">
+
+<div class="card mb-4">
+<div class="card-body">
+
+<div class="col-md-12 text-center">
+<h2> Booking</h2>
+</div>
+
+<div class="col-xl-4 col-lg-6">
+<img class="img-fluid" src="/media/{{ vehicle.vehicle_img }}">
+</div>
+
+<h4>{{ vehicle.brand }} {{ vehicle.model }}</h4>
+<p>Fare: ₹{{ vehicle.fare }} / day</p>
+
+</div>
+</div>
+
+        <div style="
+    width:100%;
+    margin-top:6px;
+    padding:8px 10px;
+    border-radius:6px;
+    background:#e7f1ff;
+    border:1px solid #cfe2ff;
+    color:#0b3d91;
+    font-size:13px;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+">
+
+    <div style="display:flex; align-items:center;">
+        <i class="fa fa-info-circle" style="margin-right:6px;"></i>
+        <span>
+            Our Service Available in <b>Ahmedabad, Gandhinagar, Vadodara, Rajkot ,Surat</b>
+        </span>
+    </div>
+
+    <!-- CTA Button -->
+    <a href="/about#offline-stores" style="
+        background:#0b3d91;
+        color:#fff;
+        padding:4px 10px;
+        border-radius:4px;
+        text-decoration:none;
+        font-size:13px;
+    ">
+        Offline Store Details
+    </a>
+
+</div>
+    <div class="spacer-20"></div>
+    <form action="/confirm_booking/{{ vehicle.id }}"
+      method="POST"
+      id="bookingForm"
+      class="form-border js-validate"
+      data-parsley-validate
+      enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+            <div class="row">
+
+            <div class="col-md-6">
+            <label>Name</label>
+            <input class="form-control"
+                   id="name"
+                   name="name"
+                   type="text"
+                   value="{{ user.uname }}"
+                   placeholder="{{ user.uname }}"
+                   required
+                   data-parsley-pattern="^[A-Za-z\s]+$"
+                   data-parsley-required-message="Name is required"
+                   data-parsley-pattern-message="Only alphabets allowed">
+            </div>
+
+            <!-- BOOKING TYPE -->
+            <div class="col-md-6">
+            <label>Booking Type</label>
+            <select name="booking_type"
+                    id="booking_type"
+                    class="form-control"
+                    required
+                    data-parsley-required-message="Select booking type">
+            <option value="">Select</option>
+            <option value="with_driver">With Driver</option>
+            <option value="self_drive">Self Drive</option>
+            </select>
+            </div>
+
+            <!-- START DATE -->
+            <div class="col-md-6">
+            <label>Start Date</label>
+            <input type="date"
+                   name="start_date"
+                   id="start_date"
+                   class="form-control"
+                   required
+                   data-parsley-mindate
+                   data-parsley-required-message="Start date required">
+            </div>
+
+
+            <!-- END DATE -->
+            <div class="col-md-6">
+            <label>End Date</label>
+            <input type="date"
+                   name="return_date"
+                   id="return_date"
+                   class="form-control"
+                   required
+                   data-parsley-enddate="#start_date"
+                   data-parsley-required-message="End date required">
+            </div>
+
+
+
+
+<!-- ===== WITH DRIVER ===== -->
+<div id="withDriverSection" style="display:none">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-md-6">
+
+
+
+
+<!--        &lt;!&ndash; PICKUP LOCATION INPUT &ndash;&gt;-->
+        <label>Pickup Location</label>
+        <input type="text"
+               name="pickup_location"
+               id="pickup_location"
+               placeholder="Enter Your Location"
+               class="form-control"
+               data-parsley-required-message="Pickup location required">
+
+<!--        <div style="
+    width:100%;
+    margin-top:6px;
+    padding:8px 10px;
+    border-radius:6px;
+    background:#e7f1ff;
+    border:1px solid #cfe2ff;
+    color:#0b3d91;
+    font-size:13px;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+">
+
+    <div style="display:flex; align-items:center;">
+        <i class="fa fa-info-circle" style="margin-right:6px;"></i>
+        <span>
+            Our Service Available in <b>Ahmedabad, Gandhinagar, Vadodara, Rajkot</b>
+        </span>
+    </div>
+
+    &lt;!&ndash; CTA Button &ndash;&gt;
+    <a href="/about#offline-stores" style="
+        background:#0b3d91;
+        color:#fff;
+        padding:4px 10px;
+        border-radius:4px;
+        text-decoration:none;
+        font-size:13px;
+    ">
+        Offline Store Details
+    </a>
+
+</div>-->
+
+
+    </div>
+
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-md-6">
+        <label>Pickup Time</label>
+        <input type="time"
+               name="pickup_time"
+               id="pickup_time"
+               class="form-control"
+               data-parsley-required-message="Pickup time required"
+               data-parsley-pickuptime>
+    </div>
+
+</div>
+                <!-- Hidden fields for JS -->
+            <input type="hidden" id="licenseUploaded"
+                   value="{% if license_doc %}true{% else %}false{% endif %}">
+
+            <input type="hidden" id="licenseVerified"
+                   value="{% if license_doc and license_doc.verification_status == 1 %}true{% else %}false{% endif %}">
+
+            <!-- ===== SELF DRIVE ===== -->
+            <div id="selfDriveSection" style="display:none">
+
+            {% if license_doc %}
+
+                {% if license_doc.verification_status == 1 %}
+                    <div class="alert alert-success p-2 small">
+                        ✔ Your Driving License is uploaded & verified.
+                    </div>
+                    <img src="{{ license_doc.doc_file.url }}" width="250">
+
+                {% else %}
+                    <div class="alert alert-warning">
+                        Your license is uploaded but not verified.
+                        Please wait for admin approval.
+                    </div>
+                    <img src="{{ license_doc.doc_file.url }}" width="250">
+                {% endif %}
+
+            {% else %}
+                <div class="alert alert-danger">
+                    Please upload your driving license in
+                    <strong>My Profile → My Documents</strong> section.
+                </div>
+            {% endif %}
+
+            </div>
+            <div class="col-md-12 mt-3">
+
+                <button type="submit"
+                        class="vp-btn"
+                        id="confirmBtn">
+                    Confirm Booking
+                </button>
+
+                <a href="/document" class="vp-btn-danger" id="visitProfileBtn">
+                    Visit Profile to Upload / Verify License
+                </a>
+
+            </div>
+
+            </div>
+    </form>
+
+<!-- ================= FORM END ================= -->
+
+</div>
+</section>
+
+{% include 'footer.html' %}
+
+        <script src="{% static 'js/plugins.js' %}"></script>
+        <script src="{% static 'js/designesia.js' %}"></script>
+        <script src="{% static 'js/booking.js' %}"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zxx">
+{% load static %}
+<head>
+    <title>My Documents | Rideplex</title>
+
+    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'images/ridelogo.png' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" id="bootstrap">
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet" id="mdb">
+    <link href="{% static 'css/plugins.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/coloring.css' %}" rel="stylesheet">
+    <link href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" id="colors">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
+    <style>
+        /* FIX: Prevent Jarallax image from pushing content down on initial load */
+        .jarallax-img {
+            position: absolute;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+
+        }
+
+        .premium-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 35px; /* Balanced padding for the new wider layout */
+            margin-bottom: 30px;
+        }
+        .premium-table th {
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 15px;
+        }
+        .premium-table td {
+            vertical-align: middle;
+            color: #374151;
+            font-weight: 500;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 18px 10px;
+        }
+        .doc-preview-img {
+            width: 75px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .doc-preview-img:hover {
+            transform: scale(1.15);
+        }
+        .action-btns .btn {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .action-btns form {
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .upload-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 15px;
+            padding: 20px;
+            background: #f9fafb;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover {
+            border-color: #1a73e8;
+            background: #f0fdf4;
+        }
+        .form-control-custom {
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            padding: 12px 15px;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        .form-control-custom:focus {
+            background-color: #ffffff;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .layout-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Parsley Validation Styles */
+        .parsley-errors-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #ef4444;
+        }
+        .parsley-error {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<script>
+setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+        flashWrap.style.opacity = "0";
+        setTimeout(() => flashWrap.remove(), 300);
+    }
+}, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+    {% for message in messages %}
+    <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% include 'navbar.html' %}
+
+<div class="no-bottom no-top zebra" id="content">
+    <div id="top"></div>
+
+    <section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img">
+<div class="col-md-12 text-center">
+                            <div class="hero-title-wrap">
+                                   <h1 class="hero-title"> Documents</h1>
+
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+</section>
+      <div id="de-preloader"></div>
+
+    <div class="container-fluid mt-5 mb-5 mx-auto" style="max-width: 1400px;">
+        <div class="row g-5">
+
+            <div class="col-lg-3 col-md-4">
+                <div class="rp-sidebar">
+                    <div class="rp-sidebar-title">ACCOUNT</div>
+                    <div class="rp-userbox">
+                        <div class="rp-user-name">
+                            Welcome,
+                            {% if role == 'leaser' %}
+                                {{ request.session.leaserlogname }}
+                            {% elif role == 'driver' %}
+                                {{ request.session.driverlogname }}
+                            {% else %}
+                                {{ request.session.userlogname }}
+                            {% endif %}
+                        </div>
+                        <div class="rp-user-sub">
+                            Manage Your Documents and Keep Updated.
+                        </div>
+                    </div>
+
+                    <ul class="rp-menu">
+                        {% if role == 'leaser' %}
+                            <li class="{% if request.path == '/leaser_cars' %}active{% endif %}"><a href="/leaser_cars"><i class="fa fa-car"></i><span>My Vehicles</span></a></li>
+                            <li class="{% if request.path == '/leaser_add_car' %}active{% endif %}"><a href="/leaser_add_car"><i class="fa fa-plus"></i><span>Add New Vehicle</span></a></li>
+                        <li class="{% if request.path == '/leaser_bookings' %}active{% endif %}">
+<a href="/leaser_bookings">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking Overview</span>
+</a>
+</li>
+                            <li class="{% if request.path == '/leaserprofile' %}active{% endif %}"><a href="/leaserprofile"><i class="fa fa-user"></i><span>Profile</span></a></li>
+                        {% elif role == 'user' %}
+                        <li class="{% if request.path == '/bookinghistory' %}active{% endif %}"><a href="/bookinghistory"><i class="fa fa-calendar-check-o"></i><span>Booking History</span></a></li>
+                            <li class="{% if request.path == '/userprofile' %}active{% endif %}"><a href="/userprofile"><i class="fa fa-user"></i><span>My Profile</span></a></li>
+                        {% elif role == 'driver' %}
+                            <li class="{% if request.path == '/assign_ride' %}active{% endif %}"><a href="/assign_ride"><i class="fa fa-car"></i><span>Assigned Rides</span></a></li>
+                            <li class="{% if request.path == '/driverprofile' %}active{% endif %}"><a href="/driverprofile"><i class="fa fa-user"></i><span>My Profile</span></a></li>
+                        {% endif %}
+                        <li class="{% if request.path == '/document' %}active{% endif %}"><a href="/document"><i class="fa fa-file-pdf-o"></i> Documents</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-8">
+
+                <div class="premium-card">
+                    <h4 class="section-title"><i class="fa fa-file text-primary"></i>
+                        {% if role == 'leaser' %}Leaser Documents
+                        {% elif role == 'driver' %}Driver Documents
+                        {% else %}User Documents
+                        {% endif %}
+                    </h4>
+
+                    {% if existing_docs %}
+                        <div class="table-responsive">
+                            <table class="table premium-table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>Doc Number</th>
+                                        <th>Expiry Date</th>
+                                        <th>Status</th>
+                                        <th>Preview</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in existing_docs %}
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-dark">
+                                                {% if doc.document_type == '1' %}Aadhar Card
+                                                {% elif doc.document_type == '2' %}Driving License
+                                                {% elif doc.document_type == '6' %}PAN Card
+                                                {% else %}{{ doc.document_type }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>{{ doc.document_number|default:"-" }}</td>
+                                        <td>
+                                            {% if doc.document_type == '1' or doc.document_type == '6' %}
+                                                <span class="text-success small fw-bold"><i class="fa fa-shield"></i> Lifetime Valid</span>
+                                            {% elif doc.expiry_date %}
+                                                {{ doc.expiry_date }}
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if doc.verification_status %}
+                                                <span class="badge bg-success rounded-pill px-3 py-2"><i class="fa fa-check-circle"></i> Verified</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2"><i class="fa fa-clock-o"></i> Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if doc.doc_file %}
+                                                <a href="{{ doc.doc_file.url }}" target="_blank">
+                                                    <img src="{{ doc.doc_file.url }}" class="doc-preview-img" alt="Doc Preview">
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted small">No File</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-2 action-btns">
+                                                <button class="btn btn-outline-dark rounded-pill shadow-none" data-bs-toggle="modal" data-bs-target="#updateModal{{ doc.id|default:doc.document_type }}">
+                                                    <i class="fa fa-pencil"></i> Update
+                                                </button>
+
+                                                <form method="post" action="/delete_document/{{ doc.id }}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-outline-danger rounded-pill shadow-none" onclick="return confirm('Are you sure you want to permanently delete this document?');">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {% for doc in existing_docs %}
+                            <div class="modal fade" id="updateModal{{ doc.id|default:doc.document_type }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold">Update Document</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-4">
+                                            <form method="post" action="manage_documents" enctype="multipart/form-data" data-parsley-validate novalidate class="update-doc-form">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="document_type" value="{{ doc.document_type }}">
+
+                                                <div class="mb-3">
+                                                    <label class="form-label text-muted small fw-bold">Document Number</label>
+                                                    <input type="text" name="document_number" class="form-control form-control-custom" value="{{ doc.document_number|default:'' }}" placeholder="Enter new number" required data-parsley-required-message="Document number is required" data-parsley-trigger="keyup">
+                                                </div>
+
+                                                <div class="row">
+                                                    {% if doc.document_type == '1' or doc.document_type == '6' %}
+                                                        <div class="col-md-12 mb-3">
+                                                            <label class="form-label text-muted small fw-bold">Issue Date</label>
+                                                            <input type="date" name="issue_date" class="form-control form-control-custom update-issue-date" value="{{ doc.issue_date|date:'Y-m-d' }}" required data-parsley-required-message="Issue date is required" data-parsley-trigger="change">
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label text-muted small fw-bold">Issue Date</label>
+                                                            <input type="date" name="issue_date" class="form-control form-control-custom update-issue-date" value="{{ doc.issue_date|date:'Y-m-d' }}" required data-parsley-required-message="Issue date is required" data-parsley-trigger="change">
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label text-muted small fw-bold">Expiry Date</label>
+                                                            <input type="date" name="expiry_date" class="form-control form-control-custom update-expiry-date" value="{{ doc.expiry_date|date:'Y-m-d' }}" required data-parsley-required-message="Expiry date is required" data-parsley-trigger="change">
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="mb-4">
+                                                    <label class="form-label text-muted small fw-bold">New File Image <span class="text-danger">*</span></label>
+                                                    <input type="file" name="doc_file" class="form-control form-control-custom" accept="image/*" required data-parsley-required-message="Please upload a new image of the document" data-parsley-trigger="change">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-main w-100 rounded-pill py-2 fs-6 fw-bold"><i class="fa fa-save"></i> Save Changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <div class="alert alert-light text-center border p-4 rounded-4 text-muted">
+                            <i class="fa fa-folder-open-o fa-3x mb-3 text-secondary"></i><br>
+                            You haven't uploaded any documents yet.
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="premium-card bg-light border-0">
+                    <h4 class="section-title"><i class="fa fa-cloud-upload text-success"></i> Upload New Document</h4>
+                    <p class="text-muted small mb-4">Select a document type from the list to add it to your profile.</p>
+
+                    <form id="uploadDocForm" method="post" action="manage_documents" enctype="multipart/form-data" data-parsley-validate novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-bold">Document Type</label>
+                                <select name="document_type" id="uploadDocType" class="form-control form-control-custom" required data-parsley-required-message="Please select a document type" data-parsley-trigger="change">
+                                    <option value="" disabled selected>-- Select Document --</option>
+                                    {% for key, value in allowed_options.items %}
+                                        {% if key != '3' and key != '4' and key != '5' %}
+                                            <option value="{{ key }}">{{ value }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+
+                                <div id="docWarning" class="text-danger small fw-bold mt-2" style="display:none; padding: 10px; background: #fee2e2; border-radius: 8px; border-left: 4px solid #ef4444;">
+                                    <i class="fa fa-info-circle"></i> This document is already on file. To submit a newer version, please click <b>"Update"</b> next to the document in the list above.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-bold">Document Number</label>
+                                <input type="text" name="document_number" class="form-control form-control-custom" placeholder="e.g. ABCD12345" required data-parsley-required-message="Document number is required" data-parsley-trigger="keyup">
+                            </div>
+
+                            <div class="col-md-6" id="issueDateContainer">
+                                <label class="text-muted small fw-bold">Issue Date</label>
+                                <input type="date" name="issue_date" id="issueDateInput" class="form-control form-control-custom" required data-parsley-required-message="Issue date is required" data-parsley-trigger="change">
+                            </div>
+
+                            <div class="col-md-6" id="expiryDateContainer">
+                                <label class="text-muted small fw-bold">Expiry Date</label>
+                                <input type="date" name="expiry_date" id="expiryDateInput" class="form-control form-control-custom" required data-parsley-required-message="Expiry date is required" data-parsley-trigger="change">
+                            </div>
+
+                            <div class="col-md-12 mt-4">
+                                <div class="upload-zone">
+                                    <label class="text-muted small fw-bold d-block mb-2">Upload Clear Image of Document</label>
+                                    <input type="file" name="doc_file" class="form-control form-control-custom border-0 bg-transparent" accept="image/*" required data-parsley-required-message="Please upload an image of the document" data-parsley-trigger="change">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 text-center mt-4">
+                                <button type="submit" id="uploadBtn" class="btn btn-success px-5 py-2 fs-6 fw-bold rounded-pill shadow-sm">
+                                    <i class="fa fa-upload"></i> Upload Document
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Array of already uploaded types
+        const uploadedTypes = [
+            {% for doc in existing_docs %}
+                "{{ doc.document_type }}",
+            {% endfor %}
+        ];
+
+        const docSelect = document.getElementById('uploadDocType');
+        const warningMsg = document.getElementById('docWarning');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Layout and Date Elements for Upload Form
+        const issueDateContainer = document.getElementById('issueDateContainer');
+        const expiryDateContainer = document.getElementById('expiryDateContainer');
+        const issueDateInput = document.getElementById('issueDateInput');
+        const expiryDateInput = document.getElementById('expiryDateInput');
+        const uploadForm = $('#uploadDocForm');
+
+        // --- NEW HELPER FUNCTIONS ---
+        function getLocalToday() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getNextDay(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            date.setDate(date.getDate() + 1); // Add one day
+            return date.toISOString().split('T')[0];
+        }
+
+        const today = getLocalToday();
+
+        // --- APPLY INITIAL RESTRICTIONS ON LOAD ---
+        if (issueDateInput) {
+            issueDateInput.max = today;
+        }
+        if (expiryDateInput) {
+            expiryDateInput.min = today;
+        }
+
+        const updateForms = document.querySelectorAll('.update-doc-form');
+        updateForms.forEach(form => {
+            const updateIssueDate = form.querySelector('.update-issue-date');
+            const updateExpiryDate = form.querySelector('.update-expiry-date');
+
+            if (updateIssueDate) {
+                updateIssueDate.max = today;
+            }
+
+            if (updateExpiryDate) {
+                let minExpiry = today;
+                if (updateIssueDate && updateIssueDate.value) {
+                    const nextDayAfterIssue = getNextDay(updateIssueDate.value);
+                    if (nextDayAfterIssue > minExpiry) {
+                        minExpiry = nextDayAfterIssue;
+                    }
+                }
+                updateExpiryDate.min = minExpiry;
+            }
+        });
+
+
+        // --- DYNAMIC EVENT LISTENERS ---
+        if (issueDateInput && expiryDateInput) {
+            issueDateInput.addEventListener('change', function() {
+                const nextDay = getNextDay(this.value);
+                expiryDateInput.min = (nextDay > today) ? nextDay : today;
+
+                if (expiryDateInput.value && (expiryDateInput.value <= this.value || expiryDateInput.value < today)) {
+                    expiryDateInput.value = '';
+                    if (typeof uploadForm.parsley === 'function') {
+                        uploadForm.parsley().validate();
+                    }
+                }
+            });
+        }
+
+        updateForms.forEach(form => {
+            const updateIssueDate = form.querySelector('.update-issue-date');
+            const updateExpiryDate = form.querySelector('.update-expiry-date');
+
+            if (updateIssueDate && updateExpiryDate) {
+                updateIssueDate.addEventListener('change', function() {
+                    const nextDay = getNextDay(this.value);
+                    updateExpiryDate.min = (nextDay > today) ? nextDay : today;
+
+                    if (updateExpiryDate.value && (updateExpiryDate.value <= this.value || updateExpiryDate.value < today)) {
+                        updateExpiryDate.value = '';
+                    }
+                });
+            }
+        });
+
+        if(docSelect) {
+            docSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+
+                if (uploadedTypes.includes(selectedValue)) {
+                    warningMsg.style.display = 'block';
+                    uploadBtn.disabled = true;
+                    uploadBtn.classList.replace('btn-success', 'btn-secondary');
+                    uploadBtn.innerHTML = '<i class="fa fa-lock"></i> Please Use Update Button';
+                } else {
+                    warningMsg.style.display = 'none';
+                    uploadBtn.disabled = false;
+                    uploadBtn.classList.replace('btn-secondary', 'btn-success');
+                    uploadBtn.innerHTML = '<i class="fa fa-upload"></i> Upload Document';
+                }
+
+                if (selectedValue === '1' || selectedValue === '6') {
+                    expiryDateContainer.style.display = 'none';
+                    expiryDateInput.value = '';
+                    expiryDateInput.removeAttribute('required');
+                    expiryDateInput.removeAttribute('data-parsley-required');
+
+                    issueDateContainer.classList.remove('col-md-6');
+                    issueDateContainer.classList.add('col-md-12');
+                } else {
+                    expiryDateContainer.style.display = 'block';
+                    expiryDateInput.setAttribute('required', 'required');
+                    expiryDateInput.setAttribute('data-parsley-required', 'true');
+
+                    issueDateContainer.classList.remove('col-md-12');
+                    issueDateContainer.classList.add('col-md-6');
+                }
+
+                if (typeof uploadForm.parsley === 'function') {
+                    uploadForm.parsley().reset();
+                }
+            });
+        }
+
+        // --- NEW: FIXES FOR PAGE LOAD GLITCH / FOUC ---
+
+        // 1. Manually trigger the change event on load to sync UI with cached browser state
+        if (docSelect && docSelect.value !== "") {
+            docSelect.dispatchEvent(new Event('change'));
+        }
+
+        // 2. Add transitions AFTER page load to prevent initial animation glitches
+        setTimeout(() => {
+            if(issueDateContainer) issueDateContainer.classList.add('layout-transition');
+            if(expiryDateContainer) expiryDateContainer.classList.add('layout-transition');
+            if(uploadBtn) uploadBtn.classList.add('layout-transition');
+        }, 100);
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+{% include 'links.html' %}
+<style>
+/* ===== HERO BASE ===== */
+.ab-hero {
+    background: #ffffff;
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== TEXT ===== */
+.ab-main-title {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #1B263B;
+}
+
+/* HIGHLIGHT */
+.ab-highlight {
+    background: linear-gradient(135deg, #0D1B2A, #0288d1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+/* UNDERLINE EFFECT */
+.ab-highlight::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(135deg, #0288d1, #0D1B2A);
+    transition: 0.4s;
+}
+
+.ab-main-title:hover .ab-highlight::after {
+    width: 100%;
+}
+
+/* DESCRIPTION */
+.ab-desc {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #5f6b7a;
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+/* ===== BUTTONS ===== */
+.ab-actions {
+    margin-top: 35px;
+}
+
+.ab-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 30px;
+    background: linear-gradient(135deg,#0B1C2D, #0288d1);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.4s;
+    box-shadow: 0 8px 25px rgba(79,195,247,0.4);
+}
+.ab-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(79,195,247,0.6);
+}
+
+/* PRIMARY */
+.ab-primary {
+    background: linear-gradient(135deg, #0288d1, #03a9f4);
+    color: #fff;
+}
+
+.ab-primary:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 18px 40px rgba(2,136,209,0.35);
+}
+
+/* OUTLINE */
+.ab-outline {
+    border: 1.5px solid #0288d1;
+    color: #0288d1;
+    background: transparent;
+}
+
+.ab-outline:hover {
+    background: #0288d1;
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+/* ===== WRAP ===== */
+/* ===== RIGHT VISUAL WRAP ===== */
+.ab-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* ===== BACK PANEL (DEPTH LAYER) ===== */
+.ab-panel {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: linear-gradient(135deg, #e3f2fd, #f8fbff);
+    border-radius: 30px;
+    transform: rotate(-6deg);
+    z-index: 0;
+    transition: 0.4s;
+}
+
+/* ===== MAIN CARD ===== */
+.ab-glass-card {
+    position: relative;
+    z-index: 2;
+    background: #ffffff;
+    border-radius: 24px;
+    max-width: 600px;
+    padding: 45px;
+    height: 300px;
+    text-align: center;
+    border: 1px solid #e6eef5;
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.08),
+        0 40px 90px rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+}
+
+/* HOVER (LIFT + DEPTH) */
+.ab-visual:hover .ab-glass-card {
+    transform: translateY(-12px) scale(1.03);
+}
+
+.ab-visual:hover .ab-panel {
+    transform: rotate(-10deg) scale(1.05);
+}
+
+/* ===== TEXT ===== */
+.ab-glass-card h3 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #0D1B2A;
+    margin-bottom: 10px;
+}
+
+.ab-glass-card p {
+    color: #5f6b7a;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* ===== TAG GROUP (INSIDE CARD) ===== */
+.ab-tag-group {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* TAG STYLE */
+.ab-tag-group span {
+    background: #0D1B2A;
+    border: 1px solid #dbe7f3;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #ffff;
+    transition: 0.3s;
+}
+
+/* HOVER TAG */
+.ab-tag-group span:hover {
+    background: #0D1B2A;
+    color: #f4f8fc;
+    border-color: #0D1B2A;
+    transform: translateY(-2px);
+}
+
+/* ===== ADD SUBTLE GLOW ===== */
+.ab-glass-card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 24px;
+    background: linear-gradient(120deg, transparent, rgba(2,136,209,0.2), transparent);
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.ab-glass-card:hover::after {
+    opacity: 1;
+}
+
+/* ===== BACKGROUND DECOR (SOFTER) ===== */
+.ab-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.06;
+}
+
+.ab-circle-1 {
+    width: 320px;
+    height: 320px;
+    background: #0288d1;
+    top: 5%;
+    left: 5%;
+}
+
+.ab-circle-2 {
+    width: 240px;
+    height: 240px;
+    background: #03a9f4;
+    bottom: 8%;
+    right: 8%;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .ab-glass-wrap {
+        min-height: 300px;
+    }
+    .ab-tag {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}
+
+/* ===== SECTION ===== */
+.ab-features {
+    background: #ffffff !important;
+    padding: 80px 0;
+    position: relative;
+}
+
+/* SUBTEXT */
+.ab-subtext {
+    color: #6c7a89;
+    font-size: 15px;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+/* ===== FEATURE CARD ===== */
+.ab-feature-card {
+    background: #ffffff !important;
+    border: 1px solid #e9eef5;
+    padding: 24px 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    text-align: left;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* LEFT ACCENT LINE */
+.ab-feature-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 3px;
+    border-radius: 3px;
+    background: #0D1B2A;
+    opacity: 0;
+    transition: 0.25s ease;
+}
+
+/* HOVER EFFECT (CLEAN WHITE) */
+.ab-feature-card:hover {
+    background: #ffffff !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+    border-color: #dfe7f1;
+}
+
+.ab-feature-card:hover::after {
+    opacity: 1;
+}
+
+/* SUBTLE BORDER GLOW (VERY LIGHT) */
+.ab-feature-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, #0288d1, #0D1B2A);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.ab-feature-card:hover::before {
+    opacity: 0.15;
+}
+
+/* ===== ICON ===== */
+.ab-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    background: #0D1B2A;
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+/* ICON HOVER */
+.ab-feature-card:hover .ab-icon {
+    transform: scale(1.06);
+    box-shadow: 0 6px 14px rgba(13,27,42,0.18);
+}
+
+/* TEXT */
+.ab-feature-card h4 {
+    font-weight: 700;
+    color: #1B263B;
+    margin-bottom: 6px;
+    font-size: 16px;
+}
+
+.ab-feature-card p {
+    font-size: 13.5px;
+    color: #5f6b7a;
+    line-height: 1.5;
+}
+
+/* ===== CENTER IMAGE ===== */
+.ab-feature-center {
+    position: relative;
+    padding: 10px;
+}
+
+/* FLOAT EFFECT */
+.ab-feature-center img {
+    max-width: 90%;
+    transition: all 0.3s ease;
+}
+
+.ab-feature-center:hover img {
+    transform: translateY(-6px) scale(1.05);
+}
+
+/* REMOVE DIRTY BACKGROUND GLOW */
+.ab-feature-center::after {
+    content: "";
+    display: none;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .ab-feature-card {
+        text-align: center;
+    }
+    .ab-icon {
+        margin: 0 auto 12px;
+    }
+}
+
+/* ===== STATS SECTION ===== */
+.ab-stats {
+    background: #ffffff !important;
+    padding: 40px 0;
+}
+
+/* CARD BASE */
+.ab-stat-card {
+    background: #ffffff;
+    border: 1px solid #e9eef5;
+    border-radius: 14px;
+    padding: 24px 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* LEFT ACCENT */
+.ab-stat-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 30%;
+    height: 40%;
+    width: 3px;
+    background: #0D1B2A;
+    opacity: 0;
+    transition: 0.25s ease;
+}
+
+/* SUBTLE GLOW BORDER */
+.ab-stat-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(135deg, #0288d1, #0D1B2A);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+/* HOVER EFFECT */
+.ab-stat-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.05);
+    border-color: #dfe7f1;
+}
+
+.ab-stat-card:hover::after {
+    opacity: 1;
+}
+
+.ab-stat-card:hover::before {
+    opacity: 0.2;
+}
+
+/* FEATURED CARD (CENTER) */
+.ab-stat-active {
+    transform: scale(1.05);
+    border-color: #dfe7f1;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* PULSE GLOW (NO JS) */
+.ab-stat-active::before {
+    opacity: 0.2;
+}
+
+/* NUMBER */
+.ab-stat-card h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0D1B2A;
+    margin-bottom: 6px;
+    transition: 0.3s ease;
+}
+
+/* LABEL */
+.ab-stat-card p {
+    font-size: 13.5px;
+    color: #6c7a89;
+    margin: 0;
+}
+
+/* HOVER NUMBER POP */
+.ab-stat-card:hover h2 {
+    transform: scale(1.08);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .ab-stat-card {
+        margin-bottom: 15px;
+    }
+    .ab-stat-active {
+        transform: none;
+    }
+}
+
+/* ===== OFFLINE STORES / LOCATIONS (GRID FIX) ===== */
+.ab-locations {
+    background: #f9fbfd !important;
+    padding: 80px 0;
+    position: relative;
+}
+
+.ab-city-card {
+    background: #ffffff;
+    border: 1px solid #e9eef5;
+    border-radius: 16px;
+    padding: 30px 25px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    height: 100%; /* Ensures cards stretch nicely in the grid */
+}
+
+/* Top Gradient Accent Line */
+.ab-city-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(135deg, #0288d1, #0D1B2A);
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+/* Hover Lift Effect */
+.ab-city-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    border-color: #dfe7f1;
+}
+
+.ab-city-card:hover::before {
+    opacity: 1;
+}
+
+/* City Header */
+.ab-city-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e9eef5;
+}
+
+.ab-city-header i {
+    background: #0D1B2A;
+    color: #ffffff;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(13,27,42,0.15);
+}
+
+.ab-city-header h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1B263B;
+}
+
+/* Address List */
+.ab-store-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ab-store-item {
+    position: relative;
+    padding-left: 24px;
+    transition: transform 0.2s ease;
+}
+
+/* Location Pin Icon before text */
+.ab-store-item::before {
+    content: "📍";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    font-size: 14px;
+}
+
+.ab-store-title {
+    display: block;
+    font-weight: 700;
+    color: #1B263B;
+    font-size: 15px;
+    margin-bottom: 5px;
+    transition: color 0.2s ease;
+}
+
+.ab-store-address {
+    display: block;
+    color: #5f6b7a;
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+/* Title Color Shift on Hover */
+.ab-store-item:hover {
+    transform: translateX(3px);
+}
+.ab-store-item:hover .ab-store-title {
+    color: #0288d1;
+}
+</style>
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <div id="de-preloader"></div>
+        {% include 'navbar.html' %}
+            <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
+
+            <section id="subheader" class="jarallax text-light">
+                <img src="static/images/background/aboutbg.png" class="jarallax-img" alt="">
+                    <div class="center-y relative text-center">
+                        <div class="container">
+                            <div class="row">
+                                 <div class="col-md-12 text-center">
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title">About Us</h1>
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+<section class="ab-hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+                <div class="ab-content">
+                    <h2 class="ab-main-title">
+                        We offer a wide range of
+                        <span class="ab-highlight">commercial cars</span> and
+                        <span class="ab-highlight">luxury cars</span> for every journey.
+                    </h2>
+
+                    <p class="ab-desc">
+                        Experience seamless, smart, and premium vehicle rentals designed for comfort, speed, and reliability.
+                    </p>
+
+                         <form name="contactForm" id="contact_form" action="/vehicle" method="post">
+    {% csrf_token %}
+
+                      <input type="submit"  class="ab-btn" value="Explore Vehicles">
+                 </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+    <div class="ab-visual">
+
+        <div class="ab-panel"></div>
+
+        <div class="ab-glass-card">
+            <h3>Why Choose Rideplex?</h3>
+            <p>
+                We combine technology, comfort, and reliability to deliver a seamless rental experience for every journey.
+            </p>
+
+            <div class="ab-tag-group">
+                <span>24/7 Support</span>
+                <span>Instant Booking</span>
+                <span>Verified Vehicles</span>
+                <span>Best Pricing</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <div class="ab-bg-circle ab-circle-1"></div>
+    <div class="ab-bg-circle ab-circle-2"></div>
+</section>
+
+<section class="ab-features">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3 text-center">
+                <h2 class="ab-main-title">
+                    Feature <span class="ab-highlight">Highlights</span>
+                </h2>
+                <p class="ab-subtext">
+                    Experience premium service, seamless rides, and reliability at every step.
+                </p>
+            </div>
+        </div>
+
+        <div class="row align-items-center g-4 mt-4">
+
+            <div class="col-lg-3">
+                <div class="ab-feature-card">
+                    <div class="ab-icon"><i class="fa fa-car"></i></div>
+                    <h4>Wide Range of Vehicles</h4>
+                    <p>Providing diverse choices, from budget-friendly bikes to premium cars, ensuring everyone finds their ideal ride.</p>
+                </div>
+
+                <div class="ab-feature-card">
+                    <div class="ab-icon"><i class="fa fa-inr"></i></div>
+                    <h4>Income for Vehicle Owners</h4>
+                    <p>Helping vehicle owners rent out their vehicles easily and earn money while staying in full control.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center">
+                <div class="ab-feature-center">
+                    <img src="static/images/misc/nisaan.png" class="img-fluid" alt="">
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="ab-feature-card">
+                    <div class="ab-icon"><i class="fa fa-calendar-check-o"></i></div>
+                    <h4>Easy Rental Process</h4>
+                    <p>Making vehicle booking fast and simple, allowing users to find and confirm a vehicle within minutes.</p>
+                </div>
+
+                <div class="ab-feature-card">
+                    <div class="ab-icon"><i class="fa fa-address-card"></i></div>
+                    <h4>Skilled Driver Service</h4>
+                    <p>Giving users reliable, trained drivers when they want someone to drive for them.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="ab-stats">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="ab-stat-card">
+                    <h2>{{ total_users|floatformat:0 }}+</h2>
+                    <p>Total Users</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="ab-stat-card ab-stat-active">
+                    <h2>{{ total_bookings|floatformat:0 }}+</h2>
+                    <p>Bookings Completed</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="ab-stat-card">
+                    <h2>5</h2>
+                    <p>Cities Covered</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="ab-locations">
+    <div class="container" >
+
+        <div class="row mb-5">
+            <div class="col-lg-6 offset-lg-3 text-center">
+                <h2 class="ab-main-title">
+                    Visit Rideplex <span class="ab-highlight">Offline Stores</span>
+                </h2>
+                <p class="ab-subtext">
+                    Find our physical branches across major cities in Gujarat for a seamless car rental experience.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4" id="offline-stores">
+
+            <div class="col-lg-5">
+                <div class="ab-city-card">
+                    <div class="ab-city-header">
+                        <i class="fa fa-map-marker"></i>
+                        <h3>Ahmedabad</h3>
+                    </div>
+                    <ul class="ab-store-list">
+                        <li class="ab-store-item">
+                            <span class="ab-store-title">Sindhu Bhavan Road, Bodakdev</span>
+                            <span class="ab-store-address">Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054, India</span>
+                        </li>
+                        <li class="ab-store-item">
+                            <span class="ab-store-title">Corporate Road, Prahlad Nagar</span>
+                            <span class="ab-store-address">Commerce House, 100 Feet Ring Road, Prahlad Nagar, Ahmedabad, Gujarat 380015, India</span>
+                        </li>
+                        <li class="ab-store-item">
+                            <span class="ab-store-title">SG Highway, Satellite</span>
+                            <span class="ab-store-address">H N Safal House, Sarkhej–Gandhinagar Hwy, Satellite, Ahmedabad, Gujarat 380015, India</span>
+                        </li>
+
+                        <li class="ab-store-item">
+                            <span class="ab-store-title">Ashram Road, Ellis Bridge</span>
+                            <span class="ab-store-address">Ashram Road, Near Times of India Building, Ellis Bridge, Ahmedabad, Gujarat 380006, India</span>
+                        </li>
+                        <li class="ab-store-item">
+                            <span class="ab-store-title">SP Ring Road, Bopal</span>
+                            <span class="ab-store-address">Amrapali Axiom, SP Ring Road, Bopal, Ahmedabad, Gujarat 380058, India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="ab-city-card">
+                            <div class="ab-city-header">
+                                <i class="fa fa-map-marker"></i>
+                                <h3>Gandhinagar</h3>
+                            </div>
+                            <ul class="ab-store-list">
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">GIFT City – Zone 5</span>
+                                    <span class="ab-store-address">56‑A GIFT One, Ground Floor, Road 5C, Zone 5, GIFT City, Gandhinagar, Gujarat 382355, India</span>
+                                </li>
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">Sector 16, Gandhinagar</span>
+                                    <span class="ab-store-address">Vidhya Shopping Center, Sector 16, Gandhinagar, Gujarat 382016, India</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ab-city-card">
+                            <div class="ab-city-header">
+                                <i class="fa fa-map-marker"></i>
+                                <h3>Vadodara</h3>
+                            </div>
+                            <ul class="ab-store-list">
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">Sayajigunj, Vadodara</span>
+                                    <span class="ab-store-address">547, 5th Floor, Phoenix Complex, Sayajigunj, Near Vaikunth Cross Road, Vadodara, Gujarat 390020, India</span>
+                                </li>
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">Race Course Area, Vadodara</span>
+                                    <span class="ab-store-address">Akshar Building, Race Course, Vadodara, Gujarat 390007, India</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ab-city-card">
+                            <div class="ab-city-header">
+                                <i class="fa fa-map-marker"></i>
+                                <h3>Rajkot</h3>
+                            </div>
+                            <ul class="ab-store-list">
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">Kalavad Road, Rajkot</span>
+                                    <span class="ab-store-address">4 Sagar Complex, Opposite SBI Bank, Kalavad Road, Rajkot, Gujarat 360005, India</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ab-city-card">
+                            <div class="ab-city-header">
+                                <i class="fa fa-map-marker"></i>
+                                <h3>Surat</h3>
+                            </div>
+                            <ul class="ab-store-list">
+                                <li class="ab-store-item">
+                                    <span class="ab-store-title">Adajan, Surat</span>
+                                    <span class="ab-store-address">3rd Floor, Royal Trade Center, Opp. Star Bazaar, Adajan, Surat, Gujarat – 395009, India</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+        </div>
+
+
+        {% include 'footer.html' %}
+        </div>
+
+    <script src="static/js/plugins.js"></script>
+    <script src="static/js/designesia.js"></script>
+
+</body>
+</html>

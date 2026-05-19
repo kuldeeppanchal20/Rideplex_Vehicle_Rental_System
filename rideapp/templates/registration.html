@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'links.html' %}
+
+    <style>
+        /* ====== Premium Registration Page UI (Only for this page) ====== */
+
+        .reg-choose-wrap{
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 22px;
+            padding: 35px 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reg-choose-wrap:before{
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 220px;
+            height: 220px;
+            background: rgba(29, 110, 255, 0.12);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        .reg-choose-wrap:after{
+            content: "";
+            position: absolute;
+            bottom: -90px;
+            left: -90px;
+            width: 260px;
+            height: 260px;
+            background: rgba(0, 200, 140, 0.10);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        .reg-title{
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #0b1b33;
+            letter-spacing: 0.2px;
+        }
+
+        .reg-subtitle{
+            font-size: 15px;
+            line-height: 1.8;
+            color: #5b6b80;
+            margin-bottom: 24px;
+        }
+
+        .reg-divider{
+            height: 1px;
+            background: rgba(0,0,0,0.08);
+            margin: 18px 0 28px;
+        }
+
+        .reg-cards{
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .reg-card{
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 18px 18px;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.07);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .reg-card:hover{
+            transform: translateY(-6px);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+            border-color: rgba(13, 110, 253, 0.30);
+        }
+
+        .reg-card h4{
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #0b1b33;
+        }
+
+        .reg-card p{
+            font-size: 13px;
+            color: #6b7b92;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .reg-badge{
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(13,110,253,0.12);
+            color: #0d6efd;
+            margin-bottom: 12px;
+        }
+
+        .reg-btn{
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .reg-btn-user{
+            background: linear-gradient(135deg, #0d6efd, #0053d6);
+            color: #fff !important;
+            box-shadow: 0 12px 25px rgba(13,110,253,0.28);
+        }
+        .reg-btn-user:hover{
+            filter: brightness(1.03);
+            transform: translateY(-2px);
+        }
+
+        .reg-btn-leaser{
+            background: linear-gradient(135deg, #111827, #0b1220);
+            color: #fff !important;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+        .reg-btn-leaser:hover{
+            filter: brightness(1.05);
+            transform: translateY(-2px);
+        }
+
+        .reg-footer-note{
+            margin-top: 20px;
+            font-size: 13px;
+            color: #6b7b92;
+        }
+
+        .reg-footer-note a{
+            font-weight: 700;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+        .reg-footer-note a:hover{
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px){
+            .reg-choose-wrap{
+                padding: 25px 18px;
+            }
+            .reg-title{
+                font-size: 26px;
+            }
+            .reg-cards{
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+{% if messages %}
+{% for i in messages %}
+<script>alert("{{i}}")</script>
+{% endfor %}
+{% endif %}
+
+<div id="wrapper">
+
+    <!-- page preloader begin -->
+    <div id="de-preloader"></div>
+    <!-- page preloader close -->
+
+    <!-- navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- content begin -->
+    <div class="no-bottom no-top" id="content">
+
+
+        <!-- section begin -->
+        <section class="jarallax text-light" id="subheader">
+            <img alt="" class="jarallax-img" src="static/images/background/register1.png">
+
+            <div class="v-center">
+                <div class="container">
+                    <div class="jarallax text-light">
+                    <div class="row">
+
+                        <div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title"> Registration</h1>
+                                <p class="hero-subtitle"> Choose your account type to continue</p>
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="reg-choose-wrap">
+                        <div style="position: relative; z-index: 5;">
+                            <div class="reg-title">Don’t have an account? Register now.</div>
+
+                                <div class="reg-subtitle">
+                                    Welcome to <b>Rideplex</b> 🚗✨<br>
+                                    Create an account to access bookings, manage your rentals, and enjoy a smooth premium experience.
+                                </div>
+
+                                <div class="reg-divider"></div>
+
+                                <div class="reg-cards">
+
+                                    <!-- User Card -->
+                                    <div class="reg-card">
+                                        <div class="reg-badge">
+                                            <i class="fa fa-user"></i> Customer Account
+                                        </div>
+                                        <h4>User Registration</h4>
+                                        <p>
+                                            Register as a user to browse vehicles, book rentals, and manage your orders easily.
+                                        </p>
+                                        <a href="userregister" class="reg-btn reg-btn-user">
+                                            <i class="fa fa-arrow-right"></i> Continue as User
+                                        </a>
+                                    </div>
+
+                                    <!-- Leaser Card -->
+                                    <div class="reg-card">
+                                        <div class="reg-badge" style="background: rgba(17,24,39,0.10); color: #111827;">
+                                            <i class="fa fa-car"></i> Vehicle Owner Account
+                                        </div>
+                                        <h4>Leaser Registration</h4>
+                                        <p>
+                                            Register as a leaser to list your vehicle, earn from rentals, and manage requests.
+                                        </p>
+                                        <a href="leaserregister" class="reg-btn reg-btn-leaser">
+                                            <i class="fa fa-arrow-right"></i> Continue as Leaser
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="reg-footer-note">
+                                    Already have an account?
+                                    <a href="login">Login here</a>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+        <!-- section close -->
+
+
+
+
+
+
+    <!-- footer -->
+    {% include 'footer.html' %}
+
+
+
+<!-- JS -->
+<script src="static/js/plugins.js"></script>
+<script src="static/js/designesia.js"></script>
+
+</body>
+</html>

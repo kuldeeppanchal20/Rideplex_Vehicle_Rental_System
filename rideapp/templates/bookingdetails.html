@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+
+<head>
+  <title>Rideplex:Rent,Ride and Explore with Rideplex</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="/static/images/ridelogo.png">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Rideplex :Rent ,Ride and Explore with Rideplex" name="description">
+    <meta content="" name="keywords">
+    <meta content="" name="author">
+    <!-- CSS Files
+    ================================================== -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet" type="text/css" id="mdb">
+    <link href="{% static 'css/plugins.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
+    <!-- color scheme -->
+    <link id="colors" href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <header class="transparent header-light scroll-light has-topbar">
+
+    <!-- ===== MAIN NAVBAR ===== -->
+    <div class="container">
+        <div class="de-flex align-items-center justify-content-between">
+
+            <!-- LOGO -->
+            <div id="logo">
+                <a href="/">
+                    <img src="{% static 'images/v.png' %}" height="70"  width="200" />
+                </a>
+            </div>
+
+
+
+            <!-- MENU -->
+          <ul id="mainmenu">
+    {% if request.session.userlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-car"></i> Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/bookinghistory' %}active{% endif %}" href="/bookinghistory">
+            <i class="fa fa-calendar-check-o"></i> Booking History
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/userprofile' %}active{% endif %}" href="/userprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.leaserlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/leaser' in request.path %}active{% endif %}" href="/">
+            <i class="fa fa-car"></i> Vehicles Listing
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_add_car' %}active{% endif %}" href="/leaser_add_car">
+                    <i class="fa fa-plus"></i> Add Vehicles
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_cars' %}active{% endif %}" href="/leaser_cars">
+                    <i class="fa fa-cogs"></i> Manage Vehicles
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/leaserprofile' %}active{% endif %}" href="/leaserprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.driverlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/assign_ride' %}active{% endif %}" href="/assign_ride">
+            <i class="fa fa-map"></i> Assigned Rides
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/driverprofile' %}active{% endif %}" href="/driverprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% else %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+<i class="fa fa-comments-o"></i>
+
+  About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-tachometer"></i>
+
+
+            Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    {% endif %}
+</ul>
+
+            <!-- RIGHT SIDE -->
+            <div class="menu_side_area">
+
+                {% if request.session.userlogid %}
+                    <b class="me-2">{{request.session.userlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.leaserlogid %}
+                    <b class="me-2">{{request.session.leaserlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.driverlogid %}
+
+                    <b class="me-2">{{request.session.driverlogname}}</b>
+                        <a href="/logout" class="btn-main">Logout</a>
+
+                {% else %}
+
+                  <!-- LOGIN -->
+                {% if request.path != "/login" %}
+                <a href="/login" class="btn-main">Login</a>
+                {% endif %}
+
+    <!-- USER ↔ LEASER SWITCH -->
+                {% if request.path == "/userregister" %}
+                <a href="/leaserregister" class="btn-main">Leaser Registration</a>
+
+                {% elif request.path == "/leaserregister" %}
+                <a href="/userregister" class="btn-main">User Registration</a>
+
+    <!-- NORMAL REGISTER (only when not on any registration page) -->
+                {% elif request.path != "/registration" %}
+                <a href="/registration" class="btn-main">Register</a>
+                {% endif %}
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+</header>
+<script>
+setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+        flashWrap.style.opacity = "0";
+        setTimeout(() => flashWrap.remove(), 300);
+    }
+}, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+    {% for message in messages %}
+    <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div id="wrapper" class="profile-section">
+
+
+
+<!-- page preloader -->
+<div id="de-preloader"></div>
+
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+<!-- SUBHEADER -->
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/contactbg.png' %}" class="jarallax-img" alt="">
+
+<div class="center-y relative text-center">
+<div class="container">
+<div class="row">
+<div class="col-md-12 text-center">
+
+ <div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+
+                                    <h1 class="hero-title">Booking Details</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<div class="container mt-4 mb-5">
+
+<div class="row g-4">
+
+<!-- SIDEBAR -->
+<div class="col-lg-3 col-md-4">
+
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+
+<div class="rp-user-name">
+Welcome, {{ user.uname }}
+</div>
+
+<div class="rp-user-sub">
+View your past booking Details
+</div>
+
+</div>
+
+<ul class="rp-menu">
+
+<li class="{% if 'booking' in request.path %}active{% endif %}">
+<a href="/bookinghistory">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking History</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/userprofile' %}active{% endif %}">
+<a href="/userprofile">
+<i class="fa fa-user"></i>
+<span>Profile</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/document' %}active{% endif %}">
+<a href="/document">
+<i class="fa fa-file-pdf-o"></i>
+
+<span>My Documents</span>
+</a>
+</li>
+
+<li>
+<a href="/logout">
+<i class="fa fa-sign-out"></i>
+<span>Sign Out</span>
+</a>
+</li>
+
+</ul>
+
+</div>
+</div>
+
+<!-- RIGHT CONTENT -->
+
+<!-- RIGHT SIDE -->
+<div class="col-lg-9 col-md-8">
+
+<div class="bd-card">
+
+<!-- HEADER -->
+<div class="bd-header">
+
+<div class="bd-left-head">
+<a href="/bookinghistory" class="bd-back-btn">
+<i class="fa fa-arrow-left"></i> Back
+</a>
+
+<div class="bd-title">
+{{ booking.vehicle_id.brand }} - {{ booking.vehicle_id.model }}
+</div>
+</div>
+
+<div>
+{% if booking.booking_status %}
+<span class="bd-badge bd-active">Active</span>
+{% else %}
+<span class="bd-badge bd-cancel">Cancelled</span>
+{% endif %}
+</div>
+
+</div>
+
+<!-- VEHICLE + MAIN INFO -->
+<div class="bd-vehicle-row">
+
+<!-- LEFT IMAGE -->
+<div class="bd-vehicle-box">
+
+<div class="bd-vehicle-img">
+{% if booking.vehicle_id.vehicle_img %}
+<img src="{{ booking.vehicle_id.vehicle_img.url }}">
+{% else %}
+<img src="{% static 'images/icons/car.png' %}">
+{% endif %}
+</div>
+
+<div class="bd-vehicle-number">
+{{ booking.vehicle_id.registration_number }}
+</div>
+
+</div>
+
+<!-- RIGHT DETAILS -->
+<div class="bd-main-info">
+
+<div class="bd-info-item">
+<span>Booking Type</span>
+<strong>{{ booking.get_booking_type_display }}</strong>
+</div>
+{% if booking.booking_type == "with_driver" %}
+
+
+<div class="bd-info-item">
+<span>Pickup Location</span>
+<strong>{{ booking.pickup_location }}</strong>
+</div>
+
+<div class="bd-info-item">
+<span>Pickup Time</span>
+<strong>{{ booking.pickup_time }}</strong>
+</div>
+  {% endif %}
+
+<div class="bd-info-item">
+<span>Booking Date</span>
+<strong>{{ booking.booking_date }}</strong>
+</div>
+
+</div>
+
+</div>
+
+<!-- PRICE SECTION -->
+<div class="bd-price-box">
+
+<div class="bd-price-item">
+<span>Total Fare</span>
+<strong>₹ {{ booking.total_amount }}</strong>
+</div>
+
+<div class="bd-price-item">
+<span>Security Deposit</span>
+<strong>₹ {{ booking.security_deposit }}</strong>
+</div>
+{% if booking.booking_type == "with_driver" %}
+     <div class="bd-price-item">
+<span>Driver fee </span>
+<strong>₹ {{ driver_fee_per_day }} / Day</strong>
+</div>
+    <div class="bd-price-item">
+<span>Total Driver fee</span>
+<strong>₹ {{ driver_fee }}</strong>
+</div>
+{% endif %}
+
+
+<div class="bd-price-item bd-paid">
+<span>Paid Amount</span>
+<strong>
+{% if payment %}
+₹ {{ payment.amount }}
+{% else %}
+₹ 0
+{% endif %}
+</strong>
+</div>
+
+<div class="bd-price-item">
+<span>Payment Mode</span>
+<strong>
+{% if payment %}
+{{ payment.payment_type }}
+{% else %}
+Not Paid
+{% endif %}
+</strong>
+</div>
+
+</div>
+
+<!-- NOTICE -->
+{% if payment and payment.payment_type == "Cash" and booking.driver_id %}
+<div class="bd-note-box">
+<i class="fa fa-exclamation-circle"></i>
+Customer must download booking receipt and show it to the driver at pickup time.
+</div>
+{% endif %}
+
+{% if payment and payment.payment_type == "Cash" and not booking.driver_id %}
+<div class="bd-note-box">
+<i class="fa fa-info-circle"></i>
+Please carry booking receipt and pay cash at vehicle pickup location (Rideplex offline site).
+</div>
+{% endif %}
+
+<!-- TIMELINE -->
+<div class="bd-timeline-pro">
+
+<div class="bd-time-block">
+<div class="bd-time-icon start">
+<i class="fa fa-calendar"></i>
+</div>
+<div>
+<span>Start Date</span>
+<strong>{{ booking.start_date }}</strong>
+</div>
+</div>
+
+<div class="bd-line"></div>
+
+<div class="bd-time-block">
+<div class="bd-time-icon end">
+<i class="fa fa-flag-checkered"></i>
+</div>
+<div>
+<span>End Date</span>
+<strong>{{ booking.end_date }}</strong>
+</div>
+</div>
+
+</div>
+
+<!-- DRIVER -->
+{% if booking.driver_id %}
+<div class="bd-driver-box">
+
+<h5><i class="fa fa-id-badge"></i> Driver Details</h5>
+
+<div class="bd-driver-card">
+
+<div class="bd-driver-item">
+<i class="fa fa-user"></i>
+<div>
+<span>Driver Name</span>
+<strong>{{ booking.driver_id.dname }}</strong>
+</div>
+</div>
+
+<div class="bd-driver-item">
+<i class="fa fa-phone"></i>
+<div>
+<span>Contact Number</span>
+<strong>{{ booking.driver_id.contact }}</strong>
+</div>
+</div>
+
+</div>
+
+</div>
+{% endif %}
+
+<!-- ACTIONS -->
+<div class="bd-actions">
+
+<a href="/download-booking/{{ booking.id }}" class="bd-btn bd-download">
+<i class="fa fa-download"></i> Download Receipt
+</a>
+
+{% if booking.ride_status != 'completed' %}
+
+    <button
+        class="bd-btn bd-cancel-btn"
+
+        {% if booking.ride_status == 'not_started' %}
+            onclick="openCancelModal({{ booking.id }})"
+        {% else %}
+            disabled
+            style="opacity:0.6; cursor:not-allowed;"
+        {% endif %}
+    >
+        Cancel Booking
+    </button>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+<!--close rigth side-->
+</div>
+
+</div>
+{% include 'footer.html' %}
+</div>
+
+
+
+</div>
+
+</div>
+
+
+<!-- CANCEL MODAL -->
+
+<div id="cancelModal" class="bh-modal-overlay">
+
+<div class="bh-modal-card">
+
+<div class="bh-modal-icon">
+<i class="fa fa-exclamation-triangle"></i>
+</div>
+
+<h3>Cancel Booking?</h3>
+
+<p class="bh-modal-main">
+Are you sure you want to cancel this booking?
+</p>
+
+<p class="bh-modal-sub">
+Only a portion of your payment may be refundable according to our cancellation policy.
+</p>
+
+<div class="bh-modal-actions">
+
+<button onclick="closeCancelModal()" class="bh-btn-no">
+No
+</button>
+
+<a id="confirmCancelBtn" class="bh-btn-yes">
+Yes Cancel
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function openCancelModal(id){
+document.getElementById("cancelModal").style.display="flex"
+document.getElementById("confirmCancelBtn").href="/cancel-booking/"+id
+}
+
+function closeCancelModal(){
+document.getElementById("cancelModal").style.display="none"
+}
+
+</script>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+</body>
+</html>

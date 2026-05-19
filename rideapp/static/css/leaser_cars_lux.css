@@ -1,0 +1,179 @@
+/* ===========================
+   PREMIUM LEASER CARS STYLING
+   =========================== */
+
+.de-item-list {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.35s ease;
+    border: 1px solid #eee;
+}
+
+.de-item-list:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+.de-item-list .d-img {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.de-item-list .d-img img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.de-item-list:hover .d-img img {
+    transform: scale(1.08);
+}
+
+/* STATUS BADGE */
+.car-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.car-status.available {
+    background: linear-gradient(135deg, #1dd1a1, #10ac84); /* green */
+    color: #fff;
+}
+
+.car-status.rented {
+    background: linear-gradient(135deg, #ff6b6b, #ee5253); /* red */
+    color: #fff;
+}
+
+.car-status.on-ride {
+    background: linear-gradient(135deg, #ff9f43, #ff6f00); /* orange */
+    color: #fff;
+}
+
+/* INFO */
+.d-info {
+    padding-left: 25px;
+}
+
+.d-text h4 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.d-atr {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.d-atr li {
+    font-size: 14px;
+    color: #555;
+}
+
+.d-atr li span {
+    font-weight: 600;
+    color: #111;
+    margin-right: 5px;
+}
+
+/* PRICE */
+.d-price {
+    text-align: right;
+    min-width: 180px;
+}
+
+.price-tag {
+    font-size: 26px;
+    font-weight: 700;
+    color: #111;
+}
+
+.price-tag small {
+    font-size: 14px;
+    color: #777;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+    margin-top: 15px;
+}
+
+.action-buttons a {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-line {
+    border: 2px solid #ddd;
+    color: #111;
+    background: transparent;
+}
+
+.btn-line:hover {
+    background: #111;
+    color: #fff;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ee5253);
+    color: #fff;
+    border: none;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* STATS CARDS */
+.de-box {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.de-box:hover {
+    transform: translateY(-5px);
+}
+
+.de-box h4 {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+/* MOBILE FIX */
+@media(max-width: 991px) {
+    .de-item-list {
+        text-align: center;
+    }
+
+    .d-info {
+        padding-left: 0;
+        margin-top: 15px;
+    }
+
+    .d-price {
+        text-align: center;
+        margin-top: 15px;
+    }
+}

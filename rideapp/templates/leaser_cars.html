@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    {% include 'links.html' %}
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+/* ================================
+   LEASER DASHBOARD — REFINED SYSTEM
+================================ */
+
+:root {
+    --primary:        #4f46e5;
+    --primary-light:  #6366f1;
+    --primary-glow:   rgba(79, 70, 229, 0.22);
+    --primary-ultra:  rgba(79, 70, 229, 0.08);
+
+    --surface:        #ffffff;
+    --background:     #f4f6fb;
+
+    --text-dark:      #0f172a;
+    --text-body:      #334155;
+    --text-muted:     #64748b;
+    --border-soft:    #e2e8f0;
+
+    --green-bg:       #dcfce7;
+    --green-text:     #15803d;
+    --red-bg:         #fee2e2;
+    --red-text:       #b91c1c;
+    --amber-bg:       #fef3c7;
+    --amber-text:     #b45309;
+
+    --shadow-xs:      0 1px 3px rgba(0,0,0,0.04);
+    --shadow-sm:      0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md:      0 8px 24px rgba(0,0,0,0.07);
+    --shadow-lg:      0 20px 40px rgba(0,0,0,0.10);
+    --shadow-pop:     0 12px 32px rgba(79,70,229,0.18);
+
+    --radius-xl:      24px;
+    --radius-lg:      16px;
+    --radius-md:      12px;
+    --radius-sm:      8px;
+    --radius-pill:    999px;
+
+    --ease:           cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition:     0.28s var(--ease);
+
+
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--background);
+    color: var(--text-body);
+}
+
+/* ─── FLASH MESSAGES ─────────────────────────────────── */
+#flash-wrap {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: opacity 0.3s;
+}
+
+.flash-msg {
+    padding: 14px 22px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    animation: slideInRight 0.35s var(--ease-spring) both;
+}
+
+.flash-success { background: var(--green-bg); color: var(--green-text); border-left: 3px solid var(--green-text); }
+.flash-error   { background: var(--red-bg);   color: var(--red-text);   border-left: 3px solid var(--red-text); }
+
+@keyframes slideInRight {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ─── STAT CARDS ─────────────────────────────────────── */
+.lp-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+}
+
+.lp-stat-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 24px 20px 22px;
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-xs);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    text-align: center;
+}
+
+.lp-stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-ultra), transparent 60%);
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+.lp-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: #c7d2fe;
+}
+
+.lp-stat-card:hover::after { opacity: 1; }
+
+.lp-stat-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.lp-stat-card h3 {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 8px 0 6px;
+    letter-spacing: -1.5px;
+    line-height: 1;
+}
+
+.lp-stat-card p {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ─── VEHICLE CARD ───────────────────────────────────── */
+.lp-vehicle-card {
+    display: grid;
+    grid-template-columns: 260px 1fr auto;
+    gap: 0;
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    margin-bottom: 20px;
+    min-height: 180px;
+    height: 260px; /* fixed card height */
+}
+
+.lp-vehicle-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: #c7d2fe;
+}
+
+/* ─── IMAGE COLUMN ───────────────────────────────────── */
+.lp-vehicle-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.lp-vehicle-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s var(--ease);
+}
+
+.lp-vehicle-card:hover .lp-vehicle-img-wrap img {
+    transform: scale(1.06);
+}
+
+
+
+/* ─── INFO COLUMN ────────────────────────────────────── */
+.lp-vehicle-info {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    border-right: 1px dashed var(--border-soft);
+}
+
+.lp-vehicle-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    letter-spacing: -0.3px;
+    line-height: 1.15;
+}
+
+.lp-vehicle-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+.lp-vehicle-meta li {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lp-vehicle-meta .meta-label {
+    font-weight: 700;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-muted);
+    background: var(--background);
+    border: 1px solid var(--border-soft);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.lp-vehicle-meta .meta-value {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* ─── PRICE + ACTIONS COLUMN ─────────────────────────── */
+.lp-vehicle-price {
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-width: 200px;
+}
+
+.lp-price-tag {
+    text-align: center;
+}
+
+.lp-price-amount {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -1px;
+    line-height: 1;
+    display: block;
+}
+
+.lp-price-unit {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ─── BUTTON GROUP ───────────────────────────────────── */
+.vr-btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* ─── SHARED BUTTON / BADGE BASE ─────────────────────── */
+.vr-btn,
+.vr-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 42px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    line-height: 1;
+    padding: 0 20px;
+}
+
+/* Edit button — outlined style */
+.vr-btn-edit {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    box-shadow: none;
+}
+
+.vr-btn-edit:hover {
+    background: var(--primary-ultra);
+    box-shadow: 0 4px 14px var(--primary-glow);
+    transform: translateY(-2px);
+    color: var(--primary);
+}
+
+/* Primary action button */
+.vr-btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.vr-btn-primary:hover:not(:disabled) {
+    box-shadow: 0 8px 22px var(--primary-glow);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.vr-btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Badge — success state */
+.vr-badge {
+    background: var(--green-bg);
+    color: var(--green-text);
+    border: 1.5px solid #bbf7d0;
+    box-shadow: none;
+    cursor: default;
+    animation: popIn 0.4s var(--ease-spring) both;
+    font-size: 13px;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.82); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────── */
+.lp-empty {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--text-muted);
+}
+
+.lp-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.35;
+}
+
+.lp-empty p {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* ─── POPUP OVERLAY ──────────────────────────────────── */
+.lp-popup-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(15, 23, 42, 0.35);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 40px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s var(--ease), visibility 0.35s;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.lp-popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lp-popup-card {
+    background: var(--surface);
+    padding: 18px 32px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-soft);
+    transform: translateY(20px);
+    transition: transform 0.4s var(--ease-spring);
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    pointer-events: auto;
+}
+
+.lp-popup-overlay.show .lp-popup-card {
+    transform: translateY(0);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 991px) {
+    .lp-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lp-vehicle-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: 200px auto auto;
+    }
+
+    .lp-vehicle-img-wrap {
+        height: 200px;
+        width: 100%;
+    }
+
+    .lp-vehicle-info {
+        border-right: none;
+        border-bottom: 1px dashed var(--border-soft);
+        text-align: center;
+        align-items: center;
+    }
+
+    .lp-vehicle-price {
+        padding: 20px 24px;
+        min-width: unset;
+        border-top: none;
+    }
+
+    .vr-btn-group {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .vr-btn,
+    .vr-badge {
+        width: auto;
+        min-width: 130px;
+    }
+    .vr-warning { background:#fff3cd; color:#856404; }
+.vr-success { background:#d4edda; color:#155724; }
+.vr-danger  { background:#f8d7da; color:#721c24; }
+}
+
+@media (max-width: 576px) {
+    .lp-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .lp-stat-card h3 { font-size: 28px; }
+}
+    </style>
+</head>
+
+<body>
+
+<!-- ── POPUP TOAST ─────────────────────────────── -->
+<div id="lp-request-popup" class="lp-popup-overlay">
+    <div class="lp-popup-card">
+        <p id="lp-popup-message" style="margin:0;"></p>
+    </div>
+</div>
+
+<!-- ── FLASH MESSAGES ──────────────────────────── -->
+<script>
+  setTimeout(() => {
+    const w = document.getElementById("flash-wrap");
+    if (w) { w.style.opacity = "0"; setTimeout(() => w.remove(), 300); }
+  }, 2800);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+    {% for message in messages %}
+    <div class="flash-msg flash-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div id="wrapper">
+    <div id="de-preloader"></div>
+
+    <header class="transparent scroll-light has-topbar">
+        {% include 'navbar.html' %}
+    </header>
+
+
+        <section id="subheader" class="jarallax text-light">
+<img src="static/images/background/myprofile.png" class="jarallax-img">
+
+
+<div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+                                   <h1 class="hero-title"> My Vehicles</h1>
+                    <p>Manage your vehicle listings and rental status</p>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+</section>
+
+        <div class="container mt-4 mb-5">
+            <div class="row g-4">
+
+                <!-- ── SIDEBAR ─────────────────────────── -->
+                <div class="col-lg-3 col-md-4">
+                    <div class="rp-sidebar">
+                        <div class="rp-sidebar-title">ACCOUNT</div>
+                        <div class="rp-userbox">
+                            <div class="rp-user-name">Welcome, {{ leaser_name }}</div>
+                            <div class="rp-user-sub">Manage your vehicles, update details, and keep availability active.</div>
+                        </div>
+                        <ul class="rp-menu">
+                            <li class="{% if request.path == '/leaser_cars' %}active{% endif %}">
+                                <a href="/leaser_cars"><i class="fa fa-car"></i><span>My Vehicles</span></a>
+                            </li>
+                            <li class="{% if request.path == '/leaser_add_car' %}active{% endif %}">
+                                <a href="/leaser_add_car"><i class="fa fa-plus"></i><span>Add New Vehicle</span></a>
+                            </li>
+                            <li class="{% if request.path == '/leaser_bookings' %}active{% endif %}">
+<a href="/leaser_bookings">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking Overview</span>
+</a>
+</li>
+                            <li class="{% if request.path == '/leaserprofile' %}active{% endif %}">
+                                <a href="/leaserprofile"><i class="fa fa-user"></i><span>Profile</span></a>
+                            </li>
+                            <li class="{% if request.path == '/document' %}active{% endif %}">
+                                <a href="/document"><i class="fa fa-file-pdf-o"></i> Documents</a>
+                            </li>
+                            <li><a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ── MAIN CONTENT ────────────────────── -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="de-box p-4">
+
+                        <!-- STATS ROW -->
+                        <div class="lp-stats-row">
+                            <div class="lp-stat-card">
+                                <div class="lp-stat-accent"></div>
+                                <h3>{{ total_cars }}</h3>
+                                <p>Total Vehicles</p>
+                            </div>
+                            <div class="lp-stat-card">
+                                <div class="lp-stat-accent"></div>
+                                <h3>{{ active_rentals }}</h3>
+                                <p>Active Rentals</p>
+                            </div>
+                            <div class="lp-stat-card">
+                                <div class="lp-stat-accent"></div>
+                                <h3>{{ available_cars }}</h3>
+                                <p>Available</p>
+                            </div>
+                            <div class="lp-stat-card">
+                                <div class="lp-stat-accent"></div>
+
+                                <h3>₹{{ monthly_earnings }}</h3>
+<p>Monthly Earnings</p>
+                            </div>
+                        </div>
+
+                        <!-- VEHICLE CARDS -->
+                        {% for car in vehicles %}
+                        <div class="lp-vehicle-card">
+
+                            <!-- Image -->
+                            <div class="lp-vehicle-img-wrap">
+                                <img src="{{ car.vehicle_img.url }}" alt="{{ car.brand }} {{ car.model }}">
+                                {% if car.available_status == '1' %}
+                                    <span class="vp-status available">Available</span>
+                                {% elif car.available_status == '2' %}
+                                    <span class="vp-status not-available">Not Available</span>
+                                {% elif car.available_status == '3' %}
+                                    <span class="vp-status on-ride">On Ride</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Info -->
+                            <div class="lp-vehicle-info">
+                                <h4 class="lp-vehicle-title">{{ car.brand }} {{ car.model }}</h4>
+                                <ul class="lp-vehicle-meta">
+                                    <li>
+                                        <span class="meta-label">Category</span>
+                                        <span class="meta-value">{{ car.vcategory }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="meta-label">Sub</span>
+                                        <span class="meta-value">{{ car.vsubcategory }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="meta-label">Reg No</span>
+                                        <span class="meta-value">{{ car.registration_number }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Price + Actions -->
+                            <div class="lp-vehicle-price">
+                                <div class="lp-price-tag">
+                                    <span class="lp-price-amount">₹{{ car.fare }}</span>
+                                    <span class="lp-price-unit">per day</span>
+                                </div>
+
+<div class="vr-btn-group">
+    <a href="/editvehicle/{{ car.id }}" class="vr-btn vr-btn-edit">Edit</a>
+
+    {% if car.request_status == 'pending' %}
+        <span class="vr-badge vr-warning">⏳ Request Pending</span>
+
+    {% elif car.request_status == 'approved' %}
+        <span class="vr-badge vr-success">✅ Request Approved</span>
+
+    {% elif car.request_status == 'rejected' %}
+        <span class="vr-badge vr-danger">❌ Request Rejected</span>
+
+    {% else %}
+        <form action="/vehicle-return-request" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="vehicle_id" value="{{ car.id }}">
+
+            <button type="submit" class="vr-btn vr-btn-primary">
+                Request Return
+            </button>
+        </form>
+    {% endif %}
+</div>             </div>
+
+                        </div>
+                        {% empty %}
+                        <div class="lp-empty">
+                            <div class="lp-empty-icon">🚗</div>
+                            <p>No vehicles added yet.<br>
+                               <a href="/leaser_add_car" style="color:var(--primary);font-weight:700;">Add your first vehicle →</a>
+                            </p>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</div>
+
+
+
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/designesia.js"></script>
+
+</body>
+</html>

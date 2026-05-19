@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+{% include 'links.html' %}
+
+</head>
+
+<body>
+<script>
+setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+        flashWrap.style.opacity = "0";
+        setTimeout(() => flashWrap.remove(), 300);
+    }
+}, 2500);
+</script>
+
+{% if messages %}
+<div id="flash-wrap">
+    {% for message in messages %}
+    <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div id="wrapper" class="profile-section">
+
+{% include 'navbar.html' %}
+
+<!-- page preloader -->
+<div id="de-preloader"></div>
+
+<div class="no-bottom no-top zebra" id="content">
+<div id="top"></div>
+
+<!-- SUBHEADER -->
+<section id="subheader" class="jarallax text-light">
+<img src="{% static 'images/background/myprofile.png' %}" class="jarallax-img" alt="">
+
+<div class="center-y relative text-center">
+<div class="container">
+<div class="row">
+<div class="col-md-12 text-center">
+
+ <div class="col-md-12 text-center">
+                            <!-- ✅ classy title -->
+                            <div class="hero-title-wrap">
+
+                                    <h1 class="hero-title">Booking History</h1>
+<p>View and manage your past bookings</p>
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<div class="container mt-4 mb-5">
+
+<div class="row g-4">
+
+<!-- SIDEBAR -->
+<div class="col-lg-3 col-md-4">
+
+<div class="rp-sidebar">
+
+<div class="rp-sidebar-title">ACCOUNT</div>
+
+<div class="rp-userbox">
+
+<div class="rp-user-name">
+Welcome, {{ user.uname }}
+</div>
+
+<div class="rp-user-sub">
+View and manage your past bookings
+</div>
+
+</div>
+
+<ul class="rp-menu">
+
+<li class="{% if request.path == '/bookinghistory' %}active{% endif %}">
+<a href="/bookinghistory">
+<i class="fa fa-calendar-check-o"></i>
+<span>Booking History</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/userprofile' %}active{% endif %}">
+<a href="/userprofile">
+<i class="fa fa-user"></i>
+<span>Profile</span>
+</a>
+</li>
+
+<li class="{% if request.path == '/document' %}active{% endif %}">
+<a href="/document">
+<i class="fa fa-file-pdf-o"></i>
+
+<span>My Documents</span>
+</a>
+</li>
+
+<li>
+<a href="/logout">
+<i class="fa fa-sign-out"></i>
+<span>Sign Out</span>
+</a>
+</li>
+
+</ul>
+
+</div>
+</div>
+
+<!-- RIGHT CONTENT -->
+<div class="col-lg-9 col-md-8">
+
+{% if bookingdata %}
+
+{% for book in bookingdata %}
+
+<div class="bh-ride-card {% if not book.booking_status %}cancelled-card{% endif %}">
+ <!-- 🔥 Ribbon -->
+    {% if book.ride_status == 'completed' %}
+        <div class="ribbon completed">Completed</div>
+    {% endif %}
+<div class="bh-ride-container">
+
+<div class="bh-ride-left">
+
+<div class="bh-vehicle-icon">
+{% if book.vehicle_id.vehicle_img %}
+<img src="{{ book.vehicle_id.vehicle_img.url }}">
+{% else %}
+<img src="{% static 'images/icons/car.png' %}">
+{% endif %}
+</div>
+
+<div>
+
+<div class="bh-vehicle-title">
+{{ book.vehicle_id.brand }} - {{ book.vehicle_id.model }}
+
+<span class="bh-vehicle-number">
+{{ book.vehicle_id.registration_number }}
+</span>
+
+</div>
+
+<div class="bh-detail-grid">
+
+<div>
+<span class="bh-label">Booking Type</span>
+<span class="bh-value">{{ book.get_booking_type_display }}</span>
+</div>
+{% if book.booking_type == "with_driver" %}
+    <div class="bh-value bh-address">
+    <span class="bh-label">Pickup Location</span>
+
+    <span class="bh-address-text" data-full="{{ book.pickup_location }}">
+    {{ book.pickup_location }}
+</span>
+</div>
+
+<div>
+<span class="bh-label">Pickup Time</span>
+<span class="bh-value">{{ book.pickup_time }}</span>
+</div>
+    {% endif %}
+
+
+<div>
+<span class="bh-label">Fare</span>
+<span class="bh-fare">₹ {{ book.total_amount }}</span>
+</div>
+
+</div>
+
+<div class="bh-date-track">
+
+<div class="bh-date-pill bh-start">
+<i class="fa fa-calendar"></i> {{ book.start_date }}
+</div>
+
+<div class="bh-date-arrow">
+<i class="fa fa-arrow-right"></i>
+</div>
+
+<div class="bh-date-pill bh-end">
+<i class="fa fa-flag-checkered"></i> {{ book.end_date }}
+</div>
+
+</div>
+
+</div>
+</div>
+
+<div class="bh-action-area">
+
+<a href="/bookingdetails/{{ book.id }}" class="bh-btn-view">
+View Details
+</a>
+
+
+</div>
+
+</div>
+    <!-- PROGRESS -->
+<div class="ride-progress" data-status="{{ book.ride_status }}">
+
+<div class="step {% if book.ride_status == 'not_started' %}active{% endif %}">
+<div class="circle"></div>
+<span>Not Started</span>
+</div>
+
+<div class="step {% if book.ride_status == 'on_ride' %}active{% endif %}">
+<div class="circle"></div>
+<span>On Ride</span>
+</div>
+
+<div class="step {% if book.ride_status == 'completed' %}active{% endif %}">
+<div class="circle"></div>
+<span>Completed</span>
+</div>
+
+</div>
+
+{% if not book.booking_status %}
+        <div class="cancel-stripe">CANCELLED</div>
+        <div class="cancel-overlay">Booking Cancelled</div>
+    {% endif %}
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="bh-empty-box">
+
+<img src="{% static 'images/icons/zeroride.png' %}" width="130">
+
+<h4 style="margin-top:20px;color:#94a3b8;">
+No booking found
+</h4>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+{% include 'footer.html' %}
+</div>
+
+
+
+</div>
+
+</div>
+
+
+<!-- CANCEL MODAL -->
+
+
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+</body>
+</html>

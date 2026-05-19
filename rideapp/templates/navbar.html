@@ -1,0 +1,229 @@
+<!-- ===== FONT AWESOME ===== -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<header class="transparent header-light scroll-light has-topbar">
+
+    <div class="container">
+        <div class="de-flex align-items-center justify-content-between">
+
+            <!-- LOGO -->
+            <div id="logo">
+                <a href="/">
+                    <img src="static/images/v.png" height="70" width="200" />
+                </a>
+            </div>
+
+            <!-- MENU -->
+<ul id="mainmenu">
+
+{% if request.session.userlogid %}
+
+<li>
+    <a class="menu-item {% if request.path == '/' or request.path == '/logout' %}active{% endif %}" href="/">
+        <i class="fa fa-home"></i> Home
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+        <i class="fa fa-comments-o"></i> About Us
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+        <i class="fa fa-phone"></i> Support & Feedback
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+        <i class="fa fa-car"></i> Vehicles
+    </a>
+    <ul>
+        <li>
+            <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                <i class="fa fa-car"></i> Cars List
+            </a>
+        </li>
+        <li>
+            <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                <i class="fa fa-motorcycle"></i> Bikes List
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/bookinghistory' %}active{% endif %}" href="/bookinghistory">
+        <i class="fa fa-calendar-check-o"></i> Booking History
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/userprofile' %}active{% endif %}" href="/userprofile">
+        <i class="fa fa-user"></i> My Profile
+    </a>
+</li>
+
+{% elif request.session.leaserlogid %}
+
+<li>
+    <a class="menu-item {% if request.path == '/' or request.path == '/logout' %}active{% endif %}" href="/">
+        <i class="fa fa-home"></i> Home
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+        <i class="fa fa-comments-o"></i> About Us
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+        <i class="fa fa-phone"></i> Support & Feedback
+    </a>
+</li>
+    <li>
+    <a class="menu-item {% if request.path == '/leaser_bookings' %}active{% endif %}" href="/leaser_bookings">
+        <i class="fa fa-calendar-check-o"></i> Booking Overview
+    </a>
+</li>
+
+<!-- ✅ FIXED VEHICLES LISTING -->
+<li>
+    <a class="menu-item {% if request.path == '/leaser_add_car' or request.path == '/leaser_cars' or request.path == '/editvehicle/<int:id>'%}active{% endif %}" href="/leaser_cars">
+        <i class="fa fa-car"></i> Vehicles Listing
+    </a>
+    <ul>
+        <li>
+            <a class="menu-item {% if request.path == '/leaser_add_car' %}active{% endif %}" href="/leaser_add_car">
+                <i class="fa fa-plus"></i> Add Vehicles
+            </a>
+        </li>
+        <li>
+            <a class="menu-item {% if request.path == '/leaser_cars' or request.path == '/editvehicle/<int:id>' %}active{% endif %}" href="/leaser_cars">
+                <i class="fa fa-cogs"></i> Manage Vehicles
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/leaserprofile' or request.path == '/document'%}active{% endif %}" href="/leaserprofile">
+        <i class="fa fa-user"></i> My Profile
+    </a>
+</li>
+
+{% elif request.session.driverlogid %}
+
+<li>
+    <a class="menu-item {% if request.path == '/' or request.path == '/logout' %}active{% endif %}" href="/">
+        <i class="fa fa-home"></i> Home
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+        <i class="fa fa-comments-o"></i> About Us
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+        <i class="fa fa-phone"></i> Support & Feedback
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/assign_ride' %}active{% endif %}" href="/assign_ride">
+        <i class="fa fa-map"></i> Assigned Rides
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/driverprofile'  %}active{% endif %}" href="/driverprofile">
+        <i class="fa fa-user"></i> My Profile
+    </a>
+</li>
+
+{% else %}
+
+<li>
+    <a class="menu-item {% if request.path == '/' or request.path == '/logout' %}active{% endif %}" href="/">
+        <i class="fa fa-home"></i> Home
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+        <i class="fa fa-comments-o"></i> About Us
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+        <i class="fa fa-phone"></i> Support & Feedback
+    </a>
+</li>
+
+<li>
+    <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+        <i class="fa fa-tachometer"></i> Vehicles
+    </a>
+    <ul>
+        <li>
+            <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                <i class="fa fa-car"></i> Cars List
+            </a>
+        </li>
+        <li>
+            <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                <i class="fa fa-motorcycle"></i> Bikes List
+            </a>
+        </li>
+    </ul>
+</li>
+
+{% endif %}
+
+</ul>
+
+            <!-- RIGHT SIDE -->
+            <div class="menu_side_area">
+
+                {% if request.session.userlogid %}
+                    <b class="me-2">{{request.session.userlogname}}</b>
+                    <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.leaserlogid %}
+                    <b class="me-2">{{request.session.leaserlogname}}</b>
+                    <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.driverlogid %}
+                    <b class="me-2">{{request.session.driverlogname}}</b>
+                    <a href="/logout" class="btn-main">Logout</a>
+
+                {% else %}
+
+                {% if request.path != "/login" %}
+                <a href="/login" class="btn-main">Login</a>
+                {% endif %}
+
+                {% if request.path == "/userregister" %}
+                <a href="/leaserregister" class="btn-main">Leaser Registration</a>
+
+                {% elif request.path == "/leaserregister" %}
+                <a href="/userregister" class="btn-main">User Registration</a>
+
+                {% elif request.path != "/registration" %}
+                <a href="/registration" class="btn-main">Register</a>
+                {% endif %}
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</header>

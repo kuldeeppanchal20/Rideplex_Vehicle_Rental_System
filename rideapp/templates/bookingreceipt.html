@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style>
+body{
+font-family: Arial, sans-serif;
+padding:20px;
+color:#333;
+}
+
+.card{
+border:1px solid #ddd;
+border-radius:10px;
+padding:20px;
+}
+
+/* TITLE */
+.title{
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+text-align:center;
+}
+
+/* VEHICLE SECTION (LEFT IMAGE + RIGHT DETAILS) */
+.vehicle-table{
+width:100%;
+margin-bottom:20px;
+}
+
+.vehicle-table td{
+vertical-align:top;
+}
+
+/* LEFT IMAGE */
+.vehicle-img{
+text-align:center;
+}
+
+.vehicle-img img{
+width:160px;
+}
+
+.number{
+margin-top:8px;
+font-weight:bold;
+background:#f4f6f9;
+padding:6px;
+border-radius:6px;
+display:inline-block;
+}
+
+/* RIGHT DETAILS */
+.details-box{
+padding-left:15px;
+}
+
+.info-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.info-table td{
+padding:6px;
+font-size:13px;
+}
+
+.label{
+color:#777;
+width:40%;
+}
+
+.value{
+font-weight:bold;
+}
+
+/* DATE SECTION */
+.date-box{
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
+padding:10px;
+background:#f9fbfd;
+text-align:center;
+}
+
+/* PRICE */
+.price{
+margin-top:15px;
+border:1px solid #ddd;
+padding:10px;
+border-radius:6px;
+background:#eef5ff;
+}
+
+/* DRIVER */
+.driver{
+margin-top:15px;
+border:1px solid #ddd;
+padding:10px;
+border-radius:6px;
+background:#f9fbfd;
+}
+
+/* NOTE */
+.note{
+margin-top:15px;
+background:#fff8e1;
+padding:10px;
+border-left:4px solid #f1c40f;
+}
+
+/* FOOTER */
+.footer{
+margin-top:20px;
+font-size:12px;
+text-align:center;
+color:#777;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="title">Booking Receipt</div>
+
+<!-- VEHICLE ROW -->
+<table class="vehicle-table">
+<tr>
+
+<!-- LEFT -->
+<td width="35%">
+<div class="vehicle-img">
+{% if vehicle_img %}
+<img src="{{ vehicle_img }}">
+{% endif %}
+
+<div class="number">
+{{ booking.vehicle_id.registration_number }}
+</div>
+</div>
+</td>
+
+<!-- RIGHT -->
+<td width="65%">
+<div class="details-box">
+
+<table class="info-table">
+
+<tr>
+<td class="label">Vehicle</td>
+<td class="value">{{ booking.vehicle_id.brand }} - {{ booking.vehicle_id.model }}</td>
+</tr>
+
+<tr>
+<td class="label">Booking Type</td>
+<td class="value">{{ booking.get_booking_type_display }}</td>
+</tr>
+{% if booking.booking_type == "with_driver" %}
+    <tr>
+<td class="label">Pickup Location</td>
+<td class="value">{{ booking.pickup_location }}</td>
+</tr>
+
+<tr>
+<td class="label">Pickup Time</td>
+<td class="value">{{ booking.pickup_time }}</td>
+</tr>
+  {% endif %}
+
+
+<tr>
+<td class="label">Booking Date</td>
+<td class="value">{{ booking.booking_date }}</td>
+</tr>
+
+</table>
+
+</div>
+</td>
+
+</tr>
+</table>
+
+<!-- DATE BOX -->
+<div class="date-box">
+<strong>From:</strong> {{ booking.start_date }} &nbsp;&nbsp; → &nbsp;&nbsp;
+<strong>To:</strong> {{ booking.end_date }}
+</div>
+
+<!-- PRICE -->
+<div class="price">
+{% if booking.booking_type == "with_driver" %}
+   <strong>Driver fee:</strong>  {{ driver_fee_per_day }} / Day <br>
+    <strong>Total Driver fee:</strong>  {{ booking.total_driver_fee }} <br>
+
+  {% endif %}
+
+<strong>Total Fare:</strong>  {{ booking.total_amount }} <br>
+<strong>Security Deposit:</strong>  {{ booking.security_deposit }} <br>
+<strong>Paid Amount:</strong>
+{% if payment %}
+ {{ payment.amount }}
+{% else %}
+ 0
+{% endif %}
+<br>
+<strong>Payment Mode:</strong>
+{% if payment %}
+{{ payment.payment_type }}
+{% else %}
+Not Paid
+{% endif %}
+</div>
+
+<!-- DRIVER -->
+{% if booking.driver_id %}
+<div class="driver">
+<strong>Driver Name:</strong> {{ booking.driver_id.dname }} <br>
+<strong>Contact:</strong> {{ booking.driver_id.contact }}
+</div>
+{% endif %}
+
+<!-- NOTE -->
+{% if payment and payment.payment_type == "Cash" and booking.driver_id %}
+<div class="note">
+<strong>Note:</strong> Show this receipt to the driver at pickup time.
+</div>
+{% endif %}
+
+{% if payment and payment.payment_type == "Cash" and not booking.driver_id %}
+<div class="note">
+<strong>Note:</strong> Pay cash at pickup location and show this receipt.
+</div>
+{% endif %}
+
+<!-- FOOTER -->
+<div class="footer">
+Thank you for booking with us!
+</div>
+
+</div>
+
+</body>
+</html>

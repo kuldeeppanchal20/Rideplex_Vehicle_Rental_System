@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+{% include 'links.html' %}
+
+<!-- Custom Login CSS -->
+<link rel="stylesheet" href="/static/css/login-custom.css">
+
+<style>
+
+/* PASSWORD WRAPPER */
+.pass-wrap{
+    position:relative;
+}
+
+/* add space for icon */
+.pass-wrap input{
+    padding-right:45px;
+}
+
+/* EYE ICON */
+.eye-icon{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#6b7280;
+    font-size:16px;
+    z-index:5;
+}
+
+.eye-icon:hover{
+    color:#2563eb;
+}
+
+/* PARSLEY ERROR */
+.parsley-errors-list{
+    margin-top:6px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="wrapper">
+
+<!-- preloader -->
+<div id="de-preloader"></div>
+
+<!-- navbar -->
+{% include 'navbar.html' %}
+
+<!-- content -->
+<div class="no-bottom no-top zebra" id="content">
+
+<div id="top"></div>
+
+
+<!-- hero section -->
+<section aria-label="section" class="jarallax" id="section-hero">
+
+<img alt="" class="jarallax-img" src="static/images/background/login2.png">
+
+<div class="v-center">
+
+<div class="container">
+
+
+<div class="jarallax text-light">
+
+<div class="row">
+
+<div class="col-md-12 text-center">
+
+<div class="hero-title-wrap">
+
+<h1 class="hero-title">Login</h1>
+
+<p class="hero-subtitle">Access your dashboard</p>
+
+<div class="hero-line"></div>
+
+</div>
+
+</div>
+
+<div class="clearfix"></div>
+
+</div>
+
+</div>
+
+
+<div class="row align-items-center">
+
+<div class="col-lg-4 offset-lg-4">
+
+<div class="login-card">
+
+
+<!-- Django messages -->
+{% if messages %}
+{% for i in messages %}
+
+{% if i.tags == 'success' %}
+
+<div class="form-msg form-msg-success">
+<div>{{ i }}</div>
+</div>
+
+{% elif i.tags == 'error' %}
+
+<div class="form-msg form-msg-danger">
+<div>{{ i }}</div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+
+
+<!-- LOGIN FORM -->
+
+<form action="logindata"
+method="post"
+id="loginForm"
+data-parsley-validate
+novalidate>
+
+{% csrf_token %}
+
+
+<!-- EMAIL -->
+
+<div class="field-set">
+
+<label>Email Address</label>
+
+<input class="form-control"
+id="email"
+name="email"
+type="email"
+placeholder="Enter your email"
+autocomplete="email"
+
+required
+data-parsley-trigger="keyup"
+data-parsley-required-message="Email is required"
+data-parsley-type-message="Enter a valid email address">
+
+</div>
+
+
+
+<!-- PASSWORD -->
+
+<div class="field-set">
+
+<label>Password</label>
+
+<div class="pass-wrap">
+
+<input class="form-control"
+id="password"
+name="password"
+type="password"
+placeholder="Enter your password"
+autocomplete="current-password"
+
+required
+minlength="6"
+
+data-parsley-trigger="keyup"
+
+data-parsley-required-message="Password is required"
+data-parsley-minlength-message="Password must be at least 6 characters"
+
+data-parsley-errors-container="#password-error">
+
+<i class="fa fa-eye eye-icon"
+onclick="togglePassword('password', this)"></i>
+
+</div>
+
+<!-- ERROR CONTAINER -->
+<div id="password-error"></div>
+
+</div>
+
+
+
+<!-- REMEMBER + FORGOT -->
+
+<div class="login-row">
+
+<label class="remember-me">
+
+<input type="checkbox" id="rememberMe">
+
+<span> </span>
+
+</label>
+
+<a href="/forgot_password" class="forgot-link">Forgot password?</a>
+
+</div>
+
+
+
+<!-- BUTTON -->
+
+<div class="mt-3">
+
+<button class="btn-main btn-fullwidth" type="submit">
+Sign In
+</button>
+
+</div>
+
+</form>
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+
+
+<!-- JS -->
+
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/designesia.js"></script>
+
+
+<script>
+
+function togglePassword(inputId, icon){
+
+var input = document.getElementById(inputId);
+
+if(input.type === "password"){
+
+input.type = "text";
+icon.classList.remove("fa-eye");
+icon.classList.add("fa-eye-slash");
+
+}
+else{
+
+input.type = "password";
+icon.classList.remove("fa-eye-slash");
+icon.classList.add("fa-eye");
+
+}
+
+}
+
+document.getElementById('togglePassword').addEventListene
+r('click', function () {
+   const passwordField =
+document.getElementById('password');
+
+   const passwordIcon =
+document.getElementById('passwordIcon');
+   if (passwordField.type === 'password') {
+     passwordField.type = 'text';
+     passwordIcon.classList.replace('bi-eye',
+'bi-eye-slash');
+   } else {
+     passwordField.type = 'password';
+     passwordIcon.classList.replace('bi-eye-slash',
+'bi-eye');
+   }
+ });
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zxx">
+{%load static%}
+
+<head>
+    <title>Rideplex:Rent,Ride and Explore with Rideplex</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="/static/images/ridelogo.png">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Rideplex :Rent ,Ride and Explore with Rideplex" name="description">
+    <meta content="" name="keywords">
+    <meta content="" name="author">
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet" type="text/css" id="mdb">
+    <link href="{% static 'css/plugins.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
+    <link id="colors" href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Custom Styling for the Inclusion/Exclusion Box */
+        .vp-notice-box {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #ebebeb;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        .vp-notice-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #011638;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+            display: block;
+        }
+
+        .vp-notice-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .vp-notice-list li {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            color: #444;
+        }
+
+        .vp-notice-list li i {
+            margin-right: 10px;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+
+        .text-success { color: #28a745 !important; }
+        .text-danger { color: #dc3545 !important; }
+
+        .vp-notice-list strong {
+            color: #011638;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <div id="de-preloader"></div>
+      <header class="transparent header-light scroll-light has-topbar">
+
+    <!-- ===== MAIN NAVBAR ===== -->
+    <div class="container">
+        <div class="de-flex align-items-center justify-content-between">
+
+            <!-- LOGO -->
+            <div id="logo">
+                <a href="/">
+                    <img src="{% static 'images/v.png' %}" height="70"  width="200" />
+                </a>
+            </div>
+
+
+
+            <!-- MENU -->
+          <ul id="mainmenu">
+    {% if request.session.userlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-car"></i> Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/bookinghistory' %}active{% endif %}" href="/bookinghistory">
+            <i class="fa fa-calendar-check-o"></i> Booking History
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/userprofile' %}active{% endif %}" href="/userprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.leaserlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/leaser' in request.path %}active{% endif %}" href="/">
+            <i class="fa fa-car"></i> Vehicles Listing
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_add_car' %}active{% endif %}" href="/leaser_add_car">
+                    <i class="fa fa-plus"></i> Add Vehicles
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/leaser_cars' %}active{% endif %}" href="/leaser_cars">
+                    <i class="fa fa-cogs"></i> Manage Vehicles
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/leaserprofile' %}active{% endif %}" href="/leaserprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% elif request.session.driverlogid %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+            <i class="fa fa-comments-o"></i> About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/assign_ride' %}active{% endif %}" href="/assign_ride">
+            <i class="fa fa-map"></i> Assigned Rides
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/driverprofile' %}active{% endif %}" href="/driverprofile">
+            <i class="fa fa-user"></i> My Profile
+        </a>
+    </li>
+
+    {% else %}
+
+    <li>
+        <a class="menu-item {% if request.path == '/' %}active{% endif %}" href="/">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/about' %}active{% endif %}" href="/about">
+<i class="fa fa-comments-o"></i>
+
+  About Us
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if request.path == '/support' %}active{% endif %}" href="/support">
+            <i class="fa fa-phone"></i> Support & Feedback
+        </a>
+    </li>
+
+    <li>
+        <a class="menu-item {% if '/vehicle' in request.path or '/bikes' in request.path %}active{% endif %}" href="/vehicle">
+            <i class="fa fa-tachometer"></i>
+            Vehicles
+        </a>
+        <ul>
+            <li>
+                <a class="menu-item {% if request.path == '/vehicle' %}active{% endif %}" href="/vehicle">
+                    <i class="fa fa-car"></i> Cars List
+                </a>
+            </li>
+            <li>
+                <a class="menu-item {% if request.path == '/bikes' %}active{% endif %}" href="/bikes">
+                    <i class="fa fa-motorcycle"></i> Bikes List
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    {% endif %}
+</ul>
+
+            <!-- RIGHT SIDE -->
+            <div class="menu_side_area">
+
+                {% if request.session.userlogid %}
+                    <b class="me-2">{{request.session.userlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.leaserlogid %}
+                    <b class="me-2">{{request.session.leaserlogname}}</b>
+                <a href="/logout" class="btn-main">Logout</a>
+
+                {% elif request.session.driverlogid %}
+
+                    <b class="me-2">{{request.session.driverlogname}}</b>
+                        <a href="/logout" class="btn-main">Logout</a>
+
+                {% else %}
+
+                  <!-- LOGIN -->
+                {% if request.path != "/login" %}
+                <a href="/login" class="btn-main">Login</a>
+                {% endif %}
+
+    <!-- USER ↔ LEASER SWITCH -->
+                {% if request.path == "/userregister" %}
+                <a href="/leaserregister" class="btn-main">Leaser Registration</a>
+
+                {% elif request.path == "/leaserregister" %}
+                <a href="/userregister" class="btn-main">User Registration</a>
+
+    <!-- NORMAL REGISTER (only when not on any registration page) -->
+                {% elif request.path != "/registration" %}
+                <a href="/registration" class="btn-main">Register</a>
+                {% endif %}
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+</header>
+            <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
+
+            <section id="subheader" class="jarallax text-light">
+                <img src="{% static 'images/background/nbc.jpeg' %}" class="jarallax-img" alt="">
+                    <div class="center-y relative text-center">
+                        <div class="container">
+                            <div class="row">
+
+                                 <div class="col-md-12 text-center">
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title"> Vehicle Fleet</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+            <section id="section-car-details">
+
+
+<div class="container">
+    <div class="row g-4">
+
+        <!-- LEFT SECTION -->
+        <div class="col-lg-9">
+
+            <!-- TOP: IMAGE + FEATURES -->
+            <div class="row">
+
+                <!-- IMAGE -->
+                <div class="col-lg-8">
+                    <div class="h-100">
+                        <div id="slider-carousel" class="owl-carousel">
+                            <div class="item">
+                                <img src="/media/{{ vehicle.vehicle_img }}" class="img-fluid w-100">
+                            </div>
+                            <div class="item">
+                                <img src="/media/{{ vehicle.front_angle }}" class="img-fluid w-100">
+                            </div>
+                            <div class="item">
+                                <img src="/media/{{ vehicle.leftside_angle}}" class="img-fluid w-100">
+                            </div>
+                            <div class="item">
+                                <img src="/media/{{ vehicle.rightside_angle}}" class="img-fluid w-100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURES -->
+                <div class="col-lg-4">
+                    <div class="h-100">
+                        <h3 class="vp-header-box">{{ vehicle.brand }}</h3>
+
+                        <div class="spacer-10"></div>
+
+                        <h4 class="vp-filter-head">Specifications</h4>
+
+                        <div class="d-row">
+                            <span class="vp-name">Category</span>
+                            <span class="vp-spec">{{ vehicle.vcategory }}</span>
+                        </div>
+
+                     <div class="spacer-10"></div>
+
+                        <div class="d-row">
+                            <span class="vp-name">Sub-Category</span>
+                            <span class="vp-spec">{{ vehicle.vsubcategory }}</span>
+                        </div>
+
+                         <div class="spacer-10"></div>
+
+                        <div class="d-row">
+                            <span class="vp-name">Model</span>
+                            <span class="vp-spec">{{ vehicle.model }}</span>
+                        </div>
+
+                         <div class="spacer-10"></div>
+
+                        <div class="d-row">
+                            <span class="vp-name">Reg No</span>
+                            <span class="vp-spec">{{ vehicle.registration_number }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BELOW: SELF DRIVE + WITH DRIVER -->
+            <div class="row mt-4">
+
+                <div class="col-lg-6">
+                    <div class="ride-col">
+                        <h4><i class="fa fa-car"></i> Self Drive</h4>
+                        <ul>
+                              <li>Pick up the vehicle from our location</li>
+                    <li>Carry original Aadhaar & Driving License</li>
+                    <li>Keep a copy of documents for verification</li>
+                    <li>Return vehicle on the selected date & time</li>
+                    <li>Late returns may incur extra charges</li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="ride-col">
+                        <h4><i class="fa fa-address-card"></i> With Driver</h4>
+                        <ul>
+                           <li>Driver charges are included in pricing</li>
+                    <li>Driver will arrive at your pickup location</li>
+                    <li>Ensure pickup address is correct</li>
+                    <li>Be ready on time to avoid delays</li>
+                    <li>Follow trip schedule for smooth experience</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SECTION -->
+        <div class="col-lg-3">
+     <div class="de-price text-center">
+                                Daily rate
+                                <h3 >₹ {{ vehicle.fare }}</h3>
+                            </div>
+            <div class="vp-notice-box">
+
+                <span class="vp-notice-title">Inclusions & Exclusions</span>
+
+                <ul class="vp-notice-list">
+                    <li>
+                                        <i class="fa fa-check text-success"></i>
+                                        <span><strong>Security Deposit:</strong> Refunded within 2-3 days after trip completion.</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span><strong>Fuel:</strong> Not included. Return with same fuel level as start.</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span><strong>Toll/Fastag:</strong> Charges not included. Check for Fastag recharge.</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span><strong>Trip Protection:</strong> Excludes off-road, DUI, speeding, or illegal use.</span>
+                                    </li>
+                </ul>
+
+                <!-- BOOKING FORM (UNCHANGED) -->
+                                                             <form name="contactForm" id="contact_form" action="/booking/{{vehicle.id}}" method="post">
+    {% csrf_token %}
+
+
+
+    <div class="spacer-10"></div>
+
+    {% if request.session.userlogid %}
+
+    {% if doc_status == 'not_uploaded' %}
+        <div class="vehicle-msg red">
+            <i class="fa fa-upload"></i> Please upload your Aadhaar card to continue booking.
+        </div>
+        <a href="/document" class="vp-btn">Upload Aadhaar</a>
+
+    {% elif doc_status == 'pending' %}
+        <div class="vehicle-msg yellow">
+            <i class="fa fa-clock-o"></i> Your Aadhaar is under review , You’ll be able to book once it’s approved.
+        </div>
+        <button class="vp-btn disabled">Book Now</button>
+
+    {% elif doc_status == 'verified' %}
+
+        {% if vehicle.available_status == '1' %}
+            <input type="submit" class="vp-btn" value="Book Now">
+
+        {% elif vehicle.available_status == '2' %}
+            <div class="vehicle-msg red">
+                <i class="fa fa-times-circle"></i> This vehicle is currently unavailable. Please check back later or explore other options.
+            </div>
+            <button class="vp-btn disabled">Book Now</button>
+
+        {% elif vehicle.available_status == '3' %}
+            <div class="vehicle-msg yellow">
+                <i class="fa fa-car"></i>Oops! This vehicle is out on a ride. It’ll be back and ready to book soon.
+            </div>
+            <button class="vp-btn disabled">Book Now</button>
+        {% endif %}
+
+    {% endif %}
+
+    {% elif request.session.driverlogid or request.session.leaserlogid %}
+
+        <p style="margin-top:10px; color:#6c757d;">
+            You are currently logged in as a
+            <strong>
+                {% if request.session.driverlogid %}Driver{% else %}Leaser{% endif %}
+            </strong>.
+            <br>
+            To book vehicles, please login or register with a
+            <strong>Customer Account</strong>.
+        </p>
+
+        <div class="spacer-20"></div>
+
+        <a href="/registration" class="vp-btn">Register as User </a>
+
+        <div class="spacer-30"></div>
+
+        <a href="/login" class="vp-btn">Login as User</a>
+
+    {% else %}
+
+        <a href="/login" class="vp-btn">Login to Book</a>
+
+    {% endif %}
+
+    <div class="clearfix"></div>
+</form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+            </section>
+
+
+        </div>
+        {% include 'footer.html' %}
+        </div>
+
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/designesia.js' %}"></script>
+
+</body>
+
+</html>

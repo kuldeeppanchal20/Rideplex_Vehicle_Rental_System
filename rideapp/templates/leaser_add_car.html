@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    {% include 'links.html' %}
+    <style>
+        /* ==========================================
+           Premium Modal Styles for Terms & Conditions
+           ========================================== */
+        .rp-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.7); /* Modern dark overlay */
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+        }
+
+        .rp-modal-content {
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh; /* Prevents overflow on smaller screens */
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            animation: modalPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            overflow: hidden; /* Contains the scroll area */
+        }
+
+        @keyframes modalPopIn {
+            from { transform: scale(0.95) translateY(10px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* Sticky Header */
+        .rp-modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Scrollable Body */
+        .rp-modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            color: #334155;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Sticky Footer */
+        .rp-modal-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .body-no-scroll {
+            overflow: hidden;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        .rp-modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .rp-modal-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .rp-modal-body::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid #f1f5f9;
+        }
+        .rp-modal-body::-webkit-scrollbar-thumb:hover {
+            background-color: #94a3b8;
+        }
+
+        /* Interactive Element States */
+        .btn-agree {
+            transition: all 0.3s ease;
+        }
+        .btn-agree:disabled {
+            background-color: #cbd5e1 !important;
+            border-color: #cbd5e1 !important;
+            color: #ffffff;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .scroll-hint {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Better Form submit button visual state */
+        #submitVehicleBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+  <div id="flash-wrap">
+    {% for message in messages %}
+      <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+    <div id="wrapper">
+
+        <div id="de-preloader"></div>
+        <header class="transparent scroll-light has-topbar">
+             {% include 'navbar.html'%}
+        </header>
+        <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
+
+            <section id="subheader" class="jarallax text-light">
+                <img src="static/images/background/nb.jpeg" class="jarallax-img" alt="">
+                <div class="center-y relative text-center">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-md-12 text-center">
+                            <div class="hero-title-wrap">
+                                <h1 class="hero-title"> Add New Vehicle</h1>
+
+                                <div class="hero-line"></div>
+                            </div>
+                        </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <div class="container mt-4 mb-5">
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-4">
+                    <div class="rp-sidebar">
+                        <div class="rp-sidebar-title">ACCOUNT</div>
+
+                        <div class="rp-userbox">
+                            <div class="rp-user-name">Welcome, {{ leaser_name }}</div>
+                            <div class="rp-user-sub"> List your vehicles for rental.</div>
+                        </div>
+                        <ul class="rp-menu">
+                            <li class="{% if request.path == '/leaser_cars' %}active{% endif %}">
+                                <a href="/leaser_cars">
+                                    <i class="fa fa-car"></i>
+                                    <span>My Vehicles</span>
+                                </a>
+                            </li>
+
+                            <li class="{% if request.path == '/leaser_add_car' %}active{% endif %}">
+                                <a href="/leaser_add_car">
+                                    <i class="fa fa-plus"></i>
+                                    <span>Add New Vehicle</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == '/leaser_bookings' %}active{% endif %}">
+                                <a href="/leaser_bookings">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                    <span>Booking Overview</span>
+                                </a>
+                            </li>
+
+                            <li class="{% if request.path == '/leaserprofile' %}active{% endif %}">
+                                <a href="/leaserprofile">
+                                    <i class="fa fa-user"></i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == '/document' %}active{% endif %}">
+                                <a href="/document"><i class="fa fa-file-pdf-o"></i> Documents</a>
+                            </li>
+
+                            <li>
+                                <a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-8">
+                    <div class="rp-card">
+
+                        <div class="rp-card-header">
+                            <h2 class="rp-title">Add New Vehicle</h2>
+                            <p class="rp-subtitle">Fill basic vehicle details</p>
+                        </div>
+
+                        {% if not docs_uploaded %}
+                        <div class="alert alert-danger mb-4">
+                            <strong>Documents Required!</strong><br>
+                            You must upload the following personal documents before adding vehicles :
+                            <ul>
+                                <li>Aadhar Card</li>
+                                <li>Driving License</li>
+                                <li>PAN Card</li>
+                            </ul>
+                            <a href="/document" class="rp-btn rp-btn-primary mt-2">Upload Documents</a>
+                        </div>
+                        {% elif docs_uploaded and not docs_verified %}
+                        <div class="alert alert-warning mb-4">
+                            <strong>Documents Under Verification</strong><br>
+                            Your personal documents are submitted successfully.
+                            Please wait until admin verifies them before adding vehicles.
+                        </div>
+                        {% endif %}
+
+                        <form id="addCarForm"
+                              method="POST"
+                              enctype="multipart/form-data"
+                              data-parsley-validate
+                              novalidate
+                              {% if not docs_verified %} style="pointer-events:none;opacity:0.6;" {% endif %}>
+
+                            {% csrf_token %}
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="rp-label">Vehicle Category</label>
+                                    <select name="vcategory" id="category" class="form-control rp-input" required data-parsley-required-message="Please select vehicle category" data-parsley-trigger="change">
+                                        <option value="">Select Category</option>
+                                        {% for c in categories %}
+                                        <option value="{{c.id}}">{{c.catname}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Vehicle Subcategory</label>
+                                    <select name="vsubcategory" id="subcategory" class="form-control rp-input" required data-parsley-required-message="Please select vehicle subcategory" data-parsley-trigger="change">
+                                        <option value="">Select Subcategory</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Brand</label>
+                                    <input type="text" name="brand" class="form-control rp-input" placeholder="e.g., Maruti Suzuki , Royal Enfield " required data-parsley-pattern="^[A-Za-z ]+$" data-parsley-pattern-message="Only letters allowed" data-parsley-required-message="Enter Vehicle brand ">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Model</label>
+                                    <input type="text" name="model" class="form-control rp-input" placeholder="e.g., Baleno 2022 , Classic 350 " required data-parsley-required-message="Enter Model Name and Year">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Fuel Type</label>
+                                    <select name="fueltype" id="fueltype" class="form-control rp-input" required data-parsley-required-message="Select fuel type">
+                                        <option value="">Select Fuel Type</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Seats</label>
+                                    <select name="seats" id="seats" class="form-control rp-input" required data-parsley-required-message="Select number of seats">
+                                        <option value="">Select Seats</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Registration Number</label>
+                                    <input type="text"
+                                           name="registration_number"
+                                           class="form-control rp-input text-uppercase"
+                                           placeholder="e.g., GJ01AB1234"
+                                           required
+                                           data-parsley-pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$"
+                                           data-parsley-pattern-message="Enter valid registration number"
+                                           data-parsley-required-message="Enter registration number"
+                                           data-parsley-uniquereg="true"
+                                           data-parsley-trigger="keyup focusout">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="rp-label">Fare</label>
+                                    <input type="number" name="fare" class="form-control rp-input" placeholder="e.g., 1500" required min="401" data-parsley-type="number" data-parsley-min="401" data-parsley-required-message="Please enter fare" data-parsley-min-message="Fare must be greater than 400">
+                                </div>
+
+                                <div class="col-md-12 mt-2">
+                                    <label class="rp-label">Vehicle Images (Upload 4 Images)</label>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="rp-label">Main Vehicle Image</label>
+                                            <input type="file" name="vehicle_img" class="form-control rp-file" accept="image/*" required data-parsley-required-message="Please upload the main vehicle image" data-parsley-filemaxmegabytes="2" data-parsley-trigger="change">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="rp-label">Back View Image</label>
+                                            <input type="file" name="front_angle" class="form-control rp-file" accept="image/*" required data-parsley-required-message="Please upload the back view image" data-parsley-trigger="change">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="rp-label">Left Side Image</label>
+                                            <input type="file" name="leftside_angle" class="form-control rp-file" accept="image/*" required data-parsley-required-message="Please upload the left side image" data-parsley-trigger="change">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="rp-label">Right Side Image</label>
+                                            <input type="file" name="rightside_angle" class="form-control rp-file" accept="image/*" required data-parsley-required-message="Please upload the right side image" data-parsley-trigger="change">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mt-5">
+                                    <div class="p-4 rounded-4 shadow-sm" style="background: #ffffff; border: 1px solid #eef0f4;">
+
+                                        <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+                                            <div>
+                                                <h4 class="fw-bold mb-1" style="color: #2b3445;"><i class="fa fa-folder-open text-primary me-2"></i> Vehicle Documents</h4>
+                                                <p class="small text-muted mb-0">Upload clear copies of your vehicle's mandatory documents. All fields are required.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive mb-5">
+                                            <table class="table align-middle text-center" style="border-collapse: separate; border-spacing: 0 8px;">
+                                                <thead style="background: #f8f9fa; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: #6c757d; letter-spacing: 0.5px;">
+                                                    <tr>
+                                                        <th class="border-0 rounded-start py-3">Document Type</th>
+                                                        <th class="border-0 py-3">Document No.</th>
+                                                        <th class="border-0 rounded-end py-3">Expiry Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size: 0.9rem;">
+                                                    <tr class="shadow-sm bg-white" style="transition: all 0.2s;">
+                                                        <td class="border-0 rounded-start fw-bold text-start ps-4 py-3"><i class="fa fa-id-card-o text-primary me-2"></i> RC Book</td>
+                                                        <td id="rc-tbl-num" class="border-0 text-muted py-3">-</td>
+                                                        <td id="rc-tbl-exp" class="border-0 rounded-end text-muted py-3">-</td>
+                                                    </tr>
+                                                    <tr class="shadow-sm bg-white" style="transition: all 0.2s;">
+                                                        <td class="border-0 rounded-start fw-bold text-start ps-4 py-3"><i class="fa fa-shield text-success me-2"></i> Insurance</td>
+                                                        <td id="ins-tbl-num" class="border-0 text-muted py-3">-</td>
+                                                        <td id="ins-tbl-exp" class="border-0 rounded-end text-muted py-3">-</td>
+                                                    </tr>
+                                                    <tr class="shadow-sm bg-white" style="transition: all 0.2s;">
+                                                        <td class="border-0 rounded-start fw-bold text-start ps-4 py-3"><i class="fa fa-leaf text-warning me-2"></i> PUC</td>
+                                                        <td id="puc-tbl-num" class="border-0 text-muted py-3">-</td>
+                                                        <td id="puc-tbl-exp" class="border-0 rounded-end text-muted py-3">-</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="doc-card p-4 rounded-3 mb-4" style="background: #f8faff; border: 1px solid #dbe4f0;">
+                                            <h6 class="fw-bold text-primary mb-3"><i class="fa fa-id-card-o me-2"></i> 1. Registration Certificate (RC) Details</h6>
+                                            <div class="row g-3">
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">RC Number <span class="text-danger">*</span></label>
+                                                    <input type="text" name="rc_number" class="form-control rp-input doc-input text-uppercase" placeholder="e.g. GJ01AB1234" required data-parsley-required-message="Required" data-parsley-pattern="^[a-zA-Z0-9]+$" data-parsley-pattern-message="Alphanumeric only">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Issue Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="rc_issue_date" id="rc_issue_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Expiry Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="rc_expiry_date" id="rc_expiry_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Upload RC <span class="text-danger">*</span></label>
+                                                    <input type="file" name="rc_book" class="form-control rp-file doc-input" accept=".pdf, image/jpeg, image/png" required data-parsley-required-message="Upload file">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="doc-card p-4 rounded-3 mb-4" style="background: #f8fff9; border: 1px solid #dcf0e2;">
+                                            <h6 class="fw-bold text-success mb-3"><i class="fa fa-shield me-2"></i> 2. Insurance Policy Details</h6>
+                                            <div class="row g-3">
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Policy Number <span class="text-danger">*</span></label>
+                                                    <input type="text" name="insurance_number" class="form-control rp-input doc-input text-uppercase" placeholder="e.g. POL12345" required data-parsley-required-message="Required" data-parsley-pattern="^[a-zA-Z0-9\-\/]+$" data-parsley-pattern-message="Invalid format">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Issue Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="insurance_issue_date" id="insurance_issue_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Expiry Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="insurance_expiry_date" id="insurance_expiry_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Upload Insurance <span class="text-danger">*</span></label>
+                                                    <input type="file" name="insurance" class="form-control rp-file doc-input" accept=".pdf, image/jpeg, image/png" required data-parsley-required-message="Upload file">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="doc-card p-4 rounded-3 mb-2" style="background: #fffdf5; border: 1px solid #f2e7c4;">
+                                            <h6 class="fw-bold text-warning mb-3"><i class="fa fa-leaf me-2"></i> 3. PUC Certificate Details</h6>
+                                            <div class="row g-3">
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">PUC Number <span class="text-danger">*</span></label>
+                                                    <input type="text" name="puc_number" class="form-control rp-input doc-input text-uppercase" placeholder="e.g. PUC12345" required data-parsley-required-message="Required" data-parsley-pattern="^[a-zA-Z0-9]+$" data-parsley-pattern-message="Alphanumeric only">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Issue Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="puc_issue_date" id="puc_issue_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Expiry Date <span class="text-danger">*</span></label>
+                                                    <input type="date" name="puc_expiry_date" id="puc_expiry_date" class="form-control rp-input doc-input" required data-parsley-required-message="Required">
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <label class="rp-label">Upload PUC <span class="text-danger">*</span></label>
+                                                    <input type="file" name="puc" class="form-control rp-file doc-input" accept=".pdf, image/jpeg, image/png" required data-parsley-required-message="Upload file">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                              <div class="rp-check-wrap mt-3">
+                                    <label class="rp-check-custom">
+                                        <input type="checkbox"
+                                               id="agree_terms"
+                                               name="agree_terms"
+                                               hidden
+                                               required
+                                               data-parsley-required-message="You must agree to terms">
+                                        <span class="rp-check-box"></span>
+                                        <span class="rp-check-text">
+                                            I confirm that I have read and agree to the
+                                            <a href="javascript:void(0)" onclick="openAgreement()" class="agreement-link">
+                                                Rideplex Leaser Agreement & Terms
+                                            </a>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <button type="submit"
+                                        id="submitVehicleBtn"
+                                        class="rp-btn rp-btn-primary"
+                                        style="display:none;"
+                                        {% if not docs_verified %} disabled {% endif %}>
+                                    <i class="fa fa-upload me-2"></i>Add Vehicle
+                                </button>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <footer class="text-light">
+            {% include 'footer.html'%}
+        </footer>
+        </div>
+
+    <script src="static/js/plugins.js"></script>
+    <script src="static/js/designesia.js"></script>
+
+
+    <div class="agreement-modal" id="agreementPopup">
+
+        <div class="agreement-content">
+
+            <span id="closeAgreement">&times;</span>
+
+            <h3>Rideplex – Leaser Agreement</h3>
+
+            <div class="agreement-scroll" id="agreementScroll">
+
+                <h3>Rideplex – Leaser Agreement & Terms</h3>
+
+                <p>By listing a vehicle on the Rideplex platform, you (“Leaser”) agree to the following terms and conditions:</p>
+
+                <hr>
+
+                <h4>1. Vehicle Ownership and Authorization</h4>
+                <p>The leaser confirms that the vehicle listed on the Rideplex platform is legally owned by them or that they have full legal authorization to rent the vehicle. The vehicle must comply with all applicable transport laws and regulations.</p>
+
+                <hr>
+
+                <h4>2. Required Documents</h4>
+                <p>Before a vehicle can be listed or activated on Rideplex, the leaser must upload valid documents for verification, including:</p>
+
+                <ul>
+                    <li>Aadhar Card</li>
+                    <li>Driving License</li>
+                    <li>RC Book (Vehicle Registration Certificate)</li>
+                    <li>Insurance Certificate</li>
+                    <li>PUC Certificate</li>
+                    <li>PAN Card</li>
+                </ul>
+
+                <p>Rideplex reserves the right to verify, approve, or reject any submitted document.</p>
+
+                <hr>
+
+                <h4>3. Offline Verification Process</h4>
+                <p>After adding a vehicle on the Rideplex platform, the leaser must visit the <strong>Rideplex offline verification location</strong>.</p>
+
+                <p>During this visit, the leaser must:</p>
+
+                <ul>
+                    <li>Bring the listed vehicle to the Rideplex location</li>
+                    <li>Carry original documents and photocopies of all required personal and vehicle documents</li>
+                </ul>
+
+                <p>Rideplex staff will verify the vehicle condition and documents before activating the vehicle for rental services.</p>
+
+                <hr>
+
+                <h4>4. Vehicle Condition Requirement</h4>
+                <p>At the time of verification, the vehicle must be in <strong>good and roadworthy condition</strong>. Rideplex reserves the right to reject or delay activation if the vehicle does not meet safety or operational standards.</p>
+
+                <hr>
+
+                <h4>5. Earnings and Payment</h4>
+                <p>The leaser earns income depending on how many times their vehicle is rented through the Rideplex platform.</p>
+
+             <p>
+Rideplex processes payments to the leaser <strong>monthly</strong> based on completed rides. A <strong>15% platform fee</strong> is applied to each ride.
+</p>
+
+                <p>Rideplex does not guarantee a fixed number of bookings, as demand may vary depending on location, time, and user demand.</p>
+
+                <hr>
+
+                <h4>6. Vehicle Storage and Maintenance</h4>
+                <p>After successful verification, the vehicle may remain parked at the Rideplex operational location when not in use.</p>
+
+                <ul>
+                    <li>The <strong>leaser (vehicle owner)</strong> is responsible for major maintenance such as servicing, mechanical repairs, and insurance renewal.</li>
+                    <li><strong>Rideplex</strong> will take reasonable care of the vehicle while it is parked at the Rideplex location.</li>
+                    <li>If a vehicle remains unused for an extended period, the leaser may be contacted if maintenance or servicing is required before the vehicle can be rented again.</li>
+                </ul>
+
+                <hr>
+
+                <h4>7. Vehicle Damage Responsibility</h4>
+
+                <h5>Self-Drive Rentals</h5>
+                <p>If the vehicle is rented for self-drive and the renter causes damage, repair costs will be covered using the <strong>security deposit collected from the user </strong>, according to Rideplex policies.</p>
+                <p>In case of major accidents, applicable insurance coverage will be used.</p>
+
+                <h5>Driver-Based Rentals</h5>
+                <p>If the vehicle is rented with a Rideplex driver and damage occurs due to driver negligence, Rideplex will take responsibility for handling the situation.</p>
+
+                <p>Rideplex assigns experienced drivers, but in case of serious accidents, repair or claims will depend on the <strong>vehicle insurance policy uploaded by the leaser</strong>.</p>
+
+                <hr>
+
+                <h4>8. Vehicle Availability and Removal</h4>
+
+                <ul>
+                    <li>The leaser <strong>cannot directly remove the vehicle from the platform dashboard</strong>.</li>
+                    <li>If the leaser wishes to make the vehicle temporarily unavailable or remove it, they must <strong>contact the Rideplex admin team</strong>.</li>
+                </ul>
+
+                <hr>
+
+
+                <h4>9. Vehicle Return Request</h4>
+
+              <p>
+                  If a leaser wishes to have their <strong>vehicle returned </strong>, they must submit a request to the Rideplex admin team for vehicle return processing.
+</p>
+
+                <ul>
+                    <li>If the vehicle is currently on a ride, the request will be processed <strong>after the ride is completed</strong>.</li>
+                    <li>Once the ride ends, the vehicle will be marked <strong>unavailable for bookings</strong>, and Rideplex return the vehicle to the leaser.</li>
+                </ul>
+
+                <hr>
+
+                <h4>10. Vehicle Maintenance Responsibility</h4>
+                <p>The leaser must ensure the vehicle remains in proper working condition. If a vehicle becomes unsafe or poorly maintained, Rideplex may temporarily disable the vehicle listing until the issue is resolved.</p>
+
+                <hr>
+
+                <h4>11. Misuse or Policy Violation</h4>
+                <p>If a leaser submits false information, fake documents, or violates Rideplex policies, Rideplex reserves the right to suspend the account, remove the vehicle listing, or take necessary action without prior notice.</p>
+
+                <hr>
+
+                <h4>12. Platform Rights</h4>
+
+                <p>Rideplex reserves the right to:</p>
+
+                <ul>
+                    <li>Verify all uploaded documents and vehicle details</li>
+                    <li>Temporarily disable or remove vehicle listings when necessary</li>
+                    <li>Enforce platform safety and operational policies</li>
+                </ul>
+
+                <hr>
+
+                <h4>13. Agreement Confirmation</h4>
+                <p>By clicking <strong>“I Agree”</strong>, the leaser confirms that they have read, understood, and accepted all the terms and conditions of the Rideplex platform.</p>
+
+                <p style="font-size:13px;color:#777;margin-top:20px;">
+                    Last updated: 2026 | Rideplex Platform Agreement
+                </p>
+
+            </div>
+
+            <div class="agreement-buttons">
+                <button id="agreeBtn" style="display:none;">I Agree</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        /* open popup */
+        function openAgreement(){
+            document.getElementById("agreementPopup").style.display="flex";
+            document.body.classList.add("body-no-scroll");
+        }
+
+        /* close popup */
+        function closeAgreement(){
+            document.getElementById("agreementPopup").style.display="none";
+            document.body.classList.remove("body-no-scroll");
+        }
+
+        /* close with X */
+        document.getElementById("closeAgreement").onclick=function(){
+            closeAgreement();
+        }
+
+        /* close outside click */
+        window.onclick=function(e){
+            const modal=document.getElementById("agreementPopup");
+            if(e.target===modal){
+                closeAgreement();
+            }
+        }
+
+        /* scroll detection */
+        const scrollBox=document.getElementById("agreementScroll");
+        const agreeBtn=document.getElementById("agreeBtn");
+
+        scrollBox.addEventListener("scroll",function(){
+            if(scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight-5){
+                agreeBtn.style.display="inline-block";
+            }
+        });
+
+        /* agree button */
+        agreeBtn.onclick=function(){
+            document.getElementById("agree_terms").checked=true;
+            document.getElementById("submitVehicleBtn").style.display="inline-block";
+            closeAgreement();
+        }
+
+        /* prevent page scroll while modal open */
+        document.getElementById("agreementScroll").addEventListener("wheel", function(e){
+            e.stopPropagation();
+        }, { passive: true });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // --- NEW: PARSLEY UNIQUE REGISTRATION VALIDATOR ---
+            // 1. Get the existing registration numbers passed from Django view
+            const existingRegs = {{ existing_regs_json|safe|default:"[]" }};
+
+            // 2. Inject the custom logic into Parsley
+            if (window.Parsley) {
+                window.Parsley.addValidator('uniquereg', {
+                    validateString: function(value) {
+                        // Check if the user's uppercase input exists in the database array
+                        return !existingRegs.includes(value.toUpperCase());
+                    },
+                    messages: {
+                        en: 'This registration number is already registered to another vehicle.'
+                    }
+                });
+            }
+
+            // Function to enforce the date validation rules
+            function enforceDateRules(issueId, expiryId) {
+                const issueInput = document.getElementById(issueId);
+                const expiryInput = document.getElementById(expiryId);
+
+                if (!issueInput || !expiryInput) return;
+
+                function updateMinExpiry() {
+                    // 1. Get today's date (resetting time to midnight for accurate comparison)
+                    let today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    // By default, expiry cannot be in the past (must be at least today/tomorrow)
+                    let minValidDate = new Date(today);
+
+                    // 2. If an issue date is selected, calculate Issue Date + 1 day
+                    if (issueInput.value) {
+                        let issueDate = new Date(issueInput.value);
+                        issueDate.setDate(issueDate.getDate() + 1); // Expiry cannot be the same as issue date
+
+                        // The minimum expiry date should be whichever is LATER: Today, or Issue Date + 1
+                        if (issueDate > minValidDate) {
+                            minValidDate = issueDate;
+                        }
+                    }
+
+                    // 3. Format to YYYY-MM-DD for the HTML input type="date"
+                    let dd = String(minValidDate.getDate()).padStart(2, '0');
+                    let mm = String(minValidDate.getMonth() + 1).padStart(2, '0');
+                    let yyyy = minValidDate.getFullYear();
+                    let minDateString = `${yyyy}-${mm}-${dd}`;
+
+                    // 4. Apply the min attribute to the Expiry Input
+                    expiryInput.setAttribute('min', minDateString);
+
+                    // 5. If the user already entered an expiry date that is now invalid, clear it
+                    if (expiryInput.value && expiryInput.value < minDateString) {
+                        expiryInput.value = '';
+                    }
+                }
+
+                // Optional best practice: prevent future dates from being selected as the "Issue Date"
+                let todayFormatted = new Date().toISOString().split('T')[0];
+                issueInput.setAttribute('max', todayFormatted);
+
+                // Run the logic whenever the issue date changes, and once on page load
+                issueInput.addEventListener('change', updateMinExpiry);
+                updateMinExpiry();
+            }
+
+            // Apply rules to RC, Insurance, and PUC sections
+            enforceDateRules('rc_issue_date', 'rc_expiry_date');
+            enforceDateRules('insurance_issue_date', 'insurance_expiry_date');
+            enforceDateRules('puc_issue_date', 'puc_expiry_date');
+        });
+    </script>
+
+</body>
+</html>

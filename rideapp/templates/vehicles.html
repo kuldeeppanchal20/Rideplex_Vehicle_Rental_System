@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    {% include 'links.html' %}
+</head>
+
+<body>
+<script>
+  setTimeout(() => {
+    const flashWrap = document.getElementById("flash-wrap");
+    if (flashWrap) {
+      flashWrap.style.opacity = "0";
+      setTimeout(() => flashWrap.remove(), 300);
+    }
+  }, 2500);
+</script>
+
+{% if messages %}
+  <div id="flash-wrap">
+    {% for message in messages %}
+      <div class="flash-msg flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div id="wrapper">
+
+    <div id="de-preloader"></div>
+    {% include 'navbar.html' %}
+
+    <div class="no-bottom no-top zebra" id="content">
+
+        <section class="vp-header">
+            <div class="container">
+                <div class="vp-header-box">
+                    <div>
+                        <h2 class="vp-title">Vehicles</h2>
+                        <p class="vp-subtitle">Browse our collection of premium cars</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="vp-main">
+            <div class="container">
+                <div class="row g-4">
+
+                    <div class="col-lg-3">
+                        <form method="GET" action="/vehicle" class="vp-filter-panel" id="filter-form">
+
+                            <div class="vp-filter-head">
+                                <h4 class="vp-filter-title">Filter</h4>
+                                <a href="/vehicle" class="vp-clear-btn" style="text-decoration: none;">Clear</a>
+                            </div>
+
+                            <div class="vp-filter-group">
+                                <h5 class="vp-filter-label">Vehicle Type</h5>
+                                <div class="vp-pill-wrap">
+                                    <label class="vp-pill"><input type="radio" name="category" value="Car"><span>Car</span></label>
+                                    <label class="vp-pill"><input type="radio" name="category" value="SUV"><span>SUV</span></label>
+                                    <label class="vp-pill"><input type="radio" name="category" value="Van"><span>Van</span></label>
+                                    </div>
+                            </div>
+
+                            <div class="vp-filter-group" id="subcat-group" style="display: none;">
+                                <h5 class="vp-filter-label">Body Type</h5>
+                                <div class="vp-pill-wrap" id="subcat-container"></div>
+                            </div>
+
+                            <div class="vp-filter-group" id="fuel-group" style="display: none;">
+                                <h5 class="vp-filter-label">Fuel Type</h5>
+                                <div class="vp-pill-wrap" id="fuel-container"></div>
+                            </div>
+
+                            <div class="vp-filter-group" id="seats-group" style="display: none;">
+                                <h5 class="vp-filter-label">Seats</h5>
+                                <div class="vp-pill-wrap" id="seats-container"></div>
+                            </div>
+
+                            <div class="vp-filter-group" >
+                                <button type="submit" class="vp-btn" style="width: 100%;  ">Apply Filters</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="vp-grid">
+
+                            {% for v in vehicles %}
+                            <div class="vp-card">
+
+                               <div class="vp-image">
+    <img src="{{ v.vehicle_img.url }}" alt="">
+    <span class="vp-overlay"></span>
+
+    {% if v.available_status == '1' %}
+        <span class="vp-status available">
+            <i class="fa fa-check-circle"></i> Available
+        </span>
+    {% elif v.available_status == '2' %}
+        <span class="vp-status not-available">
+            <i class="fa fa-times-circle"></i> Not Available
+        </span>
+    {% elif v.available_status == '3' %}
+        <span class="vp-status on-ride">
+            <i class="fa fa-car"></i> On Ride
+        </span>
+    {% endif %}
+</div>
+
+                                <div class="vp-card-body">
+                                    <h4 class="vp-name">{{ v.brand }} {{ v.model }}</h4>
+
+                                    <div class="vp-specs">
+                                        <span class="vp-spec"><img src="/static/images/icons/seat.png"> {{ v.seats }}</span>
+                                        <span class="vp-spec"><img src="/static/images/icons/fuel.png"> {{ v.fuel_type }}</span>
+                                        <span class="vp-spec"><img src="/static/images/icons/car.png"> {{ v.vsubcategory }}</span>
+                                    </div>
+
+                                                 <div class="vp-footer">
+    <div>
+        <small>Daily Rate</small>
+        <strong>₹{{ v.fare }}</strong>
+    </div>
+
+    {% if v.available_status == '1' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">Rent Now</button>
+        </form>
+                                      {% elif v.available_status == '2' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details </button>
+        </form>
+
+    {% elif v.available_status == '3' %}
+        <form action="/singlecar/{{v.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="vid" value="{{ v.id }}">
+            <button class="vp-btn">View Details</button>
+        </form>
+
+    {% endif %}
+</div>
+                                </div>
+
+                            </div>
+                            {% empty %}
+                            <div class="no-results-message" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border: 2px dashed #e0e0e0; border-radius: 12px; background-color: #fafafa;">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <h3 style="color: #333; margin-bottom: 12px; font-weight: 600;">No Vehicles Found</h3>
+                                <p style="color: #666; margin-bottom: 25px; max-width: 400px; margin-left: auto; margin-right: auto;">We couldn't find any vehicles matching your current filters. Try adjusting your preferences to see more options.</p>
+                                <a href="/vehicle" class="vp-btn" style="text-decoration: none; display: inline-block; padding: 10px 24px;">Clear All Filters</a>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% include 'footer.html' %}
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/designesia.js"></script>
+
+<script>
+    const subcatContainer = document.getElementById('subcat-container');
+    const fuelContainer = document.getElementById('fuel-container');
+    const seatsContainer = document.getElementById('seats-container');
+
+    const subcatGroup = document.getElementById('subcat-group');
+    const fuelGroup = document.getElementById('fuel-group');
+    const seatsGroup = document.getElementById('seats-group');
+
+    // Allow radio buttons to be deselected when clicked again
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.type === 'radio') {
+            if (e.target.dataset.wasChecked === "true") {
+                // If it was already checked, uncheck it
+                e.target.checked = false;
+                e.target.dataset.wasChecked = "false";
+
+                // If the user deselected the main Category, we need to hide the sub-filters
+                if (e.target.name === 'category') {
+                    updateFilters();
+                }
+            } else {
+                // Uncheck all other radios in the same group
+                const groupRadios = document.getElementsByName(e.target.name);
+                groupRadios.forEach(r => r.dataset.wasChecked = "false");
+
+                // Mark the clicked one as checked
+                e.target.dataset.wasChecked = "true";
+
+                // If it's a category, update the sub-filters to show the new options
+                if (e.target.name === 'category') {
+                    updateFilters();
+                }
+            }
+        }
+    });
+
+    // Function to update the dynamic inputs based on Category selected
+    function updateFilters() {
+        const selectedCategory = document.querySelector('input[name="category"]:checked');
+
+        // Clear existing options
+        subcatContainer.innerHTML = '';
+        fuelContainer.innerHTML = '';
+        seatsContainer.innerHTML = '';
+
+        // If no category is selected (because user deselected it), hide the groups and stop
+        if (!selectedCategory) {
+            subcatGroup.style.display = 'none';
+            fuelGroup.style.display = 'none';
+            seatsGroup.style.display = 'none';
+            return;
+        }
+
+        const category = selectedCategory.value.toLowerCase();
+
+        // Show the groups
+        subcatGroup.style.display = 'block';
+        fuelGroup.style.display = 'block';
+        seatsGroup.style.display = 'block';
+
+        // Append specific criteria based on your requirements.
+        if (category === 'car') {
+            createPills(subcatContainer, 'subcategory', ['Compact', 'Sedan', 'Luxury']);
+            createPills(fuelContainer, 'fueltype', ['Petrol', 'Diesel', 'CNG', 'Electric']);
+            createPills(seatsContainer, 'seats', ['2', '5']);
+        } else if (category === 'van') {
+            createPills(subcatContainer, 'subcategory', ['Traveller Van', 'Mini Van']);
+            createPills(fuelContainer, 'fueltype', ['Petrol', 'Diesel', 'CNG', 'Electric']);
+            createPills(seatsContainer, 'seats', ['7', '10+']);
+        } else if (category === 'suv') {
+            createPills(subcatContainer, 'subcategory', ['Compact SUV', 'Luxury SUV']);
+            createPills(fuelContainer, 'fueltype', ['Petrol', 'Diesel', 'CNG', 'Electric']);
+            createPills(seatsContainer, 'seats', ['7']);
+        }
+        // Bike logic removed from here
+    }
+
+    // Helper function to build the pills
+    function createPills(container, name, options) {
+        options.forEach(opt => {
+            const label = document.createElement('label');
+            label.className = 'vp-pill';
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = opt;
+
+            const span = document.createElement('span');
+            span.innerText = opt;
+
+            label.appendChild(input);
+            label.appendChild(span);
+            container.appendChild(label);
+        });
+    }
+
+    // Preserve selected states after the page refreshes/loads due to form submission
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+
+        if (category) {
+            // Re-check the category radio button
+            const categoryRadio = document.querySelector(`input[name="category"][value="${category}"]`);
+            if (categoryRadio) {
+                categoryRadio.checked = true;
+                categoryRadio.dataset.wasChecked = "true";
+                updateFilters();
+
+                // Re-check the previously selected inputs
+                ['subcategory', 'fueltype', 'seats'].forEach(paramName => {
+                    const values = urlParams.getAll(paramName);
+                    values.forEach(val => {
+                        const cb = document.querySelector(`input[name="${paramName}"][value="${CSS.escape(val)}"]`);
+                        if (cb) {
+                            cb.checked = true;
+                            cb.dataset.wasChecked = "true";
+                        }
+                    });
+                });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
