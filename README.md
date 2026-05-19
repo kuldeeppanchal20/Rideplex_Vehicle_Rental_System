@@ -1,21 +1,21 @@
-# 🚗 Rideplex Vehicle Rental System
+# 🚗 Rideplex Vehicle Rental Website
 
-Rideplex Vehicle Rental System is a web-based vehicle rental management application developed using Django. The system provides an easy and efficient platform for users to browse available vehicles, book rentals online, and manage their bookings seamlessly.
+Rideplex is a modern web-based vehicle rental platform developed using Django. The website allows users to browse available vehicles, view detailed information, and book rentals online through a clean and responsive interface.
 
-The application also includes an admin panel for managing vehicles, users, bookings, and rental operations.
+The platform is designed to simplify the vehicle rental process for both customers and administrators by providing efficient booking management, vehicle listings, authentication, and administrative controls.
 
 ---
 
-# ✨ Features
+# ✨ Website Features
 
 - User Registration & Authentication
 - Vehicle Listing & Management
 - Online Vehicle Booking System
 - Vehicle Search & Filtering
 - Booking History Management
-- Responsive User Interface
+- Responsive Website Design
 - Admin Dashboard
-- Vehicle Image Management
+- Vehicle Image Upload & Management
 
 ---
 
@@ -90,7 +90,7 @@ source venv/bin/activate
 
 ---
 
-## Install Required Dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -114,41 +114,39 @@ python manage.py runserver
 
 ---
 
-# 🔐 Authentication Features
+# 🔐 Authentication System
 
-- Secure Login System
-- User Registration
-- Session Management
-- Logout Functionality
-
----
-
-# 🚘 Vehicle Management Features
-
-- Add Vehicles
-- Update Vehicle Details
-- Delete Vehicles
-- Vehicle Availability Status
-- Vehicle Image Upload
+The website includes a secure authentication system that allows users to:
+- Create accounts
+- Login securely
+- Manage sessions
+- Access personalized booking features
 
 ---
 
-# 📱 Responsive Design
+# 🚘 Vehicle Rental Management
 
-The application is optimized for:
+The platform provides complete vehicle rental management features including:
+- Vehicle availability management
+- Rental booking system
+- Vehicle information management
+- Booking status handling
+- Vehicle image management
+
+---
+
+# 📱 Responsive Website Design
+
+The website is fully responsive and optimized for:
 - Desktop Devices
 - Tablets
 - Mobile Devices
 
 ---
 
-# 🚀 Future Enhancements
+# 🌐 Project Objective
 
-- Online Payment Gateway Integration
-- Email Notifications
-- Live Vehicle Availability
-- Mobile Application Support
-- Advanced Search & Filtering
+The main objective of this project is to provide an easy and efficient online vehicle rental platform that improves user experience and simplifies rental management operations.
 
 ---
 
