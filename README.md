@@ -37,14 +37,13 @@ The application also includes an admin panel for managing vehicles, users, booki
 Rideplex_Vehicle_Rental_System/
 │
 ├── media/
+├── rideapp/
+├── rideproject/
 ├── static/
-├── templates/
-├── users/
-├── vehicles/
-├── bookings/
+├── .gitignore
 ├── manage.py
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
